@@ -416,3 +416,46 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 10 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+全量升级 TASK_BOARD.md v1.0 → v2.0，从「功能清单格式」升级为「Module + Owner + Reviewer + Status」任务卡：
+- 与 SPRINT_PLAN v2.1 / AGENTS v1.2 §7 Task Ownership / ARCHITECTURE v2.2 §22 完全对齐
+- 拆分 Sprint 0 为 6 个独立任务（TASK-0001 ~ TASK-0006）
+- 引入任务状态机（Backlog → Assigned → Designing → Developing → Reviewing → Testing → Done → Archived）
+- 收紧 AI Agent 任务边界：Sprint 0 仅定义 Interface，禁止真实 LLM / Prompt / Agent 实现
+- 收紧数据库边界：Sprint 0 仅创建 user / user_preference / tag 三张表
+- 新增 Sprint 0 Definition of Done 四层约束（Code / Test / Documentation / Architecture）
+- 新增 Next Sprint 任务预拆分（Sprint 1 User Module TASK-0101~0106）
+
+
+Reason:
+
+原 v1.0 仅是粗粒度 Todo 清单（如「[ ] 完成系统架构」「[ ] 创建 Agent 框架」），无法回答 Owner / Reviewer / Branch / 状态生命周期 / 边界约束等执行问题，与已升级的 SPRINT_PLAN v2.1 / AGENTS v1.2 / ARCHITECTURE v2.2 / DATABASE_DESIGN v2.1 存在明显不一致。升级后形成「产品规划层 → 执行层 → Agent 工作流」链路，AI Agent 可按任务卡稳定领取工作，避免越权与边界蔓延。
+
+
+Impact:
+
+仅影响 docs/TASK_BOARD.md 与 docs/CHANGELOG.md，无代码变更。本文档生效后，Sprint 0 可正式启动，AI Agent 领取任务必须遵守任务状态机与禁止项。
+
+
+Reviewer:
+
+Pending

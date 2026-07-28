@@ -216,6 +216,27 @@
   - 新增 §16 ADR Roadmap（ADR-0001~0011 完整清单 + 状态跟踪）
 
 
+### Changed (TASK_BOARD.md v1.0 → v2.0)
+
+
+- 全量升级 `docs/TASK_BOARD.md`，从「功能清单格式」升级为「Module + Owner + Reviewer + Status」任务卡
+  - 与 SPRINT_PLAN v2.1 / AGENTS v1.2 §7 Task Ownership / ARCHITECTURE v2.2 §22 完全对齐
+  - 拆分 Sprint 0 为 6 个独立任务（TASK-0001 ~ TASK-0006）：
+    - TASK-0001 Architecture Foundation（Owner: Architecture Agent）
+    - TASK-0002 Backend Foundation（Owner: Backend Agent）
+    - TASK-0003 Frontend Foundation（Owner: Frontend Agent）
+    - TASK-0004 Database Foundation（Owner: Backend Agent）
+    - TASK-0005 AI Platform Foundation（Owner: AI Agent）
+    - TASK-0006 CI/CD Foundation（Owner: Backend Agent）
+  - 引入任务状态机（Backlog → Assigned → Designing → Developing → Reviewing → Testing → Done → Archived）
+  - 每个任务卡含：Owner / Reviewer / Status / Module / Branch / Description / Todo / DoD / 禁止项
+  - 收紧 AI Agent 任务边界：Sprint 0 仅定义 Interface，禁止真实 LLM / Prompt / Agent 实现
+  - 收紧数据库边界：Sprint 0 仅创建 user / user_preference / tag 三张表
+  - 新增 Sprint 0 Definition of Done 四层约束（Code / Test / Documentation / Architecture）
+  - 新增 Next Sprint 任务预拆分（Sprint 1 User Module TASK-0101~0106）
+  - 新增 Task Status Legend 状态说明表
+
+
 ### Deprecated
 
 
