@@ -238,3 +238,51 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 6 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+全量升级 DATABASE_DESIGN.md v1.0 → v2.0，从「领域模型草稿」升级为「开发基线」：
+- 新增 §1 Design Principles / §2 Naming Convention
+- 新增 §3 Shared Entities（与 ARCHITECTURE §3 对齐）
+- 新增 §4 Entity Ownership（每张表唯一 Owner 模块）
+- 新增 §5 ER Diagram
+- 重写 §6 Table Design（每表含完整字段说明）
+- 新增 §7 Enum Definition（12 类枚举显式定义）
+- 新增 §8 Index Strategy（15 索引，对齐 NFR）
+- 新增 §9 Constraint Strategy（逻辑关联不建 FK）
+- 新增 §10 Migration Rule / §11 Version History / §12 对齐
+- 修正 Activity.location → location_id
+- 修正 Favorite 增加 UNIQUE(user_id, target_type, target_id)
+- 扩展 ai_memory 新增 memory_type / source / summary / embedding_id / visibility
+
+
+Reason:
+
+原 v1.0 仅是字段列表，无法回答表关系 / Owner / 字段约束 / 索引 / 外键策略 / 枚举定义等开发基线问题。升级后所有 Entity / Repository / Migration 的生成将自动统一，防止数据层架构漂移。
+
+
+Impact:
+
+仅影响 docs/DATABASE_DESIGN.md，无代码变更。本文档生效后，后续所有数据层开发必须遵守 §4 Ownership、§7 枚举、§8 索引、§9 外键策略。
+
+
+Reviewer:
+
+Pending

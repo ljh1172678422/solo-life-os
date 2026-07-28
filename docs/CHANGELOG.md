@@ -137,6 +137,25 @@
   - ADR-0004 MVP 阶段不使用微服务
 
 
+### Changed (DATABASE_DESIGN.md v1.0 → v2.0)
+
+
+- 全量升级 `docs/DATABASE_DESIGN.md`，从「领域模型草稿」升级为「开发基线」
+  - 新增 §1 Design Principles + §2 Naming Convention
+  - 新增 §3 Shared Entities（与 ARCHITECTURE §3 对齐）
+  - 新增 §4 Entity Ownership（每张表唯一 Owner 模块）
+  - 新增 §5 ER Diagram（实体关系图）
+  - 重写 §6 Table Design：每张表含完整字段说明（类型 / Nullable / 默认值 / 描述）
+  - 新增 §7 Enum Definition（12 类枚举显式定义，禁止自由字符串）
+  - 新增 §8 Index Strategy（15 个索引，对齐 §15 NFR 性能指标）
+  - 新增 §9 Constraint Strategy（逻辑关联不建 FK + 唯一约束 + 非空约束）
+  - 新增 §10 Migration Rule（命名规范 + 幂等 + 破坏性变更需 ADR）
+  - 新增 §11 Version History + §12 与其他文档对齐
+  - 修正 Activity.location → location_id（关联 Location Entity）
+  - 修正 Favorite 增加 UNIQUE(user_id, target_type, target_id)
+  - 扩展 ai_memory：新增 memory_type / source / summary / embedding_id / visibility 5 字段
+
+
 ### Deprecated
 
 
