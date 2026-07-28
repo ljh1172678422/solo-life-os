@@ -627,3 +627,93 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 16 次变更)
+
+
+Agent:
+
+AI Agent
+
+
+Task:
+
+TASK-0005 AI Foundation
+
+
+Action:
+
+定义 AI Foundation 6 个核心 Interface（Sprint 0 仅接口，不实现）：
+- Agent（agents/Agent.java）：统一 execute 契约 + AgentResult + Context
+- AgentRouter（orchestrator/AgentRouter.java）：路由策略抽象（ADR-0003）
+- MemoryService（memory/MemoryService.java）：长期记忆读写（ai_memory）
+- ConversationService（memory/ConversationService.java）：短期对话上下文（ai_conversation）
+- VectorStoreAdapter（llm/VectorStoreAdapter.java）：Vector DB 抽象层（ADR-0005，不绑定 Provider）
+- LLMProvider（llm/LLMProvider.java）：模型调用抽象层（ADR-0008，Sprint 5 实现）
+- 遵守全部禁止项：无 LLM 接入 / 无 Prompt / 无 Agent 实现 / 无 Vector DB 部署 / 无业务 Entity 修改
+- 执行 §15 Git Branch Governance：feature/ai-foundation 分支提交
+- 执行 §15.8 Compile Validation：mvn clean compile 通过（32 source files）
+
+
+Reason:
+
+Sprint 0 Phase 2 AI Foundation，为 Sprint 5 AI Platform 预留扩展点。Sprint 0 仅定义接口边界，确保未来切换 LLM Provider / Vector DB 时业务代码零修改。
+
+
+Impact:
+
+新增 backend/solo-server/src/main/java/com/sololifeos/ai/ 下 9 个文件（6 Interface + 3 支撑类）。无业务实现，无数据库变更。本文档生效后，Sprint 5 AI Platform 可基于此 6 个 Interface 实现具体 Agent。
+
+
+Reviewer:
+
+Pending
+
+
+---
+
+
+## 2026-07-28 (第 17 次变更)
+
+
+Agent:
+
+Frontend Agent
+
+
+Task:
+
+TASK-0003 Frontend Foundation
+
+
+Action:
+
+初始化 uni-app + Vue3 + TypeScript + Pinia H5 工程：
+- 创建 apps/h5/ 目录，14 个文件
+- 配置 TypeScript strict mode + @/* 路径别名
+- 配置 Pinia 状态管理
+- 配置 Vite + uni-app 插件
+- 创建 src/api/ 通用请求封装（对齐 Backend ApiResponse 格式）
+- 创建 src/stores/ app store
+- 创建首页 pages/index/index.vue
+- 配置 VITE_API_BASE_URL 环境变量
+- 执行 §15 Git Branch Governance：feature/frontend-foundation 分支提交
+
+
+Reason:
+
+Sprint 0 Phase 2 Frontend Foundation，为 Sprint 1+ User Module 前端页面开发提供可运行骨架。MVP 阶段仅 H5 端，多端结构已预留。
+
+
+Impact:
+
+新增 apps/h5/ 目录，14 个文件。无业务页面，无后端变更。本文档生效后，Sprint 1 可在此基础上开发登录 / 资料 / 偏好页。
+
+
+Reviewer:
+
+Pending

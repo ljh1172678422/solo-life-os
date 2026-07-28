@@ -274,6 +274,32 @@
     - Sprint 0 DoD Architecture 段同步调整为三 ADR 状态
 
 
+### Added (TASK-0005 AI Foundation)
+
+
+- AI Foundation 6 个核心 Interface 定义完成（`backend/solo-server/src/main/java/com/sololifeos/ai/`）
+  - Agent（agents/）：统一 execute 契约 + AgentResult + Context
+  - AgentRouter（orchestrator/）：路由策略抽象（ADR-0003）
+  - MemoryService（memory/）：长期记忆读写（ai_memory）
+  - ConversationService（memory/）：短期对话上下文（ai_conversation）
+  - VectorStoreAdapter（llm/）：Vector DB 抽象层（ADR-0005，不绑定 Provider）
+  - LLMProvider（llm/）：模型调用抽象层（ADR-0008，Sprint 5 实现）
+- 禁止项全部遵守：无 LLM 接入 / 无 Prompt / 无 Agent 实现 / 无 Vector DB 部署
+- mvn clean compile 验证通过（32 source files）
+
+
+### Added (TASK-0003 Frontend Foundation)
+
+
+- uni-app + Vue3 + TypeScript + Pinia H5 工程初始化（`apps/h5/`）
+  - src/api/：request 通用封装 + health API
+  - src/stores/：Pinia app store
+  - src/pages/：index 首页
+  - TS strict mode + `@/*` 路径别名
+  - VITE_API_BASE_URL 环境变量配置
+- 配置：package.json / tsconfig.json / vite.config.ts / pages.json / manifest.json
+
+
 ### Added (Git Branch Governance)
 
 
