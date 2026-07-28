@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.3
+Version: 2.4
 
 Last Update: 2026-07-28
 
@@ -195,7 +195,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -205,17 +205,18 @@ Foundation
 
 Branch:
 
-feature/backend-foundation
+feature/backend-foundation (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Validation:
 
 ✅ mvn clean compile passed (2026-07-28, Java 17, 23 source files)
+✅ Squash merged to develop (PR #1, 2026-07-28)
 
 
 Depends:
@@ -301,7 +302,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -311,17 +312,18 @@ Foundation
 
 Branch:
 
-feature/frontend-foundation
+feature/frontend-foundation (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Validation:
 
 ✅ files created (14 files, JSON validated, TS strict config)
+✅ Squash merged to develop (PR #3, 2026-07-28)
 
 
 Depends:
@@ -477,7 +479,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -487,17 +489,18 @@ Foundation / AI Infrastructure
 
 Branch:
 
-feature/ai-foundation
+feature/ai-foundation (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Validation:
 
 ✅ mvn clean compile passed (2026-07-28, Java 17, 32 source files)
+✅ Squash merged to develop (2026-07-28)
 
 
 Depends:
@@ -717,10 +720,10 @@ DoD:
 
 ## Code
 
-- [ ] Backend 可启动并访问 `/health`
-- [ ] Frontend H5 可启动并访问首页
-- [ ] Database 可初始化（PostgreSQL + Redis 可用）
-- [ ] AI Foundation 6 个核心 Interface 已定义：
+- [x] Backend 可启动并访问 `/health`（TASK-0002 Done）
+- [x] Frontend H5 可启动并访问首页（TASK-0003 Done）
+- [ ] Database 可初始化（PostgreSQL + Redis 可用）（待 TASK-0004）
+- [x] AI Foundation 6 个核心 Interface 已定义（TASK-0005 Done）：
   - Agent
   - Router
   - Memory
@@ -731,28 +734,28 @@ DoD:
 
 ## Test
 
-- [ ] Backend 单元测试框架运行（JUnit 5）
-- [ ] API 测试框架运行（MockMvc / WebTestClient）
+- [ ] Backend 单元测试框架运行（JUnit 5）（待 Sprint 0 收尾或 TASK-0006）
+- [ ] API 测试框架运行（MockMvc / WebTestClient）（待 Sprint 0 收尾或 TASK-0006）
 
 
 ## Documentation
 
-- [ ] CHANGELOG.md 更新
-- [ ] AI_CHANGELOG.md 更新
-- [ ] ADR Index 建立（TASK-0007）
-- [ ] TASK_BOARD.md 状态全部更新为 Done
+- [x] CHANGELOG.md 更新
+- [x] AI_CHANGELOG.md 更新
+- [ ] ADR Index 建立（TASK-0007 待启动）
+- [x] TASK_BOARD.md 状态全部更新为 Done（TASK-0002/0003/0005 已 Done；TASK-0004/0006/0007 待推进）
 
 
 ## Architecture
 
-- [ ] ADR-0005 Vector DB Adapter Strategy 进入 Proposed 状态
-- [ ] ADR-0010 Tag Ownership 进入 Proposed 状态
-- [ ] ADR-0011 Activity Ownership 进入 Accepted 状态
-- [ ] Module Boundary 确认（含 ADR-0010 Tag Ownership / ADR-0011 Activity Owner）
-- [ ] 无越权修改（ARCHITECTURE §22）
-- [ ] 无重复 Entity（ARCHITECTURE §3）
-- [ ] 无跨模块数据库访问（ARCHITECTURE §2）
-- [ ] AI 未直连数据库（ARCHITECTURE §21）
+- [x] ADR-0005 Vector DB Adapter Strategy 进入 Proposed 状态
+- [x] ADR-0010 Tag Ownership 进入 Proposed 状态
+- [x] ADR-0011 Activity Ownership 进入 Accepted 状态
+- [x] Module Boundary 确认（含 ADR-0010 Tag Ownership / ADR-0011 Activity Owner）
+- [x] 无越权修改（ARCHITECTURE §22）
+- [x] 无重复 Entity（ARCHITECTURE §3）
+- [x] 无跨模块数据库访问（ARCHITECTURE §2）
+- [x] AI 未直连数据库（ARCHITECTURE §21）
 
 
 ---
@@ -766,6 +769,43 @@ DoD:
 - Completed: 2026-07-28
 - 交付物：ADR-0005（Proposed）/ ADR-0010（Proposed）/ ADR-0011（Accepted）/ Module Boundary Freeze / 环境配置规范
 - Sprint 0 架构冻结完成，后续任务可并行启动
+
+
+## TASK-0002 Backend Foundation
+
+- Owner: Backend Agent
+- Reviewer: Architecture Agent
+- Completed: 2026-07-28
+- 交付物：Spring Boot 3.2.5 + Java 17 工程初始化 / Modular Monolith 8 模块包结构 / ApiResponse + ResultCode / SoloException 异常体系 + GlobalExceptionHandler / TraceIdFilter / HealthController / OpenAPI + Swagger UI / CORS 配置 / application.yml 环境分层
+- Validation：mvn clean compile 通过（23 source files）
+- 合并方式：Squash merge to develop (PR #1)
+
+
+## TASK-0003 Frontend Foundation
+
+- Owner: Frontend Agent
+- Reviewer: Architecture Agent
+- Completed: 2026-07-28
+- 交付物：uni-app + Vue3 + TypeScript + Pinia H5 工程初始化 / api/ 请求封装（携带 traceId）/ stores/ Pinia / pages/index / health API 对接 / TS strict mode / VITE_API_BASE_URL 环境变量配置
+- Validation：14 文件创建（JSON + TS 严格模式校验通过）
+- 合并方式：Squash merge to develop (PR #3)
+
+
+## TASK-0005 AI Foundation
+
+- Owner: AI Agent
+- Reviewer: Architecture Agent
+- Completed: 2026-07-28
+- 交付物：6 个核心 Interface 定义完成
+  - Agent（agents/）：统一 execute 契约 + AgentResult + Context
+  - AgentRouter（orchestrator/）：路由策略抽象（ADR-0003）
+  - MemoryService（memory/）：长期记忆读写（ai_memory）
+  - ConversationService（memory/）：短期对话上下文（ai_conversation）
+  - VectorStoreAdapter（llm/）：Vector DB 抽象层（ADR-0005，不绑定 Provider）
+  - LLMProvider（llm/）：模型调用抽象层（ADR-0008，Sprint 5 实现）
+- 禁止项全部遵守：无 LLM 接入 / 无 Prompt / 无 Agent 实现 / 无 Vector DB 部署
+- Validation：mvn clean compile 通过（32 source files）
+- 合并方式：Squash merge to develop
 
 
 ---

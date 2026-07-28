@@ -760,3 +760,50 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 19 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务（Sprint 0 Phase 2 收尾）
+
+
+Action:
+
+执行 Sprint 0 Phase 2 收尾，将三个任务从 Reviewing → Done：
+- TASK-0002 Backend Foundation：Reviewing → Done（PR #1 已合并 develop，Squash merge）
+- TASK-0003 Frontend Foundation：Reviewing → Done（PR #3 已合并 develop，Squash merge）
+- TASK-0005 AI Foundation：Reviewing → Done（已合并 develop，Squash merge）
+- 三个 feature 分支（feature/backend-foundation / feature/ai-foundation / feature/frontend-foundation）已删除（remote + local）
+- `docs/TASK_BOARD.md` v2.3 → v2.4：
+  - Branch Status：PR-Open → Merged
+  - Sprint 0 DoD Code 段：Backend / Frontend / AI Foundation 三项已勾选
+  - Sprint 0 DoD Architecture 段：8 项全部已勾选
+  - Completed 区新增 TASK-0002 / TASK-0003 / TASK-0005 交付物清单
+- `docs/CHANGELOG.md`：新增 "Changed (Sprint 0 Phase 2 完成收尾)" 段
+- 中间过程：解决 docs/CHANGELOG.md 冲突（develop 上的 §15 governance 提交与 feature 分支重复 §15.7/§15.8 提交冲突），通过 rebase + force-push 整理三个 feature 分支
+
+
+Reason:
+
+三个 PR 已通过 GitHub Web 合并到 develop，但 TASK_BOARD 仍停留在 Reviewing 状态。AGENTS §7 Task Ownership 与 §15.4 Branch Status 要求任务完成后立即更新状态机。本次收尾使 TASK_BOARD 与实际 git 状态对齐，并为 Sprint 0 Phase 3（TASK-0004 Database Foundation）启动扫清障碍。
+
+
+Impact:
+
+影响 docs/TASK_BOARD.md（v2.3→v2.4）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md，无代码变更。本文档生效后，Sprint 0 Phase 2 闭环，剩余 TASK-0004 / TASK-0006 / TASK-0007 可启动。
+
+
+Reviewer:
+
+Pending

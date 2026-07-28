@@ -346,6 +346,20 @@
 - `docs/TASK_BOARD.md` v2.2 → v2.3：TASK-0001 移入 Completed，Sprint 0 进入 Ready
 
 
+### Changed (Sprint 0 Phase 2 完成收尾)
+
+
+- `docs/TASK_BOARD.md` v2.3 → v2.4：Sprint 0 Phase 2 三个任务收尾
+  - TASK-0002 Backend Foundation：Reviewing → Done（PR #1 Squash merged to develop）
+  - TASK-0003 Frontend Foundation：Reviewing → Done（PR #3 Squash merged to develop）
+  - TASK-0005 AI Foundation：Reviewing → Done（Squash merged to develop）
+  - 三个 feature 分支已删除（remote + local）
+  - Branch Status：PR-Open → Merged
+  - Sprint 0 DoD Code 段：Backend / Frontend / AI Foundation 三项已勾选
+  - Sprint 0 DoD Architecture 段：8 项全部已勾选
+  - Completed 区新增 TASK-0002 / TASK-0003 / TASK-0005 交付物清单
+
+
 ### Deprecated
 
 
