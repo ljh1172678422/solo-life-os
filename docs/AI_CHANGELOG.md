@@ -459,3 +459,48 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 11 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+升级 TASK_BOARD.md v2.0 → v2.1，按评审意见修复 5 项问题并新增 1 项任务：
+- P0-1 修复：TASK-0101 User Migration 改为 Migration Review，禁止 Sprint 1 重复创建 user / user_preference / tag 表
+- P0-2 修复：TASK-0005 Module 从「AI Platform」改为「Foundation / AI Infrastructure」（AI Platform 完整实现属 Sprint 5）
+- P0-3 修复：ADR-0005 职责拆分——Architecture Agent 负责 Vector DB Selection Proposal（定方向），AI Agent 负责 VectorStoreAdapter Interface 实现（抽象层）
+- P1-1 修复：TASK-0004 Database Foundation 增加 TASK-0002 依赖（Flyway 配置需先就绪）
+- P1-2 修复：TASK-0005 新增业务模块禁止项（禁改 Entity / Repository / Domain Service / 跨模块 import，对齐 ARCHITECTURE §21）
+- 架构修复：Sprint 0 DoD 明确 6 个核心 Interface（含 VectorStoreAdapter）
+- 新增 TASK-0007 Documentation Foundation（ADR Index / ADR 模板 / 版本同步规则 / AI_CHANGELOG 模板）
+- 新增 Sprint 0 Task Dependency Graph 依赖关系图
+- DoD Architecture 段新增 ADR-0005 Proposed 与 Module Boundary 确认项
+
+
+Reason:
+
+v2.0 评审发现 3 项 P0 问题（Migration 重复风险 / Module 命名与 Sprint Roadmap 不一致 / ADR-0005 职责混淆）与 2 项 P1 优化（Flyway 依赖缺失 / AI Agent 业务模块越权风险），同时识别 Sprint 0 DoD 未明确 VectorStoreAdapter、缺少 Documentation Agent 任务。v2.1 修复后职责边界清晰，AI Agent 可按任务卡无冲突并行执行。
+
+
+Impact:
+
+仅影响 docs/TASK_BOARD.md（v2.0→v2.1）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md，无代码变更。本文档生效后，Sprint 0 任务卡 7 个（TASK-0001~0007），AI Agent 领取任务必须遵守 Depends 顺序与禁止项。
+
+
+Reviewer:
+
+Pending

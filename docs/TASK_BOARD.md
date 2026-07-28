@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.0
+Version: 2.1
 
 Last Update: 2026-07-28
 
@@ -39,6 +39,41 @@ Architecture Agent
 
 
 ---
+
+
+# Sprint 0 Task Dependency Graph
+
+
+```
+                    TASK-0001 Architecture Foundation
+                              │
+        ┌──────────┬──────────┼──────────┬──────────┐
+        │          │          │          │          │
+        ▼          ▼          ▼          ▼          ▼
+  TASK-0002    TASK-0003    TASK-0005  TASK-0007   (TASK-0004)
+  Backend      Frontend     AI Fdn     Doc Fdn      Database
+     │                                                │
+     │  ┌─────────────────────────────────────────────┘
+     │  │  (TASK-0004 同时依赖 TASK-0002 的 Flyway 配置)
+     ▼  ▼
+  TASK-0004 Database Foundation
+     │
+     │
+     ▼
+  TASK-0006 CI/CD Foundation (依赖 TASK-0002 + TASK-0003)
+```
+
+
+依赖说明：
+
+- TASK-0001 是根任务，所有其他任务依赖其架构决策
+- TASK-0004 Database Foundation 同时依赖 TASK-0001（架构）和 TASK-0002（Flyway 配置），避免与 Backend Agent 同时修改配置文件
+- TASK-0006 CI/CD 依赖 TASK-0002 和 TASK-0003 的工程结构就绪
+- TASK-0007 Documentation Foundation 仅依赖 TASK-0001，可与其他任务并行
+
+
+---
+
 
 # Active Tasks
 
@@ -80,15 +115,16 @@ Todo:
 
 - [ ] 确认 Modular Monolith 基础结构
 - [ ] 确认 Backend Package Convention（ARCHITECTURE §19）
-- [ ] 创建 ADR-0005 Vector DB Adapter Interface
+- [ ] 创建 ADR-0005 Vector DB Selection Proposal（候选方案 pgvector / Milvus / Qdrant + 评估维度 + Adapter 延迟绑定原则，仅定方向，不实现 Adapter）
+- [ ] 确认 Module Boundary（ARCHITECTURE §3 / §4 / §22，含 ADR-0010 Tag Ownership / ADR-0011 Activity Owner）
 - [ ] 确认环境配置规范（.env / docker-compose 分层）
 - [ ] 更新 ARCHITECTURE.md（如涉及边界调整）
 
 
 DoD:
 
-- [ ] ADR-0005 进入 Proposed 状态
-- [ ] Backend / Frontend / Database 任务可在不二次确认架构的情况下启动
+- [ ] ADR-0005 进入 Proposed 状态（决策方向已明确，Adapter 实现归 TASK-0005）
+- [ ] Backend / Frontend / Database / AI 任务可在不二次确认架构的情况下启动
 
 
 ---
@@ -308,12 +344,12 @@ feature/database-foundation
 
 Depends:
 
-TASK-0001
+TASK-0001, TASK-0002
 
 
 Description:
 
-建立数据库基础环境与初始 Migration（仅 User Module 前置表）。
+建立数据库基础环境与初始 Migration（仅 User Module 前置表）。依赖 TASK-0002 的 Spring Boot Flyway 配置，避免与 Backend Agent 同时修改配置文件。
 
 
 Todo:
@@ -356,7 +392,7 @@ DoD:
 
 ---
 
-## TASK-0005 AI Platform Foundation
+## TASK-0005 AI Foundation
 
 
 Owner:
@@ -376,7 +412,7 @@ Assigned
 
 Module:
 
-AI Platform
+Foundation / AI Infrastructure
 
 
 Branch:
@@ -391,7 +427,7 @@ TASK-0001
 
 Description:
 
-建立 AI Platform 基础接口，为 Sprint 5 真实接入预留扩展点。
+建立 AI 基础接口层（注意：Sprint 0 仅是 AI Interface Foundation，不是 AI Platform；AI Platform 完整实现属 Sprint 5），为 Sprint 5 真实接入预留扩展点。
 
 
 Todo:
@@ -400,7 +436,7 @@ Todo:
 - [ ] 创建 Router Interface（路由策略抽象）
 - [ ] 创建 Memory Interface（读写长期记忆）
 - [ ] 创建 Conversation Interface（短期对话上下文）
-- [ ] 创建 VectorStore Adapter Interface（ADR-0005 决策点）
+- [ ] 创建 VectorStoreAdapter Interface（基于 ADR-0005 决策方向实现抽象层，不绑定具体实现）
 - [ ] 创建 LLMProvider Interface（模型调用抽象层）
 
 
@@ -422,9 +458,21 @@ ai/
 ```
 
 
+职责边界（与 TASK-0001 分工）：
+
+- Architecture Agent（TASK-0001）：决定 Vector DB 选型方向（ADR-0005）
+- AI Agent（TASK-0005）：依据 ADR-0005 方向实现 VectorStoreAdapter 接口抽象
+
+
 DoD:
 
-- [ ] 5 个核心 Interface 全部定义
+- [ ] 6 个核心 Interface 全部定义：
+  - Agent
+  - Router
+  - Memory
+  - Conversation
+  - VectorStoreAdapter
+  - LLMProvider
 - [ ] 接口编译通过
 - [ ] 接口签名与 ARCHITECTURE §7 一致
 
@@ -436,6 +484,9 @@ DoD:
 - [X] Agent 业务实现（Sprint 5）
 - [X] Vector DB 实例部署（Sprint 5）
 - [X] ai_memory / ai_conversation 表 Migration（Sprint 5）
+- [X] 修改业务 Module（common / user / today / explore / mood / growth / community / story）的 Entity / Repository / Domain Service（ARCHITECTURE §21）
+- [X] 直接访问数据库（ARCHITECTURE §21）
+- [X] 跨模块 import 业务内部类
 
 
 ---
@@ -498,6 +549,89 @@ DoD:
 ---
 
 
+## TASK-0007 Documentation Foundation
+
+
+Owner:
+
+Architecture Agent
+
+
+Reviewer:
+
+QA Agent
+
+
+Status:
+
+Backlog
+
+
+Module:
+
+Foundation / Documentation
+
+
+Branch:
+
+feature/documentation-foundation
+
+
+Depends:
+
+TASK-0001
+
+
+Description:
+
+建立文档治理基础设施，确保后续所有 Sprint 的 CHANGELOG / AI_CHANGELOG / ADR / TASK_BOARD 同步规则可执行。
+
+
+Todo:
+
+- [ ] 初始化 docs/ 状态检查清单（确认 7 份核心文档版本基线）
+- [ ] 创建 ADR Index（`docs/architecture/ADR/README.md`，登记 ADR-0001~0011 状态）
+- [ ] 建立 ADR 模板（标准化 ADR-XXXX 文件结构：Date / Status / Decision / Reason / Impact）
+- [ ] 建立版本同步规则（AGENTS.md §13 文档版本管理可执行检查项）
+- [ ] 创建 AI_CHANGELOG 模板条目示例（Agent / Task / Action / Reason / Impact / Reviewer）
+- [ ] 创建 Sprint 结束文档归档规则（TASK_BOARD Done → Archived 流程）
+
+
+目录结构：
+
+```
+docs/
+├── architecture/
+│   └── ADR/
+│       ├── README.md          ADR Index（本次新增）
+│       ├── TEMPLATE.md        ADR 模板（本次新增）
+│       ├── ADR-0001-modular-monolith.md
+│       ├── ADR-0002-postgresql.md
+│       ├── ADR-0003-agent-router.md
+│       ├── ADR-0004-no-microservices-mvp.md
+│       └── (ADR-0005~0011 待 TASK-0001 / 各 Sprint 创建)
+```
+
+
+DoD:
+
+- [ ] ADR Index 文件存在且登记 ADR-0001~0004 为 Accepted
+- [ ] ADR-0005~0011 在 Index 中标注为 Proposed / Pending
+- [ ] ADR 模板文件存在
+- [ ] AI_CHANGELOG 模板示例存在
+- [ ] 版本同步规则文档化
+
+
+禁止:
+
+- [X] 在 Sprint 0 创建 ADR-0005~0011 的具体内容（属 TASK-0001 / 各 Module Sprint）
+- [X] 修改业务文档的业务内容（仅建立治理结构与模板）
+- [X] 创建未在 ARCHITECTURE §14 登记的 ADR
+
+
+---
+
+
 # Sprint 0 Definition of Done
 
 
@@ -506,7 +640,13 @@ DoD:
 - [ ] Backend 可启动并访问 `/health`
 - [ ] Frontend H5 可启动并访问首页
 - [ ] Database 可初始化（PostgreSQL + Redis 可用）
-- [ ] AI Platform 5 个核心 Interface 已定义
+- [ ] AI Foundation 6 个核心 Interface 已定义：
+  - Agent
+  - Router
+  - Memory
+  - Conversation
+  - VectorStoreAdapter
+  - LLMProvider
 
 
 ## Test
@@ -519,11 +659,14 @@ DoD:
 
 - [ ] CHANGELOG.md 更新
 - [ ] AI_CHANGELOG.md 更新
+- [ ] ADR Index 建立（TASK-0007）
 - [ ] TASK_BOARD.md 状态全部更新为 Done
 
 
 ## Architecture
 
+- [ ] ADR-0005 Vector DB Selection 进入 Proposed 状态
+- [ ] Module Boundary 确认（含 ADR-0010 Tag Ownership / ADR-0011 Activity Owner）
 - [ ] 无越权修改（ARCHITECTURE §22）
 - [ ] 无重复 Entity（ARCHITECTURE §3）
 - [ ] 无跨模块数据库访问（ARCHITECTURE §2）
@@ -558,7 +701,7 @@ Sprint 0
 
 预计任务（Sprint 1 启动时拆分）：
 
-- TASK-0101 User Migration（user / user_preference / tag 已在 Sprint 0 创建）
+- TASK-0101 User Migration Review（确认 Sprint 0 创建的 user / user_preference / tag 符合 User Module Domain Design；如需字段扩展，通过增量 Migration 修改，禁止重复创建表）
 - TASK-0102 User Domain Layer
 - TASK-0103 User Application Service
 - TASK-0104 User Controller + DTO
@@ -587,6 +730,19 @@ Sprint 0
 ---
 
 # Version History
+
+
+## v2.1 - 2026-07-28
+
+- P0-1 修复：TASK-0101 User Migration 改为 Migration Review，禁止 Sprint 1 重复创建 user / user_preference / tag 表
+- P0-2 修复：TASK-0005 Module 从「AI Platform」改为「Foundation / AI Infrastructure」（AI Platform 完整实现属 Sprint 5）
+- P0-3 修复：ADR-0005 职责拆分——Architecture Agent 负责 Vector DB Selection Proposal（定方向），AI Agent 负责 VectorStoreAdapter Interface 实现（抽象层）
+- P1-1 修复：TASK-0004 Database Foundation 增加 TASK-0002 依赖（Flyway 配置需先就绪）
+- P1-2 修复：TASK-0005 新增业务模块禁止项（禁改 Entity / Repository / Domain Service / 跨模块 import，对齐 ARCHITECTURE §21）
+- 架构修复：Sprint 0 DoD 明确 6 个核心 Interface（含 VectorStoreAdapter）
+- 新增 TASK-0007 Documentation Foundation（ADR Index / ADR 模板 / 版本同步规则 / AI_CHANGELOG 模板）
+- 新增 Sprint 0 Task Dependency Graph 依赖关系图
+- DoD Architecture 段新增 ADR-0005 Proposed 与 Module Boundary 确认项
 
 
 ## v2.0 - 2026-07-28

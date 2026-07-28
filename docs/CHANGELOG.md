@@ -237,6 +237,21 @@
   - 新增 Task Status Legend 状态说明表
 
 
+### Changed (TASK_BOARD.md v2.0 → v2.1)
+
+
+- 按评审意见修复 5 项问题并新增 1 项任务：
+  - P0-1 修复：TASK-0101 User Migration 改为 Migration Review，禁止 Sprint 1 重复创建 user / user_preference / tag 表
+  - P0-2 修复：TASK-0005 Module 从「AI Platform」改为「Foundation / AI Infrastructure」（AI Platform 完整实现属 Sprint 5）
+  - P0-3 修复：ADR-0005 职责拆分——Architecture Agent 负责 Vector DB Selection Proposal（定方向），AI Agent 负责 VectorStoreAdapter Interface 实现（抽象层）
+  - P1-1 修复：TASK-0004 Database Foundation 增加 TASK-0002 依赖（Flyway 配置需先就绪）
+  - P1-2 修复：TASK-0005 新增业务模块禁止项（禁改 Entity / Repository / Domain Service / 跨模块 import，对齐 ARCHITECTURE §21）
+  - 架构修复：Sprint 0 DoD 明确 6 个核心 Interface（含 VectorStoreAdapter）
+  - 新增 TASK-0007 Documentation Foundation（ADR Index / ADR 模板 / 版本同步规则 / AI_CHANGELOG 模板）
+  - 新增 Sprint 0 Task Dependency Graph 依赖关系图
+  - DoD Architecture 段新增 ADR-0005 Proposed 与 Module Boundary 确认项
+
+
 ### Deprecated
 
 
