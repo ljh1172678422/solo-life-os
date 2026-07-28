@@ -545,3 +545,46 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 13 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+TASK-0001 Architecture Foundation
+
+
+Action:
+
+执行 Sprint 0 Architecture Freeze Gate，完成架构边界冻结：
+- Sprint 0 Status：Planning → Ready
+- TASK-0001 Status：Designing → Done
+- 创建 ADR-0005 Vector DB Adapter Strategy（Proposed）：采用 VectorStoreAdapter 抽象模式，候选 pgvector / Milvus / Qdrant，Provider 延后至 Sprint 5 决策
+- 创建 ADR-0010 Tag Ownership（Proposed）：决策方向为 Tag 归 Shared Kernel，Owner Architecture，避免多模块反向依赖 User Module
+- 创建 ADR-0011 Activity Ownership（Accepted）：Activity 归 Today Module，Explore 只读引用，CommunityEvent 独立不复用 activity
+- 输出 Module Boundary Freeze：8 模块（User / Today / Explore / Mood / Growth / Community / Story / AI Platform）+ Shared Kernel 冻结表
+- 输出环境配置规范：.env（不入库）/ docker-compose.yml / docker-compose.ci.yml / application.yml / application-dev.yml 分层
+
+
+Reason:
+
+Sprint 0 的核心目标是冻结架构边界，使后续 TASK-0002~0007 可无冲突并行执行。TASK-0001 作为 Architecture Freeze Gate，必须在工程任务启动前完成 ADR-0005（Vector DB 接口边界）、ADR-0010（Tag 领域边界争议决策）、ADR-0011（Activity Owner 架构事实固化）。完成后进入「减少文档修改频率，增加代码产出频率」阶段。
+
+
+Impact:
+
+新增 docs/architecture/ADR/ADR-0005-vector-db-adapter-strategy.md、ADR-0010-tag-ownership.md、ADR-0011-activity-ownership.md 三个文件。更新 docs/TASK_BOARD.md（v2.2→v2.3，TASK-0001 Done，Sprint 0 Ready）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无代码变更。本文档生效后，TASK-0002 / TASK-0003 / TASK-0005 / TASK-0007 可并行启动，TASK-0004 待 TASK-0002 完成后启动。
+
+
+Reviewer:
+
+Pending

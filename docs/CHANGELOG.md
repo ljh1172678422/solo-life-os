@@ -274,6 +274,20 @@
     - Sprint 0 DoD Architecture 段同步调整为三 ADR 状态
 
 
+### Added (TASK-0001 Architecture Foundation 完成)
+
+
+- Sprint 0 Status：Planning → Ready
+- TASK-0001 Architecture Foundation 执行完成（Architecture Freeze Gate）
+- 新增 ADR 文件：
+  - `docs/architecture/ADR/ADR-0005-vector-db-adapter-strategy.md`（Proposed）
+  - `docs/architecture/ADR/ADR-0010-tag-ownership.md`（Proposed，Tag 归 Shared Kernel）
+  - `docs/architecture/ADR/ADR-0011-activity-ownership.md`（Accepted）
+- 输出 Module Boundary Freeze（8 模块 + AI Platform + Shared Kernel 冻结表）
+- 输出环境配置规范（.env / docker-compose / application.yml 分层）
+- `docs/TASK_BOARD.md` v2.2 → v2.3：TASK-0001 移入 Completed，Sprint 0 进入 Ready
+
+
 ### Deprecated
 
 

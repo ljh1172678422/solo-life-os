@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.2
+Version: 2.3
 
 Last Update: 2026-07-28
 
@@ -20,7 +20,7 @@ Sprint 0：工程初始化
 
 Status:
 
-Planning
+Ready
 
 
 Sprint Goal:
@@ -93,7 +93,7 @@ QA Agent
 
 Status:
 
-Designing
+Done
 
 
 Module:
@@ -108,27 +108,73 @@ feature/foundation-architecture
 
 Description:
 
-完成 Sprint 0 架构基础设计，为后续 Backend / Frontend / Database / AI 任务提供约束基线。
+完成 Sprint 0 架构基础设计（Architecture Freeze Gate），为后续 Backend / Frontend / Database / AI 任务提供约束基线。
 
 
 Todo:
 
-- [ ] 确认 Modular Monolith 基础结构
-- [ ] 确认 Backend Package Convention（ARCHITECTURE §19）
-- [ ] 创建 ADR-0005 Vector DB Adapter Strategy（候选 pgvector / Milvus / Qdrant + Adapter 延迟绑定原则，仅定接口边界方向，不实现 Adapter）
-- [ ] 创建 ADR-0010 Tag Ownership（Proposed；User Module vs Shared Kernel 决策，影响 Sprint 1 User Module）
-- [ ] 创建 ADR-0011 Activity Ownership（Accepted；Activity 归 Today，CommunityEvent 独立，已是架构事实）
-- [ ] 确认 Module Boundary（ARCHITECTURE §3 / §4 / §22，含 ADR-0010 / ADR-0011）
-- [ ] 确认环境配置规范（.env / docker-compose 分层）
-- [ ] 更新 ARCHITECTURE.md（如涉及边界调整）
+- [x] 确认 Modular Monolith 基础结构（ADR-0001 Accepted）
+- [x] 确认 Backend Package Convention（ARCHITECTURE §19）
+- [x] 创建 ADR-0005 Vector DB Adapter Strategy（Proposed；候选 pgvector / Milvus / Qdrant + Adapter 延迟绑定，Provider 延后至 Sprint 5）
+- [x] 创建 ADR-0010 Tag Ownership（Proposed；决策方向：Tag 归 Shared Kernel，Owner Architecture）
+- [x] 创建 ADR-0011 Activity Ownership（Accepted；Activity 归 Today，CommunityEvent 独立，已是架构事实）
+- [x] 确认 Module Boundary（ARCHITECTURE §3 / §4 / §22，8 模块 + AI Platform）
+- [x] 确认环境配置规范（.env 分层 + docker-compose 本地开发）
+- [x] 更新 ARCHITECTURE.md（v2.3 ADR 清单已调整）
+
+
+Module Boundary Freeze（架构冻结输出）：
+
+
+Package 结构（ARCHITECTURE §19）：
+
+```
+com.sololifeos
+├── common/          统一返回 / 异常 / 日志 / 配置
+├── user/            User Module
+├── today/           Today Module（Activity Owner）
+├── explore/         Explore Module（Location Owner）
+├── mood/            Mood Module
+├── growth/          Growth Module（Goal Owner）
+├── community/       Community Module（CommunityEvent Owner）
+├── story/           Story Module
+└── ai/              AI Platform（Memory / Conversation Owner）
+```
+
+
+Module Owner 冻结表：
+
+| Module | Owner | 核心数据对象 |
+|--------|-------|------------|
+| User | User Module | user / user_preference / favorite |
+| Today | Today Module | daily_plan / activity |
+| Explore | Explore Module | location |
+| Mood | Mood Module | mood_record |
+| Growth | Growth Module | goal |
+| Community | Community Module | community_event / registration |
+| Story | Story Module | （聚合 Memory / Goal / Mood / Activity） |
+| AI | AI Platform | ai_memory / ai_conversation |
+| Tag | Shared Kernel（ADR-0010 Proposed） | tag |
+
+
+环境配置规范：
+
+```
+.env                    本地开发环境变量（不入库，.gitignore）
+docker-compose.yml      PostgreSQL + Redis 本地容器
+docker-compose.ci.yml   CI 环境覆盖配置
+application.yml         Spring Boot 默认配置
+application-dev.yml     开发环境覆盖
+```
 
 
 DoD:
 
-- [ ] ADR-0005 进入 Proposed 状态（决策方向已明确，Adapter 实现归 TASK-0005）
-- [ ] ADR-0010 进入 Proposed 状态（Tag Ownership 决策方向明确）
-- [ ] ADR-0011 进入 Accepted 状态（Activity Ownership 已是架构事实）
-- [ ] Backend / Frontend / Database / AI 任务可在不二次确认架构的情况下启动
+- [x] ADR-0005 进入 Proposed 状态（决策方向已明确，Adapter 实现归 TASK-0005）
+- [x] ADR-0010 进入 Proposed 状态（Tag Ownership 决策方向明确：Shared Kernel）
+- [x] ADR-0011 进入 Accepted 状态（Activity Ownership 已是架构事实）
+- [x] Module Boundary 冻结（8 模块 + AI Platform + Shared Kernel）
+- [x] Backend / Frontend / Database / AI 任务可在不二次确认架构的情况下启动
 
 
 ---
@@ -684,7 +730,12 @@ DoD:
 # Completed
 
 
-暂无
+## TASK-0001 Architecture Foundation
+
+- Owner: Architecture Agent
+- Completed: 2026-07-28
+- 交付物：ADR-0005（Proposed）/ ADR-0010（Proposed）/ ADR-0011（Accepted）/ Module Boundary Freeze / 环境配置规范
+- Sprint 0 架构冻结完成，后续任务可并行启动
 
 
 ---
@@ -736,6 +787,18 @@ Sprint 0
 ---
 
 # Version History
+
+
+## v2.3 - 2026-07-28
+
+- Sprint 0 Status：Planning → Ready
+- TASK-0001 Architecture Foundation 执行完成，Status: Designing → Done
+- 创建 ADR-0005 Vector DB Adapter Strategy（Proposed）
+- 创建 ADR-0010 Tag Ownership（Proposed，Tag 归 Shared Kernel）
+- 创建 ADR-0011 Activity Ownership（Accepted）
+- 输出 Module Boundary Freeze（8 模块 + AI Platform + Shared Kernel 冻结表）
+- 输出环境配置规范（.env / docker-compose / application.yml 分层）
+- TASK-0001 移入 Completed 段
 
 
 ## v2.2 - 2026-07-28
