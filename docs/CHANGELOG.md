@@ -274,6 +274,19 @@
     - Sprint 0 DoD Architecture 段同步调整为三 ADR 状态
 
 
+### Added (Git Branch Governance)
+
+
+- `docs/AGENTS.md` v1.2 → v1.3：新增 §15 Git Branch Governance
+  - §15.1 Develop Branch Protection（硬约束：禁止在 develop/main 上提交代码）
+  - §15.2 Task Start Checklist（强制：创建 feature 分支后才能 Developing）
+  - §15.3 Task Commit Workflow（feature 分支提交 → PR → 审核 → 合并）
+  - §15.4 Branch Status 字段（Created / Pushed / PR-Open / Merged）
+  - §15.5 AI Agent 自检规则（git 命令前检查当前分支）
+  - §15.6 PR 合并条件（DoD + 编译通过 + Reviewer 审核）
+- `docs/TASK_BOARD.md`：TASK-0002 新增 Branch Status 字段
+
+
 ### Added (TASK-0001 Architecture Foundation 完成)
 
 

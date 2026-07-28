@@ -20,7 +20,7 @@ Sprint 0：工程初始化
 
 Status:
 
-Ready
+In Progress
 
 
 Sprint Goal:
@@ -195,7 +195,7 @@ Architecture Agent
 
 Status:
 
-Assigned
+Developing
 
 
 Module:
@@ -206,6 +206,11 @@ Foundation
 Branch:
 
 feature/backend-foundation
+
+
+Branch Status:
+
+Pushed
 
 
 Depends:
@@ -291,7 +296,7 @@ Architecture Agent
 
 Status:
 
-Assigned
+Developing
 
 
 Module:
@@ -379,7 +384,7 @@ Architecture Agent
 
 Status:
 
-Assigned
+Blocked
 
 
 Module:
@@ -457,7 +462,7 @@ Architecture Agent
 
 Status:
 
-Assigned
+Developing
 
 
 Module:

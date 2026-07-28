@@ -550,7 +550,46 @@ Pending
 ---
 
 
-## 2026-07-28 (第 13 次变更)
+## 2026-07-28 (第 14 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+新增 AGENTS.md §15 Git Branch Governance，修复 AI Agent 直接提交 develop 的问题：
+- 发现 TASK-0002 Backend Foundation 代码直接在 develop 分支准备提交，违反 §5.2「AI Agent 严禁直接操作 develop」
+- 根因：§5.2 仅有声明无强制执行机制
+- 新增 §15.1 Develop Branch Protection（硬约束）
+- 新增 §15.2 Task Start Checklist（feature 分支创建后才能 Developing）
+- 新增 §15.3 Task Commit Workflow（feature → PR → 审核 → 合并）
+- 新增 §15.4 Branch Status 字段（Created / Pushed / PR-Open / Merged）
+- 新增 §15.5 AI Agent 自检规则（git 命令前检查当前分支）
+- 新增 §15.6 PR 合并条件
+- TASK-0002 起严格执行 feature 分支流程
+
+
+Reason:
+
+TASK-0001 之前的提交均在 develop 上完成（仓库初始化阶段，§15.1 例外允许）。但从 TASK-0002 开始进入代码交付阶段，多个 Agent 并行时 develop 会失控。必须在第一个代码任务启动前建立强制约束。
+
+
+Impact:
+
+影响 docs/AGENTS.md（v1.2→v1.3）、docs/TASK_BOARD.md、docs/CHANGELOG.md、docs/AI_CHANGELOG.md，无代码变更。本文档生效后，所有代码任务必须先创建 feature 分支，禁止直接提交 develop。
+
+
+Reviewer:
+
+Pending
 
 
 Agent:

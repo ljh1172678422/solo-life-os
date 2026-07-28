@@ -1,6 +1,6 @@
 # AI Agent 协作规范
 
-Version: 1.2
+Version: 1.3
 
 Last Update: 2026-07-28
 
@@ -614,3 +614,143 @@ Solo-Life-OS
 1. docs/TASK_BOARD.md        勾选完成项、更新 Sprint 状态
 2. docs/CHANGELOG.md        按变更类型追加产品变更记录
 3. docs/AI_CHANGELOG.md     记录 AI Agent 的行为、原因、影响范围（含 §10 Handoff 信息）
+
+
+---
+
+
+# 15. Git Branch Governance
+
+
+§5.2 已声明「AI Agent 严禁直接操作 develop 或 main」，本节补充**强制执行机制**，确保规则不被绕过。
+
+
+## 15.1 Develop Branch Protection（硬约束）
+
+
+禁止以下行为：
+
+
+- 在 `develop` 分支上执行 `git commit`
+- 在 `develop` 分支上执行 `git push origin develop`
+- 在 `main` 分支上执行任何写操作
+
+
+例外（允许直接提交 develop）：
+
+
+- 仓库初始化阶段（TASK-0001 Architecture Foundation 之前的文档治理提交）
+- 文档热修复（仅 docs/ 目录变更，不涉及代码）
+- 用户明确批准的架构紧急修复
+
+
+从 TASK-0002 开始，所有代码任务必须使用 feature 分支，无例外。
+
+
+## 15.2 Task Start Checklist（强制）
+
+
+每个 TASK 进入 Developing 状态前，必须完成以下检查：
+
+
+```
+TASK START CHECKLIST
+
+
+[1] Read TASK_BOARD，确认 Owner / Reviewer / Branch
+[2] git checkout develop
+[3] git pull origin develop（确保 develop 最新）
+[4] git checkout -b feature/<task-name>（从 TASK_BOARD 提取 Branch 字段）
+[5] git push -u origin feature/<task-name>
+[6] 验证当前分支：git branch --show-current 输出为 feature/<task-name>
+[7] 仅在验证通过后，Status → Developing
+```
+
+
+如果 `git branch --show-current` 输出为 `develop` 或 `main`，**禁止继续**，必须回到步骤 4。
+
+
+## 15.3 Task Commit Workflow
+
+
+开发过程中的提交规范：
+
+
+```
+开发中（feature 分支）:
+  git add <specific files>
+  git commit -m "feat(<module>): <description>"
+  git push origin feature/<task-name>
+
+
+完成时:
+  git push origin feature/<task-name>
+  → 创建 PR: feature/<task-name> → develop
+  → TASK_BOARD Status → Reviewing
+  → 等待 Reviewer Agent / Human 审核
+  → PR 合并后 Status → Done
+```
+
+
+## 15.4 Branch Status 字段
+
+
+TASK_BOARD 每个 TASK 卡增加 Branch Status 字段：
+
+
+```
+Branch:
+feature/<task-name>
+
+Branch Status:
+Created / Pushed / PR-Open / Merged
+```
+
+
+状态流转：
+
+
+```
+Created   分支已创建（git checkout -b）
+   ↓
+Pushed    分支已推送到远端（git push -u）
+   ↓
+PR-Open   PR 已创建，等待审核
+   ↓
+Merged    PR 已合并到 develop
+```
+
+
+## 15.5 AI Agent 自检规则
+
+
+AI Agent 在执行任何 git 命令前，必须自检：
+
+
+```
+IF current branch == develop OR current branch == main:
+    IF task is documentation-only AND no code changes:
+        ALLOW commit（§15.1 例外）
+    ELSE:
+        ABORT: "禁止在 develop/main 上提交代码，请先创建 feature 分支"
+        CREATE feature branch per TASK_BOARD
+        RETRY on feature branch
+ELSE:
+    PROCEED
+```
+
+
+## 15.6 PR 合并条件
+
+
+PR 合并到 develop 前，必须满足：
+
+
+- TASK_BOARD Status 已更新为 Reviewing
+- DoD 所有项已勾选
+- 代码编译通过（Backend: mvn compile，Frontend: npm run build）
+- CHANGELOG.md 已更新
+- AI_CHANGELOG.md 已更新
+- Reviewer 已审核（Architecture Agent / QA Agent）
+
+
