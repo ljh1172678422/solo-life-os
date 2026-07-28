@@ -149,3 +149,49 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 4 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+全量升级 ARCHITECTURE.md v1.0 → v2.0，从「系统拓扑图」升级为「研发约束文档」：
+- 新增 §1 Architecture Principles（DDD + Modular Monolith + AI Native）
+- 新增 §2 Layer Architecture（分层架构与禁止规则）
+- 新增 §3 Shared Domain（8 个共享核心 Entity）
+- 新增 §4 Module Dependencies（模块依赖图与单向依赖规则）
+- 新增 §7 AI Platform 完整链路（Memory → Context → Router → Agent → LLM Provider）
+- 新增 §9 Event Flow（事件流解耦 + 典型事件表）
+- 新增 §10 Persistence（四存储架构）
+- 新增 §11 API Boundary（前端禁直调 AI）
+- 新增 §12 Repository Structure（仓库目录地图）
+- 新增 §13 Evolution Roadmap（Phase 0–4 演进路线）
+
+
+Reason:
+
+原 ARCHITECTURE v1.0 仅是部署拓扑图，未回答「系统如何分层、模块如何通信、数据如何流动、AI 如何接入、以后如何拆微服务」等研发约束问题。升级后，DATABASE_DESIGN / SPRINT_PLAN / TASK_BOARD / 各 Agent 行为都将自动统一，防止架构漂移。
+
+
+Impact:
+
+仅影响 docs/ARCHITECTURE.md，无代码与数据库变更。本文档生效后，后续所有模块开发必须遵守 §3 共享 Entity、§4 模块依赖、§2 分层规则。
+
+
+Reviewer:
+
+Pending

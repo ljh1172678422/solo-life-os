@@ -98,6 +98,23 @@
 - 升级 `docs/AI_CHANGELOG.md`，固定条目格式（Agent/Task/Action/Reason/Impact/Reviewer）
 
 
+### Changed (ARCHITECTURE.md v1.0 → v2.0)
+
+
+- 全量升级 `docs/ARCHITECTURE.md`，从「系统拓扑图」升级为「研发约束文档」
+  - 新增 §1 Architecture Principles（DDD 轻量版 + Modular Monolith + AI Native）
+  - 新增 §2 Layer Architecture（Controller/Application/Domain/Repository 分层与禁止规则）
+  - 新增 §3 Shared Domain（8 个共享核心 Entity，禁止重复定义）
+  - 新增 §4 Module Dependencies（模块依赖图与单向依赖规则）
+  - 新增 §5 升级版总体架构图（Client → Spring Boot → AI Platform → 持久化四层）
+  - 新增 §7 AI Platform 完整链路（Memory → Context → Router → Agent → LLM Provider 抽象层）
+  - 新增 §9 Event Flow（事件流解耦 + 典型事件表）
+  - 新增 §10 Persistence（PostgreSQL + Redis + Vector DB + OSS 四存储）
+  - 新增 §11 API Boundary（前端禁直调 AI、统一返回格式）
+  - 新增 §12 Repository Structure（仓库目录地图，与 AGENTS.md §12 对齐）
+  - 新增 §13 Evolution Roadmap（Phase 0–4 演进路线与触发条件）
+
+
 ### Deprecated
 
 
