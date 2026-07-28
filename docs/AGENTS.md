@@ -748,9 +748,88 @@ PR 合并到 develop 前，必须满足：
 
 - TASK_BOARD Status 已更新为 Reviewing
 - DoD 所有项已勾选
-- 代码编译通过（Backend: mvn compile，Frontend: npm run build）
+- 代码编译通过（Backend: mvn clean compile，Frontend: npm run build）
 - CHANGELOG.md 已更新
 - AI_CHANGELOG.md 已更新
 - Reviewer 已审核（Architecture Agent / QA Agent）
+
+
+## 15.7 Task Branch Validation（硬检查）
+
+
+每次执行代码任务前，必须执行分支验证：
+
+
+```
+[1] 读取 TASK_BOARD 中当前 TASK 的 Branch 字段
+[2] 执行：git branch --show-current
+[3] 比对：当前分支 == TASK_BOARD.Branch
+[4] 如不匹配，禁止执行 git add / git commit / git push
+```
+
+
+验证失败示例：
+
+
+```
+TASK_BOARD:
+  Branch: feature/frontend-foundation
+
+Current branch:
+  develop
+
+❌ Task branch mismatch
+   Expected: feature/frontend-foundation
+   Current:  develop
+   Action:  请先执行 §15.2 Task Start Checklist 创建 feature 分支
+```
+
+
+验证通过示例：
+
+
+```
+TASK_BOARD:
+  Branch: feature/backend-foundation
+
+Current branch:
+  feature/backend-foundation
+
+✅ Task branch validated
+```
+
+
+此规则与 §15.5 自检规则联动：§15.5 检查是否在 develop/main，§15.7 检查是否在正确的 feature 分支。两者都必须通过才能执行 git 写操作。
+
+
+## 15.8 Compile Validation（编译验证）
+
+
+TASK 进入 Reviewing 状态前，必须通过编译验证：
+
+
+- Backend TASK：`mvn clean compile`（必须 BUILD SUCCESS）
+- Frontend TASK：`npm run build`（必须 exit code 0）
+- AI TASK：`mvn clean compile`（如为 Java）
+
+
+TASK_BOARD 每个 TASK 卡增加 Validation 字段：
+
+
+```
+Validation:
+✅ mvn clean compile passed (YYYY-MM-DD)
+或
+❌ mvn clean compile failed — <错误简述>
+```
+
+
+禁止：
+
+
+- 在 Validation 为 ❌ 时将 Status 改为 Reviewing
+- 在 Validation 为 ❌ 时创建 PR
+- 隐藏编译失败日志
+
 
 
