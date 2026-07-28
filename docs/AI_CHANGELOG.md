@@ -592,9 +592,52 @@ Reviewer:
 Pending
 
 
+---
+
+
+## 2026-07-28 (第 15 次变更)
+
+
 Agent:
 
-Architecture Agent
+Backend Agent
+
+
+Task:
+
+TASK-0002 Backend Foundation
+
+
+Action:
+
+初始化 Spring Boot 后端工程，建立 Modular Monolith 基础结构：
+- 创建 Spring Boot 3.2.5 + Java 17 + Maven 工程（backend/solo-server/）
+- 建立 Modular Monolith 包结构（ARCHITECTURE §19）：common + user/today/explore/mood/growth/community/story/ai 共 9 个模块包
+- 实现统一 Response Wrapper：ApiResponse<T>（code/message/data/traceId）+ ResultCode 枚举
+- 实现异常体系（ARCHITECTURE §20）：SoloException 基类 + BusinessException/ValidationException/AIException/ExternalException/AuthException + GlobalExceptionHandler（业务异常 400 / 系统异常 500 / 不返回堆栈）
+- 实现 TraceIdFilter（ARCHITECTURE §16：traceId 贯穿前端→Backend→AI）
+- 实现 GET /health 端点
+- 配置 OpenAPI / Swagger UI
+- 配置 CORS（开发环境 localhost）
+- 配置 application.yml + application-dev.yml 环境分层（DB/Redis 环境变量占位符）
+- 集成依赖：Spring Web / Validation / Data Redis / Actuator / Flyway 10.10 / PostgreSQL / springdoc-openapi
+- mvn compile 验证通过（23 个源文件编译成功）
+- 首次执行 §15 Git Branch Governance：在 feature/backend-foundation 分支提交，非 develop
+
+
+Reason:
+
+Sprint 0 Phase 2 工程实现启动。Backend Foundation 是所有后续任务（Database / AI Interface / Test）的基础。按 TASK-0002 DoD 要求建立分层骨架与公共基础设施，为 Sprint 1 User Module 开发提供可运行的后端工程。
+
+
+Impact:
+
+新增 backend/solo-server/ 目录，包含 27 个文件（pom.xml + 23 个 Java 源文件 + 2 个配置文件 + .env.example）。无业务模块 Entity/Repository/Service/Controller（仅 common 基础设施）。本文档生效后，TASK-0004 Database Foundation 可依赖 Flyway 配置启动，TASK-0005 AI Foundation 可依赖 common 包结构启动。
+
+
+Reviewer:
+
+Pending
 
 
 Task:

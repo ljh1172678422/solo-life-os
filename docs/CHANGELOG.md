@@ -274,6 +274,25 @@
     - Sprint 0 DoD Architecture 段同步调整为三 ADR 状态
 
 
+### Added (TASK-0002 Backend Foundation)
+
+
+- Spring Boot 3.2.5 + Java 17 工程初始化（`backend/solo-server/`）
+- Modular Monolith 包结构建立（ARCHITECTURE §19）：
+  - common/（response / exception / health / config）
+  - user / today / explore / mood / growth / community / story / ai（8 模块 package-info）
+- 统一 Response Wrapper（`ApiResponse<T>` + `ResultCode`）
+- 异常体系（ARCHITECTURE §20）：SoloException 基类 + 5 个子类 + GlobalExceptionHandler
+- TraceId 透传 Filter（ARCHITECTURE §16）
+- GET /health 端点
+- OpenAPI / Swagger UI 配置
+- CORS 开发环境配置
+- application.yml + application-dev.yml 环境分层
+- .env.example 环境变量模板
+- 集成依赖：Spring Web / Validation / Data Redis / Actuator / Flyway 10.10 / PostgreSQL / springdoc-openapi
+- mvn clean compile 验证通过（23 source files）
+
+
 ### Added (TASK-0005 AI Foundation)
 
 
