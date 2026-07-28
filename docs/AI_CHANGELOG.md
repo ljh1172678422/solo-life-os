@@ -331,3 +331,47 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 8 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+全量升级 SPRINT_PLAN.md v1.0 → v2.0，从「功能清单」升级为「可执行 Sprint 计划」：
+- Sprint 按 Module 组织（不按页面），统一术语 Module
+- 每个 Sprint 增加：Sprint Goal / Deliverables / Agents / Depends / Risk / DoD 六段式
+- Sprint 5 改名 AI Personal Agent → AI Platform
+- 新增 §2 Sprint Roadmap / §12 Milestones / §13 Dependencies
+- 新增 §14 Definition of Done（代码/测试/文档/架构四层）
+- 新增 §15 Sprint Lifecycle + Risk 管理规则
+- 新增 §16 Version History + §17 Alignment
+- 识别 5 个待写 ADR（ADR-0005~0009）
+
+
+Reason:
+
+原 v1.0 仅是按页面切分的功能清单，无法回答 Sprint 完成标准、依赖关系、风险、Agent 分工等执行问题。升级后与 ARCHITECTURE / DATABASE_DESIGN / AGENTS 完全对齐，AI Agent 可按 Sprint 顺序稳定执行，避免开发顺序错误与功能蔓延。
+
+
+Impact:
+
+仅影响 docs/SPRINT_PLAN.md，无代码变更。本文档生效后，后续所有 Sprint 开发必须遵守 §13 依赖关系与 §14 DoD。
+
+
+Reviewer:
+
+Pending

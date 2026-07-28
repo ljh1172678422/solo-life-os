@@ -175,6 +175,22 @@
   - 新增 §13 Version History + §14 Alignment 对齐表
 
 
+### Changed (SPRINT_PLAN.md v1.0 → v2.0)
+
+
+- 全量升级 `docs/SPRINT_PLAN.md`，从「功能清单」升级为「可执行 Sprint 计划」
+  - Sprint 按 Module 组织（不按页面），统一术语 Module（与 ARCHITECTURE §5 一致）
+  - 每个 Sprint 增加：Sprint Goal / Deliverables / Agents / Depends / Risk / DoD 六段式结构
+  - Sprint 5 改名 AI Personal Agent → AI Platform（含 Memory / Router / 5 个 Agent）
+  - 新增 §2 Sprint Roadmap（含 M1/M2/M3 Milestone 标注）
+  - 新增 §12 Milestones（与 PROJECT_CONTEXT §9 Phase 对应）
+  - 新增 §13 Dependencies（依赖关系图）
+  - 新增 §14 Definition of Done（代码 / 测试 / 文档 / 架构 四层 DoD）
+  - 新增 §15 Sprint Lifecycle（与 AGENTS §7 一致）+ Risk 管理规则
+  - 新增 §16 Version History + §17 Alignment 对齐表
+  - 识别 5 个待写 ADR：ADR-0005 Vector DB / ADR-0006 JWT / ADR-0007 地图 / ADR-0008 LLM / ADR-0009 支付
+
+
 ### Deprecated
 
 
