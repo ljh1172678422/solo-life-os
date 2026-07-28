@@ -28,7 +28,8 @@ Phase 0：基础平台搭建中
 | [docs/SPRINT_PLAN.md](docs/SPRINT_PLAN.md) | Sprint 规划 |
 | [docs/TASK_BOARD.md](docs/TASK_BOARD.md) | 当前任务看板 |
 | [docs/AI_CHANGELOG.md](docs/AI_CHANGELOG.md) | AI 开发行为日志 |
-| [CHANGELOG.md](CHANGELOG.md) | 项目变更记录 |
+| [docs/CHANGELOG.md](docs/CHANGELOG.md) | 项目变更记录 |
+| [AGENTS.md](AGENTS.md) | AI Agent 根目录入口 |
 
 ---
 

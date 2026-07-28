@@ -65,6 +65,27 @@
 - 删除空的 `.ai/` 目录
 
 
+### Changed (AGENTS.md v1.0 → v1.1)
+
+
+- 升级 `docs/AGENTS.md` v1.0 → v1.1
+  - 新增 §7 Task Ownership（任务卡片格式 / Primary Owner / 领取前检查）
+  - 新增 §8 Architecture Change Process（架构变更必须先评估后开发）
+  - 新增 §9 AI 提交前检查（Context / Architecture / Database / Code / Documentation / Git 六类自检）
+  - 新增 §10 Agent Handoff Protocol（Changed / API / Database / Dependency / Next Agent 交接格式）
+  - §3 权限调整：Architecture Agent 改为可写 `database/design/`，禁止 `database/migrations/`（迁移归 Backend Agent）
+  - §6 禁止事项补充：多 Agent 同改同模块、先写代码再补架构
+  - §12 完成任务后必更清单指向 `docs/CHANGELOG.md`（原根目录 CHANGELOG 已迁移）
+
+
+### Changed (CHANGELOG 位置调整)
+
+
+- `CHANGELOG.md` → `docs/CHANGELOG.md`（使用 `git mv` 保留历史，便于根目录整洁）
+- 新增根目录 `AGENTS.md` 作为 AI Coding Agent 入口，指向 `docs/AGENTS.md`
+- 更新 `README.md` 文档导航表，同步链接调整
+
+
 ### Deprecated
 
 
