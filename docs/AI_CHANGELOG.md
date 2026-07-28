@@ -195,3 +195,46 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 5 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+全量升级 ARCHITECTURE.md v2.0 → v2.1，纳入企业级研发治理：
+- §5 总体架构图：App → Spring Boot Modular Monolith，统一 Module 命名
+- §6 服务设计 → 模块设计，全文 Service → Module（与 Phase 0 一致）
+- 新增 §14 ADR / §15 NFR / §16 Observability / §17 Security Boundary
+- 新增 §18 Integration Boundary / §19 Package Convention / §20 Error Handling
+- 新增 §21 AI Boundary（AI 永远不能直连数据库，必须经 Domain API）
+- 新增 §22 Data Ownership（每数据对象唯一 Owner 模块）
+- 新建 docs/architecture/ADR/ 目录与 4 份初始 ADR（0001-0004）
+
+
+Reason:
+
+v2.0 解决了架构拓扑与边界问题，但缺少非功能性约束、可观测性、安全边界、错误处理、AI 边界、数据归属等企业级治理细节。本次升级补齐，使架构文档真正承担研发治理职责，防止后期架构漂移。
+
+
+Impact:
+
+影响 docs/ARCHITECTURE.md 与新增的 docs/architecture/ADR/ 目录。无代码与数据库变更。本文档生效后，后续所有模块开发必须遵守 §17 安全边界、§20 错误处理、§21 AI Boundary、§22 Data Ownership。
+
+
+Reviewer:
+
+Pending

@@ -115,6 +115,28 @@
   - 新增 §13 Evolution Roadmap（Phase 0–4 演进路线与触发条件）
 
 
+### Changed (ARCHITECTURE.md v2.0 → v2.1)
+
+
+- 升级 `docs/ARCHITECTURE.md` v2.0 → v2.1，纳入企业级研发治理
+  - §5 总体架构图：App → Spring Boot Modular Monolith，统一使用 Module 命名
+  - §6 服务设计 → 模块设计，全文 Service → Module（与 Phase 0 一致）
+  - 新增 §14 ADR（Architecture Decision Record）机制
+  - 新增 §15 NFR（性能 P95 / 可用性 / 可扩展性 / 隐私）
+  - 新增 §16 Observability（Logging / Metrics / Tracing / Audit）
+  - 新增 §17 Security Boundary（认证 / 授权 / 限流 / 加密）
+  - 新增 §18 Integration Boundary（外部集成通过 Adapter 层）
+  - 新增 §19 Package Convention（后端包结构固定）
+  - 新增 §20 Error Handling（统一异常体系与错误码）
+  - 新增 §21 AI Boundary（AI 永远不能直连数据库，必须经 Domain API）
+  - 新增 §22 Data Ownership（每个核心数据对象唯一 Owner 模块）
+- 新增 `docs/architecture/ADR/` 目录与 4 份初始 ADR：
+  - ADR-0001 采用 Modular Monolith
+  - ADR-0002 选择 PostgreSQL 作为主数据库
+  - ADR-0003 AI Agent 统一经 Router 路由
+  - ADR-0004 MVP 阶段不使用微服务
+
+
 ### Deprecated
 
 
