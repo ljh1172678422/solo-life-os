@@ -1,0 +1,17 @@
+# Development profile overrides.
+# Concrete local values for PostgreSQL and Redis used during development.
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/solo_life_os
+    username: solo
+    password: solo123
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging:
+  level:
+    com.sololifeos: DEBUG
+    org.springframework.web: INFO
