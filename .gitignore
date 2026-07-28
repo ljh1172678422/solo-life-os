@@ -1,0 +1,78 @@
+# ===== 通用 =====
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# ===== 环境变量 / 凭据 =====
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# ===== Java / Maven / Gradle =====
+target/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+.gradle/
+
+# ===== Node / npm / yarn / pnpm =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.yarn/cache
+.yarn/install-state.gz
+
+# ===== uni-app 编译产物 =====
+unpackage/
+dist/
+.hbuilderx/
+
+# ===== 数据库本地数据 =====
+*.sqlite
+*.db
+database/local/
+pgdata/
+redis-data/
+
+# ===== AI / 模型缓存 =====
+*.gguf
+*.bin
+models/
+ai/.cache/
+vector-db-data/
+
+# ===== 构建与发布产物 =====
+out/
+*.tar
+*.zip
+release/
+
+# ===== 操作系统 =====
+Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
