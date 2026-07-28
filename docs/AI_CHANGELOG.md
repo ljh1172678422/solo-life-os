@@ -286,3 +286,48 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 7 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+全量升级 CODE_RULES.md v1.0 → v2.0，使规范从「代码风格约束」升级为「AI 生成代码约束」：
+- 新增 §1 General Principles / §4 Package Convention / §5 DTO/Entity/VO Rules
+- 新增 §6 Exception Handling / §7 Logging Rules / §10 Testing Rules
+- 新增 §11 AI Generated Code Rules（与 AGENTS / ARCHITECTURE 联动）
+- 重写 §2 Frontend（禁 any/as any，必经 api/ 封装）
+- 重写 §3 Backend（补全五层架构与命名规范）
+- 重写 §8 Database Rules（对齐 DATABASE_DESIGN v2.0）
+- 重写 §9 API Rules（返回格式增加 traceId）
+- 重写 §12 Git Convention（分支类型对齐 AGENTS.md §5.1）
+- 新增 §13 Version History + §14 Alignment 对齐表
+
+
+Reason:
+
+原 v1.0 仅约束代码风格，无法约束 AI Agent 生成代码的边界（DTO/Entity 混用、Repository 写业务、组件直连 axios 等）。升级后与 ARCHITECTURE / DATABASE_DESIGN / AGENTS 真正联动，形成完整闭环。
+
+
+Impact:
+
+仅影响 docs/CODE_RULES.md，无代码变更。本文档生效后，后续所有 AI 生成的代码必须遵守 §5 DTO 边界、§6 异常体系、§7 日志规范、§11 AI 代码规则。
+
+
+Reviewer:
+
+Pending

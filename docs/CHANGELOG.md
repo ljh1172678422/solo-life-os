@@ -156,6 +156,25 @@
   - 扩展 ai_memory：新增 memory_type / source / summary / embedding_id / visibility 5 字段
 
 
+### Changed (CODE_RULES.md v1.0 → v2.0)
+
+
+- 全量升级 `docs/CODE_RULES.md`，使规范从「代码风格约束」升级为「AI 生成代码约束」
+  - 新增 §1 General Principles
+  - 重写 §2 Frontend：禁止 any / as any，未知用 unknown；禁止组件直连 axios，必须经 api/ 封装
+  - 重写 §3 Backend：补全 Application Service / Domain Service / Repository Interface / Infrastructure 五层
+  - 新增 §4 Package Convention（对齐 ARCHITECTURE §19）
+  - 新增 §5 DTO/Entity/VO Rules：禁止 Entity 直出 Controller
+  - 新增 §6 Exception Handling（对齐 ARCHITECTURE §20，禁止 throw new Exception）
+  - 新增 §7 Logging Rules（对齐 ARCHITECTURE §16，必含 traceId，禁 System.out.println）
+  - 重写 §8 Database Rules（对齐 DATABASE_DESIGN v2.0）
+  - 重写 §9 API Rules：返回格式增加 traceId 字段
+  - 新增 §10 Testing Rules
+  - 新增 §11 AI Generated Code Rules：与 AGENTS / ARCHITECTURE 联动的 10 条约束
+  - 重写 §12 Git Convention：分支类型对齐 AGENTS.md §5.1（feature/bugfix/hotfix/docs/refactor）
+  - 新增 §13 Version History + §14 Alignment 对齐表
+
+
 ### Deprecated
 
 
