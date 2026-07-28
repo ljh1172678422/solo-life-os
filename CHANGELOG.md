@@ -37,6 +37,13 @@
   - 新增「数据资产战略」章节，指导数据库设计
   - 新增「AI 输出原则」（可解释 / 可编辑 / 可拒绝），指导 Agent 行为
   - 新增「隐私原则」与「AI 研发原则」，防止 AI 随意编码
+- 升级 `docs/PROJECT_CONTEXT.md` v1.1 → v1.2
+  - 重构 §11 AI 架构为 Orchestrator 模式（路由层 + 横向可扩展 Agent），新增 Assistant / Memory Service，禁止 Agent 网状依赖
+  - 新增 §16 项目成功标准（Daily Value / AI 价值 / 数据资产 / 情感价值指标）
+  - 新增 §17 架构演进原则（初期 Modular Monolith、后期服务拆分条件、核心模块边界与领域接口）
+  - 新增 §18 AI 代码生成原则（编码前必读文档清单、禁止事项、新增功能流程）
+  - 新增 §19 AI Agent 角色体系（Product / Architecture / Backend / Frontend / AI / QA 六类 Agent，共享 PROJECT_CONTEXT）
+  - 新增 §20 文档版本管理（核心文档版本规则与修改记录要求）
 
 
 ### Deprecated
