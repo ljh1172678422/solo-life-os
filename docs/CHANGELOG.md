@@ -86,6 +86,18 @@
 - 更新 `README.md` 文档导航表，同步链接调整
 
 
+### Changed (AGENTS.md v1.1 → v1.2)
+
+
+- 升级 `docs/AGENTS.md` v1.1 → v1.2
+  - §5.1 分支策略新增 `hotfix/*`（生产紧急修复通道）与 `docs/*`（文档独立生命周期）分支类型
+  - §7 Task Ownership 新增任务生命周期状态机（Backlog→Assigned→Designing→Developing→Reviewing→Testing→Done→Archived）
+  - 新增 §11 Prompt 文件管理规则（受控变更，禁止无记录修改 Prompt，防漂移）
+  - 新增 §12 Repository Structure（仓库目录地图，禁止擅建根目录）
+  - 原 §11/§12 顺延为 §13 文档版本管理 / §14 完成任务后必更
+- 升级 `docs/AI_CHANGELOG.md`，固定条目格式（Agent/Task/Action/Reason/Impact/Reviewer）
+
+
 ### Deprecated
 
 

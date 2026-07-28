@@ -1,6 +1,6 @@
 # AI Agent 协作规范
 
-Version: 1.1
+Version: 1.2
 
 Last Update: 2026-07-28
 
@@ -114,7 +114,7 @@ Solo Life OS 使用多个 AI Agent 协作（详见 PROJECT_CONTEXT §19）。
 ## 5.1 分支策略
 
 
-采用 **Git Flow 精简版**，三层结构：
+采用 **Git Flow 精简版**，多层结构：
 
 
 ```
@@ -124,7 +124,9 @@ main        产品稳定版本
 develop     研发集成分支
  │          所有 Agent 的开发结果最终汇入
  │
-feature/*   每任务一分支
+ ├── feature/*   每任务一分支
+ ├── hotfix/*    生产紧急修复
+ └── docs/*      文档独立生命周期
 ```
 
 
@@ -151,6 +153,39 @@ feature/*   每任务一分支
   - `feature/docs-project-context`
   - `feature/backend-user-module`
   - `feature/ai-memory-agent`
+
+
+### hotfix
+
+
+- 定位：生产环境严重问题紧急修复
+- 命名格式：`hotfix/<模块>-<简述>`
+- 流程：
+
+
+```
+hotfix 分支
+  ↓
+QA 验证
+  ↓
+PR → main
+  ↓
+同步回 develop
+```
+
+
+注意：
+
+hotfix 是唯一允许从 main 切出并直接 PR 回 main 的分支类型，
+但严禁绕过 QA 验证与人工审核。
+
+
+### docs
+
+
+- 定位：文档独立生命周期（PROJECT_CONTEXT / ARCHITECTURE / DATABASE_DESIGN 等大版本升级）
+- 命名格式：`docs/<文档>-<版本>`
+- 示例：`docs/project-context-v1.3`、`docs/database-design-v1`
 
 
 ---
@@ -266,10 +301,48 @@ PR 模板位于 `.github/PULL_REQUEST_TEMPLATE.md`，必须填写：
 TASK:      TASK-001
 Owner:     Backend Agent
 Reviewer:  Architecture Agent
-Status:    Doing
+Status:    Developing
 Module:    user
 Branch:    feature/backend-user-module
 ```
+
+
+## 任务生命周期
+
+
+所有任务必须按以下状态机流转：
+
+
+```
+Backlog
+  ↓
+Assigned
+  ↓
+Designing
+  ↓
+Developing
+  ↓
+Reviewing
+  ↓
+Testing
+  ↓
+Done
+  ↓
+Archived
+```
+
+
+状态说明：
+
+
+- Backlog      待领取
+- Assigned     已分配 Owner，未开始
+- Designing    架构 / 数据模型设计阶段（Architecture Agent 常驻此态）
+- Developing   编码中
+- Reviewing    PR 评审中
+- Testing      QA 验证中
+- Done         已合并，已完成文档更新
+- Archived     归档，不再活跃
 
 
 规则：
@@ -280,6 +353,7 @@ Branch:    feature/backend-user-module
   - Primary Owner：负责实现
   - Secondary Reviewer：负责评审
 - 领取任务前必须检查 docs/TASK_BOARD.md，确认目标模块未被占用
+- 状态变更时必须立即更新 TASK_BOARD
 - 完成或释放任务时，必须立即更新 TASK_BOARD 状态
 
 
@@ -429,7 +503,93 @@ Frontend Agent — 对接用户资料页
 
 ---
 
-# 11. 文档版本管理
+# 11. Prompt 文件管理规则
+
+
+Prompt 是 AI 系统的核心资产，等同代码，必须受控变更。
+
+
+任何修改 `ai/prompts/` 下的文件，必须：
+
+
+- 说明修改原因
+- 说明影响 Agent
+- 说明示例输入输出变化
+- 通过 PR 审核，禁止直接提交
+
+
+禁止：
+
+无记录修改 Prompt。
+
+
+注意：
+
+Prompt 漂移会导致 Agent 行为不一致，是 AI 项目最隐蔽的风险。
+每次 Prompt 变更必须在 docs/AI_CHANGELOG.md 中记录。
+
+
+---
+
+# 12. Repository Structure
+
+
+仓库目录地图，AI Agent 必须遵守此结构，不得擅自在根目录创建新目录。
+
+
+```
+Solo-Life-OS
+│
+├── AGENTS.md                 AI Agent 根入口
+├── README.md
+├── .gitignore
+│
+├── docs/
+│   ├── PROJECT_CONTEXT.md    项目宪法
+│   ├── ARCHITECTURE.md       系统架构
+│   ├── DATABASE_DESIGN.md    数据模型
+│   ├── AGENTS.md             协作规范（本文档）
+│   ├── CODE_RULES.md         编码规范
+│   ├── TASK_BOARD.md         任务看板
+│   ├── SPRINT_PLAN.md        Sprint 规划
+│   ├── CHANGELOG.md          产品变更记录
+│   ├── AI_CHANGELOG.md       AI 行为日志
+│   └── review/              QA 评审记录
+│
+├── apps/
+│   ├── h5/                  H5 端
+│   ├── miniapp/             微信小程序
+│   └── app/                 App 端
+│
+├── backend/                  Spring Boot 服务
+│
+├── ai/
+│   ├── agents/              Agent 实现
+│   ├── prompts/             Prompt 文件（受 §11 约束）
+│   └── memory/              Memory 系统
+│
+├── database/
+│   ├── design/              设计稿（Architecture Agent）
+│   └── migrations/          迁移脚本（Backend Agent）
+│
+├── scripts/                  工程脚本
+│
+└── .github/
+    ├── workflows/           CI/CD
+    └── PULL_REQUEST_TEMPLATE.md
+```
+
+
+注意：
+
+- `apps/` `backend/` `ai/` `database/` `scripts/` 暂未创建，将在对应 Sprint 启动时建立
+- 当前阶段（Sprint 0）仅 `docs/` 与 `.github/` 处于活跃状态
+- 新增目录必须先在本文档登记
+
+
+---
+
+# 13. 文档版本管理
 
 
 所有核心文档必须维护版本（详见 PROJECT_CONTEXT §20）：
@@ -445,7 +605,7 @@ Frontend Agent — 对接用户资料页
 
 ---
 
-# 12. 完成任务后必须更新
+# 14. 完成任务后必须更新
 
 
 每次任务完成，必须同步更新以下文档：
