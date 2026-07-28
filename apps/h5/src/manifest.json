@@ -1,0 +1,14 @@
+{
+  "name": "Solo Life OS",
+  "appid": "",
+  "description": "Solo Life OS - AI Native Solo Living Assistant",
+  "versionName": "0.1.0",
+  "versionCode": "100",
+  "h5": {
+    "title": "Solo Life OS",
+    "router": {
+      "mode": "history",
+      "base": "/"
+    }
+  }
+}
