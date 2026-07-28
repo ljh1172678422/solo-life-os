@@ -60,3 +60,38 @@ Impact:
 Reviewed:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 2 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Change:
+
+升级 AGENTS.md v1.0 → v1.1，并整理文档位置：
+- 新增 §7 Task Ownership / §8 Architecture Change Process / §9 AI 提交前检查 / §10 Agent Handoff Protocol
+- §3 权限调整：Architecture Agent 禁止 database/migrations/，迁移归 Backend Agent
+- CHANGELOG.md 从根目录迁移至 docs/CHANGELOG.md（git mv 保留历史）
+- 新增根目录 AGENTS.md 入口，便于 AI Coding Agent 扫描发现协作规范
+
+
+Reason:
+
+按评审意见补充多 Agent 长周期协作缺失的协议层：任务领取防冲突、架构变更审批、提交前自检、Agent 间交接；并将 CHANGELOG 收纳进 docs/ 保持根目录整洁。
+
+
+Impact:
+
+仅影响 docs/ 与根目录文档结构，无代码与数据库变更。
+
+
+Reviewed:
+
+Pending
