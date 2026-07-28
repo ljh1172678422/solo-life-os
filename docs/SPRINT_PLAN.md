@@ -1,6 +1,6 @@
 # Solo Life OS Sprint 规划
 
-Version: 2.1
+Version: 2.2
 
 Status: Planning
 
@@ -663,27 +663,30 @@ Archived
 # 16. ADR Roadmap
 
 
-以下 ADR 在对应 Sprint 的 Planning 阶段必须完成，否则 Sprint 不可启动：
+ADR 生命周期与 Sprint 生命周期一致，禁止一次性批量创建。仅在对应 Sprint 启动时创建：
 
 
-| ADR | 决策主题 | 负责 Sprint | 状态 |
-|-----|---------|-----------|------|
-| ADR-0001 | 采用 Modular Monolith | 全局 | Accepted |
-| ADR-0002 | 选择 PostgreSQL 作为主数据库 | 全局 | Accepted |
-| ADR-0003 | AI Agent 统一经 Router 路由 | Sprint 5 | Accepted |
-| ADR-0004 | MVP 阶段不使用微服务 | 全局 | Accepted |
-| ADR-0005 | Vector DB 选型（pgvector / Milvus / Qdrant） | Sprint 0 | Proposed |
-| ADR-0006 | JWT 策略 | Sprint 1 | Proposed |
-| ADR-0007 | 地图 SDK（高德 / 腾讯） | Sprint 3 | Proposed |
-| ADR-0008 | LLM Provider（GPT / GLM / Claude） | Sprint 5 | Proposed |
-| ADR-0009 | 支付 SDK | Sprint 7 | Proposed |
-| ADR-0010 | Tag Ownership（归 User 还是 Shared Kernel） | Sprint 1 | Proposed |
-| ADR-0011 | Activity Owner 归 Today，CommunityEvent 独立 | Sprint 2/7 | Proposed |
+| ADR | 决策主题 | 创建 Sprint | 状态 | 备注 |
+|-----|---------|-----------|------|------|
+| ADR-0001 | 采用 Modular Monolith | 全局 | Accepted | 最高层架构约束 |
+| ADR-0002 | 选择 PostgreSQL 作为主数据库（含 Redis / Vector DB / OSS 分层禁止项） | 全局 | Accepted | 存储分工 |
+| ADR-0003 | AI Agent 统一经 Router 路由（含 Agent 不持有业务状态） | 全局 | Accepted | AI 架构核心 |
+| ADR-0004 | MVP 阶段不使用微服务 | 全局 | Accepted | 与 ADR-0001 角度互补 |
+| ADR-0005 | Vector DB Adapter Strategy（候选 pgvector / Milvus / Qdrant + Adapter 延迟绑定） | Sprint 0 | Proposed | Sprint 0 仅定接口边界 |
+| ADR-0006 | JWT 策略 | Sprint 1 | Pending | User Module 启动时创建 |
+| ADR-0007 | Map Provider Adapter（Provider Adapter Pattern，避免高德 / 腾讯硬绑定） | Sprint 3 | Pending | Explore 启动时创建 |
+| ADR-0008 | LLM Provider Strategy（抽象层策略，不锁定具体 Provider） | Sprint 5 | Pending | AI Platform 启动时创建 |
+| ADR-0009 | Payment Adapter（Community MVP 免费活动可延期） | Sprint 7 | Pending | Community 启动时创建 |
+| ADR-0010 | Tag Ownership（User Module vs Shared Kernel） | Sprint 0 | Proposed | 领域边界争议需 Sprint 0 提前决策 |
+| ADR-0011 | Activity Owner 归 Today，CommunityEvent 独立 | Sprint 0 | Accepted | 已是架构事实，直接 Accepted |
 
 
 规则：
 
 
+- ADR 必须在对应 Sprint 启动时创建，禁止提前批量创建 ADR-0006~0009
+- 仅 Sprint 0 即将依赖的领域边界 ADR（ADR-0010 / ADR-0011）可提前到 Sprint 0 创建
+- ADR-0011 因评审已解决（Activity 归 Today，CommunityEvent 独立），直接 Accepted
 - ADR 状态变更必须经 Architecture Agent 评审
 - Accepted 后的 ADR 才能据此开发
 - ADR 被否决必须新建 ADR 替代，禁止直接删除
@@ -699,6 +702,7 @@ Archived
 | v1.0 | 2026-07-28 | 初始版本，按页面划分 9 个 Sprint |
 | v2.0 | 2026-07-28 | 全量升级：按 Module 组织；增加 Goal / DoD / Depends / Agents / Risk / Milestone / Lifecycle；统一术语 Module；Sprint 5 改名 AI Platform |
 | v2.1 | 2026-07-28 | 修正 Activity Owner 冲突（归 Today）；Sprint 7 改用 community_event 独立领域实体；Sprint 0 Vector DB 延后为 Adapter Interface；Sprint 5 新增 ai_conversation；新增 §16 ADR Roadmap（ADR-0005~0011） |
+| v2.2 | 2026-07-28 | §16 ADR Roadmap 重写：ADR 生命周期与 Sprint 生命周期一致；ADR-0006~0009 严格按对应 Sprint 创建（Pending）；ADR-0010 提前到 Sprint 0（Proposed）；ADR-0011 提前到 Sprint 0（Accepted，已是架构事实）；ADR-0007 改为 Provider Adapter Pattern；ADR-0008 改为抽象层策略不锁定 Provider；ADR-0009 标注 MVP 可延期 |
 
 
 ---

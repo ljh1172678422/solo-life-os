@@ -11,6 +11,8 @@ Status:  Accepted
 
 所有 AI Agent（Planner / Recommendation / Emotion / Story / Assistant 等）必须经 Agent Router 统一路由，禁止 Agent 之间直接相互调用。
 
+Agent 不拥有业务状态，不直接持久化业务数据。Agent 的产出必须通过业务模块的 Domain API 落库，禁止 Agent 直接调用 Repository 或写数据库。
+
 
 ## Reason
 
@@ -28,3 +30,5 @@ Status:  Accepted
 - Agent 之间需要协作时，通过 Memory Layer 共享上下文
 - 任何新增 Agent 必须在 ARCHITECTURE.md §8 与 AGENTS.md 登记
 - 业务模块调用 AI 时，只感知 Router 接口，不感知具体 Agent 实现
+- Agent 产出落库的正确链路：Agent → Domain API → Business Module → Repository
+- 禁止 Agent 直接持有 / 修改业务 Entity，禁止 Agent 直接写数据库（与 §21 AI Boundary 一致）

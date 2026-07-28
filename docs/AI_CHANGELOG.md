@@ -504,3 +504,44 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 12 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+调整 ADR Roadmap，将 ADR 生命周期与 Sprint 生命周期对齐，避免一次性批量创建 ADR-0005~0011：
+- 补充 ADR-0002 PostgreSQL Impact：存储分层禁止项（禁 Redis 作主数据源 / 禁 Vector DB 保存业务事实 / 禁 MySQL 专属语法）
+- 补充 ADR-0003 AI Router Decision：Agent 不持有业务状态，不直接持久化业务数据；产出必须经 Domain API 落库
+- ARCHITECTURE.md v2.2 → v2.3：§14 ADR 清单重写，ADR-0006~0009 标注对应 Sprint 与 Pending，ADR-0010 提前到 Sprint 0（Proposed），ADR-0011 提前到 Sprint 0（Accepted，已是架构事实）；新增 §23 Version History
+- SPRINT_PLAN.md v2.1 → v2.2：§16 ADR Roadmap 重写，增加备注列与创建时机规则
+- TASK_BOARD.md v2.1 → v2.2：TASK-0001 Todo 新增 ADR-0010 / ADR-0011 创建项；DoD 调整为三 ADR 状态
+
+
+Reason:
+
+v2.1 中 ADR-0005~0011 虽然标注了「负责 Sprint」，但未明确「禁止提前批量创建」的规则，AI Agent 容易在 Sprint 0 一次性创建全部 ADR，导致 ADR-0006~0009 在对应 Sprint 启动前就被过早锁定。同时 ADR-0002 / ADR-0003 缺少关键的存储分层与 Agent 不持有状态约束，未来 AI Agent 容易误用 Redis 作主数据源或让 Agent 直接写数据库。
+
+
+Impact:
+
+影响 docs/ARCHITECTURE.md（v2.2→v2.3）、docs/SPRINT_PLAN.md（v2.1→v2.2）、docs/TASK_BOARD.md（v2.1→v2.2）、docs/architecture/ADR/ADR-0002-postgresql-as-primary-db.md、docs/architecture/ADR/ADR-0003-ai-agent-unified-router.md、docs/CHANGELOG.md、docs/AI_CHANGELOG.md，无代码变更。本文档生效后，Sprint 0 仅创建 ADR-0005 / ADR-0010 / ADR-0011 三个 ADR，其余按对应 Sprint 推进。
+
+
+Reviewer:
+
+Pending

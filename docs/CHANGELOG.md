@@ -252,6 +252,28 @@
   - DoD Architecture 段新增 ADR-0005 Proposed 与 Module Boundary 确认项
 
 
+### Changed (ADR Roadmap 调整)
+
+
+- 按 ADR 评审意见，将 ADR 生命周期与 Sprint 生命周期对齐：
+  - `docs/ARCHITECTURE.md` v2.2 → v2.3
+    - §14 ADR 清单重写：ADR-0006~0009 标注对应 Sprint 与 Pending 状态，禁止提前批量创建
+    - ADR-0010 Tag Ownership 提前到 Sprint 0（Proposed，领域边界争议需提前决策）
+    - ADR-0011 Activity Ownership 提前到 Sprint 0（Accepted，已是架构事实）
+    - ADR-0007 改为 Map Provider Adapter Pattern（避免高德 / 腾讯硬绑定）
+    - ADR-0008 改为 LLM Provider Strategy（抽象层策略，不锁定具体 Provider）
+    - ADR-0009 标注 Community MVP 免费活动可延期
+    - 新增 §23 Version History
+    - ADR-0002 Impact 补充存储分层禁止项（禁 Redis 作主数据源 / 禁 Vector DB 保存业务事实）
+    - ADR-0003 Decision 补充 Agent 不持有业务状态、不直接持久化业务数据约束
+  - `docs/SPRINT_PLAN.md` v2.1 → v2.2
+    - §16 ADR Roadmap 重写：增加备注列、状态列，明确 ADR 创建时机规则
+  - `docs/TASK_BOARD.md` v2.1 → v2.2
+    - TASK-0001 Todo 新增 ADR-0010 / ADR-0011 创建项
+    - TASK-0001 DoD 调整为三 ADR 状态：ADR-0005 Proposed / ADR-0010 Proposed / ADR-0011 Accepted
+    - Sprint 0 DoD Architecture 段同步调整为三 ADR 状态
+
+
 ### Deprecated
 
 

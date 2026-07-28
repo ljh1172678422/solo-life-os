@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.1
+Version: 2.2
 
 Last Update: 2026-07-28
 
@@ -115,8 +115,10 @@ Todo:
 
 - [ ] 确认 Modular Monolith 基础结构
 - [ ] 确认 Backend Package Convention（ARCHITECTURE §19）
-- [ ] 创建 ADR-0005 Vector DB Selection Proposal（候选方案 pgvector / Milvus / Qdrant + 评估维度 + Adapter 延迟绑定原则，仅定方向，不实现 Adapter）
-- [ ] 确认 Module Boundary（ARCHITECTURE §3 / §4 / §22，含 ADR-0010 Tag Ownership / ADR-0011 Activity Owner）
+- [ ] 创建 ADR-0005 Vector DB Adapter Strategy（候选 pgvector / Milvus / Qdrant + Adapter 延迟绑定原则，仅定接口边界方向，不实现 Adapter）
+- [ ] 创建 ADR-0010 Tag Ownership（Proposed；User Module vs Shared Kernel 决策，影响 Sprint 1 User Module）
+- [ ] 创建 ADR-0011 Activity Ownership（Accepted；Activity 归 Today，CommunityEvent 独立，已是架构事实）
+- [ ] 确认 Module Boundary（ARCHITECTURE §3 / §4 / §22，含 ADR-0010 / ADR-0011）
 - [ ] 确认环境配置规范（.env / docker-compose 分层）
 - [ ] 更新 ARCHITECTURE.md（如涉及边界调整）
 
@@ -124,6 +126,8 @@ Todo:
 DoD:
 
 - [ ] ADR-0005 进入 Proposed 状态（决策方向已明确，Adapter 实现归 TASK-0005）
+- [ ] ADR-0010 进入 Proposed 状态（Tag Ownership 决策方向明确）
+- [ ] ADR-0011 进入 Accepted 状态（Activity Ownership 已是架构事实）
 - [ ] Backend / Frontend / Database / AI 任务可在不二次确认架构的情况下启动
 
 
@@ -665,7 +669,9 @@ DoD:
 
 ## Architecture
 
-- [ ] ADR-0005 Vector DB Selection 进入 Proposed 状态
+- [ ] ADR-0005 Vector DB Adapter Strategy 进入 Proposed 状态
+- [ ] ADR-0010 Tag Ownership 进入 Proposed 状态
+- [ ] ADR-0011 Activity Ownership 进入 Accepted 状态
 - [ ] Module Boundary 确认（含 ADR-0010 Tag Ownership / ADR-0011 Activity Owner）
 - [ ] 无越权修改（ARCHITECTURE §22）
 - [ ] 无重复 Entity（ARCHITECTURE §3）
@@ -730,6 +736,14 @@ Sprint 0
 ---
 
 # Version History
+
+
+## v2.2 - 2026-07-28
+
+- 按 ADR 评审意见调整 Sprint 0 TASK-0001 Todo：新增 ADR-0010 Tag Ownership（Proposed）与 ADR-0011 Activity Ownership（Accepted）创建项
+- TASK-0001 DoD 调整为三 ADR 状态：ADR-0005 Proposed / ADR-0010 Proposed / ADR-0011 Accepted
+- Sprint 0 DoD Architecture 段同步调整为三 ADR 状态
+- 与 ARCHITECTURE v2.3 / SPRINT_PLAN v2.2 ADR Roadmap 对齐（ADR 生命周期与 Sprint 生命周期一致，禁止提前批量创建）
 
 
 ## v2.1 - 2026-07-28
