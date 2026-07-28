@@ -46,6 +46,25 @@
   - 新增 §20 文档版本管理（核心文档版本规则与修改记录要求）
 
 
+### Added (Git 协作基础设施)
+
+
+- 新建 `develop` 分支作为研发集成分支，`main` 仅承载稳定版本
+- 新增 `README.md` 项目入口（文档导航 / 技术栈 / 分支策略摘要）
+- 新增 `.gitignore`（Java / Node / uni-app / IDE / OS / 凭据）
+- 新增 `.github/PULL_REQUEST_TEMPLATE.md`（变更类型 / 架构影响 / 文档更新 / 测试情况）
+- 新增 `docs/AI_CHANGELOG.md`，记录 AI Agent 行为日志，与产品 CHANGELOG 区分
+- 升级 `docs/AGENTS.md`：纳入 §3 Agent 权限分级 / §5 Git 协作规范 / §5.2 AI 分支规则 / §5.4 PR 流程 / §7 完成任务后必更清单
+
+
+### Changed (目录结构调整)
+
+
+- 迁移 `.ai/AGENTS.md` → `docs/AGENTS.md`（升级版）
+- 迁移 `.ai/CODE_RULES.md` → `docs/CODE_RULES.md`（补充 commit scope 规范）
+- 删除空的 `.ai/` 目录
+
+
 ### Deprecated
 
 
