@@ -1,6 +1,6 @@
 # Solo Life OS 系统架构
 
-Version: 2.1
+Version: 2.2
 
 Status: Planning
 
@@ -382,7 +382,7 @@ Today 重规划
 |------|--------|--------|
 | mood.recorded | Mood | Memory / Recommendation / Today |
 | goal.progressed | Growth | Memory / Story |
-| activity.completed | Today / Explore | Memory / Growth |
+| activity.completed | Today | Memory / Growth |
 | user.preference.updated | User | Today / Explore / Recommendation |
 
 
@@ -596,6 +596,18 @@ Impact:  <影响范围>
 - ADR-0002 选择 PostgreSQL 作为主数据库
 - ADR-0003 AI Agent 统一 Router
 - ADR-0004 MVP 阶段不使用微服务
+
+
+待写 ADR（SPRINT_PLAN Risk 识别）：
+
+
+- ADR-0005 Vector DB 选型（pgvector / Milvus / Qdrant）
+- ADR-0006 JWT 策略
+- ADR-0007 地图 SDK（高德 / 腾讯）
+- ADR-0008 LLM Provider（GPT / GLM / Claude）
+- ADR-0009 支付 SDK
+- ADR-0010 Tag Ownership（归 User 还是 Shared Kernel）
+- ADR-0011 Activity Owner 归 Today，CommunityEvent 独立
 
 
 ---
@@ -915,12 +927,15 @@ SQL / Repository 直调
 |------|-----------|---------------|
 | User | User | Domain API |
 | Preference | User | Domain API |
-| Activity | Today / Explore | 事件订阅 + Domain API |
+| Activity | Today | 事件订阅 + Domain API |
 | Goal | Growth | Domain API |
 | Mood | Mood | 事件订阅 + Domain API |
 | Memory | AI | Domain API |
+| Conversation | AI | Domain API |
 | Location | Explore | Domain API |
 | Tag | User | Domain API |
+| CommunityEvent | Community | Domain API |
+| Registration | Community | Domain API |
 
 
 规则：

@@ -375,3 +375,44 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 9 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务
+
+
+Action:
+
+协同调整 DATABASE_DESIGN / ARCHITECTURE / SPRINT_PLAN 三个根文档，解决评审识别的领域所有权冲突：
+- P0-1 Activity Owner 从 Today/Explore 改为 Today（解决唯一 Owner 冲突，违反 ARCHITECTURE §22）
+- P0-2 Sprint 7 Community 不复用 activity，改用 community_event 独立领域实体
+- P0-3 Sprint 0 Vector DB 延后为 Adapter Interface，实例部署延后至 Sprint 5
+- P1-4 Sprint 5 新增 ai_conversation 表（短期对话，与 ai_memory 长期记忆互补）
+- P1-5 新增 SPRINT_PLAN §16 ADR Roadmap（ADR-0001~0011 完整清单）
+
+
+Reason:
+
+原 v2.0 中 Activity Owner 标注为「Today / Explore」违反 ARCHITECTURE §22「每个核心数据对象有唯一 Owner」。Community 复用 activity 会导致 activity 表变成万能表污染领域。Vector DB 在 Sprint 0 提前部署会增加复杂度但无 Memory 数据可存。
+
+
+Impact:
+
+影响 docs/DATABASE_DESIGN.md（v2.0→v2.1）、docs/ARCHITECTURE.md（v2.1→v2.2）、docs/SPRINT_PLAN.md（v2.0→v2.1），无代码变更。本文档生效后，Explore 不创建 activity 表，Community 不复用 activity 表，AI Platform 必须同时实现 Memory 与 Conversation。
+
+
+Reviewer:
+
+Pending

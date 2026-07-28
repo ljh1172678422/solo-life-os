@@ -1,6 +1,6 @@
 # Solo Life OS Sprint 规划
 
-Version: 2.0
+Version: 2.1
 
 Status: Planning
 
@@ -57,7 +57,8 @@ Sprint 8  Story Module         ┘
 
 - uni-app 工程初始化（H5 / 小程序 / App 三端配置）
 - Spring Boot 工程初始化（Modular Monolith 包结构）
-- PostgreSQL + Redis + Vector DB 本地环境
+- PostgreSQL + Redis 本地环境
+- Vector DB Adapter Interface（仅接口定义，实例部署延后至 Sprint 5）
 - 统一返回格式 + 全局异常处理器
 - 日志框架（含 traceId 透传）
 - CI/CD 基础骨架
@@ -80,7 +81,7 @@ Sprint 8  Story Module         ┘
 
 
 - 三端配置复杂度高 → 先只跑通 H5，App/小程序后续 Sprint 补
-- Vector DB 选型未定 → 写 ADR-0005 决定（pgvector / Milvus / Qdrant）
+- Vector DB 选型未定 → 写 ADR-0005 决定（pgvector / Milvus / Qdrant），Sprint 0 仅定义 Adapter 接口
 
 
 ## DoD
@@ -214,7 +215,7 @@ Sprint 1（User / Preference）
 ## Deliverables
 
 
-- Migration：location / favorite 表
+- Migration：location / favorite 表（不含 activity，Activity Owner 归 Today）
 - Repository / Domain / Application / Controller
 - DTO：LocationDTO / FavoriteDTO
 - 前端：地图页 / 地点详情 / 收藏列表（Page06-09）
@@ -242,6 +243,7 @@ Sprint 1（User / Preference）
 
 - 地图 SDK 选型 → 写 ADR-0007
 - 推荐算法依赖 Memory → 用 Mock
+- Explore 不创建 activity 表（Owner 是 Today，需跨模块经 Domain API 调用）
 
 
 ## DoD
@@ -321,8 +323,9 @@ Sprint 1（User）
 ## Deliverables
 
 
-- Migration：ai_memory 表
+- Migration：ai_memory + ai_conversation 表
 - Memory Layer 实现（含 Vector DB 写入）
+- Conversation Layer 实现（短期对话上下文，与 Memory 长期记忆互补）
 - Context Builder 实现
 - Agent Router 实现
 - Planner / Recommendation / Emotion / Story / Assistant Agent 实现
@@ -428,7 +431,7 @@ Sprint 5（Memory，用于成长洞察）
 ## Deliverables
 
 
-- Migration：复用 activity 表，新增 community_event / registration 表（需先在 DATABASE_DESIGN 登记）
+- Migration：community_event / registration 表（独立领域实体，不复用 activity）
 - Repository / Domain / Application / Controller
 - DTO：CommunityEventDTO / RegistrationDTO
 - 前端：活动列表 / 活动详情 / 报名页
@@ -454,7 +457,8 @@ Sprint 3（Explore，Location 复用）+ Sprint 6（Growth，用户体系成熟�
 
 
 - 支付合规 → MVP 仅支持免费活动，付费活动后续 Sprint
-- 新增表必须先在 DATABASE_DESIGN §4 / §6 登记
+- community_event 是独立领域实体，禁止复用 activity 表（ADR-0011）
+- Location 复用 Explore 模块（经 Domain API）
 
 
 ## DoD
@@ -656,18 +660,50 @@ Archived
 
 ---
 
-# 16. Version History
+# 16. ADR Roadmap
+
+
+以下 ADR 在对应 Sprint 的 Planning 阶段必须完成，否则 Sprint 不可启动：
+
+
+| ADR | 决策主题 | 负责 Sprint | 状态 |
+|-----|---------|-----------|------|
+| ADR-0001 | 采用 Modular Monolith | 全局 | Accepted |
+| ADR-0002 | 选择 PostgreSQL 作为主数据库 | 全局 | Accepted |
+| ADR-0003 | AI Agent 统一经 Router 路由 | Sprint 5 | Accepted |
+| ADR-0004 | MVP 阶段不使用微服务 | 全局 | Accepted |
+| ADR-0005 | Vector DB 选型（pgvector / Milvus / Qdrant） | Sprint 0 | Proposed |
+| ADR-0006 | JWT 策略 | Sprint 1 | Proposed |
+| ADR-0007 | 地图 SDK（高德 / 腾讯） | Sprint 3 | Proposed |
+| ADR-0008 | LLM Provider（GPT / GLM / Claude） | Sprint 5 | Proposed |
+| ADR-0009 | 支付 SDK | Sprint 7 | Proposed |
+| ADR-0010 | Tag Ownership（归 User 还是 Shared Kernel） | Sprint 1 | Proposed |
+| ADR-0011 | Activity Owner 归 Today，CommunityEvent 独立 | Sprint 2/7 | Proposed |
+
+
+规则：
+
+
+- ADR 状态变更必须经 Architecture Agent 评审
+- Accepted 后的 ADR 才能据此开发
+- ADR 被否决必须新建 ADR 替代，禁止直接删除
+
+
+---
+
+# 17. Version History
 
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-07-28 | 初始版本，按页面划分 9 个 Sprint |
 | v2.0 | 2026-07-28 | 全量升级：按 Module 组织；增加 Goal / DoD / Depends / Agents / Risk / Milestone / Lifecycle；统一术语 Module；Sprint 5 改名 AI Platform |
+| v2.1 | 2026-07-28 | 修正 Activity Owner 冲突（归 Today）；Sprint 7 改用 community_event 独立领域实体；Sprint 0 Vector DB 延后为 Adapter Interface；Sprint 5 新增 ai_conversation；新增 §16 ADR Roadmap（ADR-0005~0011） |
 
 
 ---
 
-# 17. Alignment
+# 18. Alignment
 
 
 | 文档 | 对齐点 |

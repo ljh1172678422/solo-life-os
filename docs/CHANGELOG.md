@@ -191,6 +191,31 @@
   - 识别 5 个待写 ADR：ADR-0005 Vector DB / ADR-0006 JWT / ADR-0007 地图 / ADR-0008 LLM / ADR-0009 支付
 
 
+### Changed (领域所有权冲突修复)
+
+
+按评审 P0/P1 修改项，协同调整三个根文档解决领域 Owner 冲突：
+
+
+- `docs/DATABASE_DESIGN.md` v2.0 → v2.1
+  - Activity Owner 从 Today/Explore 改为 Today（解决唯一 Owner 冲突）
+  - 新增 §6.11 community_event 表（独立领域实体，不复用 activity）
+  - 新增 §6.12 registration 表（含 UNIQUE(event_id, user_id) 防重复报名）
+  - 新增 §6.13 ai_conversation 表（短期对话上下文，与 ai_memory 长期记忆互补）
+  - 新增 5 类枚举：COMMUNITY_EVENT_STATUS / REGISTRATION_STATUS / AGENT_TYPE / CONVERSATION_ROLE
+  - 新增 7 个索引 + registration 唯一约束
+- `docs/ARCHITECTURE.md` v2.1 → v2.2
+  - §22 Data Ownership：Activity Owner 调整 + 新增 Conversation / CommunityEvent / Registration
+  - §9 Event Flow：activity.completed 发布者从 Today/Explore 改为 Today
+  - §14 ADR 列表新增 ADR-0010 Tag Ownership / ADR-0011 Activity Owner 归 Today
+- `docs/SPRINT_PLAN.md` v2.0 → v2.1
+  - Sprint 0：Vector DB 本地环境 → Adapter Interface（实例延后至 Sprint 5）
+  - Sprint 3 Explore：Deliverables 移除 activity（Owner 是 Today，跨模块经 Domain API）
+  - Sprint 5：新增 ai_conversation Migration + Conversation Layer
+  - Sprint 7 Community：删除「复用 activity」，改用 community_event 独立领域实体
+  - 新增 §16 ADR Roadmap（ADR-0001~0011 完整清单 + 状态跟踪）
+
+
 ### Deprecated
 
 

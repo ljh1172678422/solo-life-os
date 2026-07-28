@@ -1,6 +1,6 @@
 # Solo Life OS 数据库设计
 
-Version: 2.0
+Version: 2.1
 
 Status: Planning
 
@@ -52,7 +52,7 @@ Last Update: 2026-07-28
 |--------|------|-----------|
 | User | 用户身份 | User |
 | Preference | 用户偏好 | User |
-| Activity | 生活事件 | Today / Explore |
+| Activity | 生活事件 | Today |
 | Goal | 成长目标 | Growth |
 | Mood | 情绪状态 | Mood |
 | Memory | AI 长期记忆 | AI |
@@ -74,12 +74,15 @@ Last Update: 2026-07-28
 | user_preference | User | Domain API |
 | goal | Growth | Domain API |
 | mood_record | Mood | 事件订阅 + Domain API |
-| activity | Today / Explore | 事件订阅 + Domain API |
+| activity | Today | 事件订阅 + Domain API |
 | daily_plan | Today | Domain API |
 | favorite | User | Domain API |
 | ai_memory | AI | Domain API |
+| ai_conversation | AI | Domain API |
 | location | Explore | Domain API |
 | tag | User | Domain API |
+| community_event | Community | Domain API |
+| registration | Community | Domain API |
 
 
 ---
@@ -164,7 +167,7 @@ Owner: Today Module
 
 ## 6.4 activity
 
-Owner: Today / Explore Module
+Owner: Today Module
 
 | 字段 | 类型 | Nullable | 默认值 | 描述 |
 |------|------|---------|--------|------|
@@ -283,6 +286,64 @@ Owner: User Module
 
 
 约束：UNIQUE(user_id, name, type)
+
+
+## 6.11 community_event
+
+Owner: Community Module
+
+| 字段 | 类型 | Nullable | 默认值 | 描述 |
+|------|------|---------|--------|------|
+| id | bigint | N | - | PK |
+| title | varchar(200) | N | - | 活动标题 |
+| description | text | Y | - | 活动描述 |
+| location_id | bigint | Y | - | 关联 location.id（复用 Explore） |
+| organizer_id | bigint | N | - | 组织者 user.id |
+| start_time | datetime | N | - | 开始时间 |
+| end_time | datetime | Y | - | 结束时间 |
+| capacity | int | Y | - | 容量上限 |
+| status | varchar(20) | N | 'DRAFT' | 活动状态，见 §7 COMMUNITY_EVENT_STATUS |
+| created_time | datetime | N | now() | 创建时间 |
+| updated_time | datetime | N | now() | 更新时间 |
+| deleted_time | datetime | Y | - | 软删除时间 |
+
+
+注意：community_event 是社会活动，与 activity（生活事件）是不同领域实体，禁止复用 activity 表（ADR-0011）。
+
+
+## 6.12 registration
+
+Owner: Community Module
+
+| 字段 | 类型 | Nullable | 默认值 | 描述 |
+|------|------|---------|--------|------|
+| id | bigint | N | - | PK |
+| event_id | bigint | N | - | 关联 community_event.id |
+| user_id | bigint | N | - | 报名用户 user.id |
+| status | varchar(20) | N | 'REGISTERED' | 报名状态，见 §7 REGISTRATION_STATUS |
+| created_time | datetime | N | now() | 创建时间 |
+| updated_time | datetime | N | now() | 更新时间 |
+
+
+约束：UNIQUE(event_id, user_id)，防止重复报名
+
+
+## 6.13 ai_conversation
+
+Owner: AI Module
+
+| 字段 | 类型 | Nullable | 默认值 | 描述 |
+|------|------|---------|--------|------|
+| id | bigint | N | - | PK |
+| user_id | bigint | N | - | 关联 user.id |
+| agent_type | varchar(20) | N | - | Agent 类型，见 §7 AGENT_TYPE |
+| role | varchar(20) | N | - | 对话角色，见 §7 CONVERSATION_ROLE |
+| content | text | N | - | 消息内容 |
+| token_count | int | Y | - | Token 消耗（仅 Assistant 消息） |
+| created_time | datetime | N | now() | 创建时间 |
+
+
+注意：ai_conversation 记录短期对话上下文，与 ai_memory（长期记忆）互补。Memory 是提炼后的持久知识，Conversation 是原始交互流。
 
 
 ---
@@ -409,6 +470,38 @@ Owner: User Module
 - GENERAL 通用
 
 
+## COMMUNITY_EVENT_STATUS
+
+- DRAFT 草稿
+- OPEN 报名中
+- CLOSED 报名截止
+- CANCELLED 已取消
+- COMPLETED 已结束
+
+
+## REGISTRATION_STATUS
+
+- REGISTERED 已报名
+- CANCELLED 已取消
+- ATTENDED 已签到
+
+
+## AGENT_TYPE
+
+- PLANNER 规划
+- RECOMMENDATION 推荐
+- EMOTION 情绪
+- STORY 故事
+- ASSISTANT 通用助手
+
+
+## CONVERSATION_ROLE
+
+- USER 用户消息
+- ASSISTANT AI 回复
+- SYSTEM 系统消息
+
+
 ---
 
 # 8. Index Strategy
@@ -434,6 +527,13 @@ Owner: User Module
 | location | idx_city | city，按城市查询 |
 | location | idx_lat_lng | (latitude, longitude)，地理范围 |
 | tag | uk_user_name_type | UNIQUE(user_id, name, type) |
+| community_event | idx_organizer | organizer_id，组织者活动列表 |
+| community_event | idx_status_start | (status, start_time)，按状态查进行中活动 |
+| community_event | idx_location | location_id，按地点查活动 |
+| registration | uk_event_user | UNIQUE(event_id, user_id)，防重复报名 |
+| registration | idx_user | user_id，用户报名记录 |
+| ai_conversation | idx_user_agent | (user_id, agent_type, created_time)，按 Agent 查对话 |
+| ai_conversation | idx_user_created | (user_id, created_time)，按时间查对话 |
 
 
 ---
@@ -469,6 +569,7 @@ Owner: User Module
 | user_preference | user_id |
 | favorite | (user_id, target_type, target_id) |
 | tag | (user_id, name, type) |
+| registration | (event_id, user_id) |
 
 
 ## 非空约束
@@ -519,6 +620,7 @@ V20260729_001__add_avatar_to_user.sql
 |------|------|------|
 | v1.0 | 2026-07-28 | 初始版本，定义 8 张核心表 |
 | v2.0 | 2026-07-28 | 全量升级：增加 Owner / ER 图 / 字段说明 / 枚举 / 索引 / 约束 / 迁移规则；修正 Activity.location → location_id；Favorite 增加 UNIQUE；Memory 扩展 5 字段 |
+| v2.1 | 2026-07-28 | 修正 Activity Owner Today/Explore → Today（解决唯一 Owner 冲突）；新增 community_event / registration / ai_conversation 三表；新增 5 类枚举 + 7 个索引 + registration 唯一约束 |
 
 
 ---
