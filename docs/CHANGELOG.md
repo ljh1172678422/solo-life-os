@@ -408,6 +408,22 @@
 - Sprint 0 阶段 CI 中 test/build 步骤使用 continue-on-error: true（业务测试和完整构建依赖待 Sprint 1 补全）
 
 
+### Added (TASK-0007 Documentation Foundation)
+
+
+- `docs/architecture/ADR/README.md`：ADR Index
+  - Accepted: ADR-0001 / 0002 / 0003 / 0004 / 0011
+  - Proposed: ADR-0005 / 0010
+  - Future: ADR-0006 (Sprint 1) / 0007 (Sprint 3) / 0008 (Sprint 5) / 0009 (Sprint 7)
+  - ADR 生命周期规则：Proposed → Accepted → Deprecated
+- `docs/architecture/ADR/template.md`：ADR 模板（Date / Status / Decision / Reason / Impact / Migration）
+- `docs/governance/DOCUMENT_VERSION_RULE.md`：版本同步规则
+  - 9 份核心文档的修改条件矩阵
+  - 核心原则：代码优先 + 非必要禁止修改核心架构文档
+  - 允许的修改场景：架构变更（需 ADR）/ Bug 修复 / 新增功能（需评估）
+- `docs/AI_CHANGELOG_TEMPLATE.md`：AI 行为日志模板（Agent / Task / Action / Reason / Impact / Reviewer）
+
+
 ### Deprecated
 
 
