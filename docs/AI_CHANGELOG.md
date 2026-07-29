@@ -807,3 +807,53 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 20 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0004 Database Foundation
+
+
+Action:
+
+执行 TASK-0004 Database Foundation，建立数据库基础环境与初始 Migration：
+- 新建 docker-compose.yml（PostgreSQL 16-alpine + Redis 7-alpine，healthcheck + 命名数据卷）
+- 新建 docker-compose.ci.yml（CI 环境 tmpfs 覆盖）
+- 新建 database/migrations/ 目录与三个初始 Migration：
+  - V20260728_001__create_user_table.sql（§6.1，10 字段 + 3 索引，email/phone partial unique）
+  - V20260728_002__create_user_preference_table.sql（§6.2，7 字段 + uk_user_id unique）
+  - V20260728_003__create_tag_table.sql（§6.10，5 字段 + uk_user_name_type unique）
+- 更新 application.yml：
+  - Flyway locations 从 classpath:db/migration 改为 filesystem:database/migrations（对齐 DATABASE_DESIGN §10）
+  - 新增 validate-on-migrate: true
+  - 新增 HikariCP 连接池配置（max 10 / min 2 / connection-timeout 30s / idle-timeout 600s / max-lifetime 1800s）
+- 更新 .env.example：新增 DB_POOL_MAX / DB_POOL_MIN / FLYWAY_LOCATIONS
+- 严格对齐 DATABASE_DESIGN：§6 字段定义 / §7 枚举 / §8 索引策略 / §9 外键策略（逻辑关联不建 FK）
+- tag 表 Owner 标注 ADR-0010（Proposed）待定稿：Shared Kernel
+
+
+Reason:
+
+TASK-0002 Backend Foundation 已合并 develop，Flyway 依赖已就绪。TASK-0004 建立数据库基础环境，为 Sprint 1 User Module 提供可初始化的 PostgreSQL + Redis + 三张前置表。SQL 严格对齐 DATABASE_DESIGN v2.1，确保后续 Entity 生成无歧义。
+
+
+Impact:
+
+新增 docker-compose.yml / docker-compose.ci.yml / database/migrations/ 目录（3 个 SQL 文件）。修改 application.yml（Flyway locations + HikariCP）与 .env.example。无 Java 代码变更。
+⚠️ sandbox 无 docker / 无网络，docker compose up + flyway migrate 待本地验证。
+
+
+Reviewer:
+
+Pending

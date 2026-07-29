@@ -360,6 +360,30 @@
   - Completed 区新增 TASK-0002 / TASK-0003 / TASK-0005 交付物清单
 
 
+### Added (TASK-0004 Database Foundation)
+
+
+- `docker-compose.yml`：PostgreSQL 16 + Redis 7 本地开发环境（healthcheck + 命名数据卷）
+- `docker-compose.ci.yml`：CI 环境 tmpfs 覆盖（不持久化数据卷）
+- `database/migrations/V20260728_001__create_user_table.sql`（DATABASE_DESIGN §6.1）
+  - 字段：id / nickname / avatar / email / phone / city / status / created_time / updated_time / deleted_time
+  - 枚举对齐 §7 USER_STATUS
+  - 索引：uk_user_email (partial unique) / uk_user_phone (partial unique) / idx_user_status
+- `database/migrations/V20260728_002__create_user_preference_table.sql`（DATABASE_DESIGN §6.2）
+  - 字段：id / user_id / interest / budget / lifestyle / created_time / updated_time
+  - 枚举对齐 §7 BUDGET_LEVEL
+  - 索引：uk_user_preference_user_id (unique)
+- `database/migrations/V20260728_003__create_tag_table.sql`（DATABASE_DESIGN §6.10）
+  - 字段：id / user_id / name / type / created_time
+  - 枚举对齐 §7 TAG_TYPE
+  - 索引：uk_tag_user_name_type (unique)
+- `backend/solo-server/src/main/resources/application.yml`：
+  - Flyway locations 改为 `filesystem:database/migrations`（对齐 DATABASE_DESIGN §10）
+  - 新增 validate-on-migrate: true
+  - 新增 HikariCP 连接池配置（max 10 / min 2 / connection-timeout 30s）
+- `backend/solo-server/.env.example`：新增 DB_POOL_MAX / DB_POOL_MIN / FLYWAY_LOCATIONS
+
+
 ### Deprecated
 
 
