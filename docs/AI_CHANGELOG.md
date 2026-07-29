@@ -913,3 +913,50 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 22 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+TASK-0007 Documentation Foundation
+
+
+Action:
+
+执行 TASK-0007 Documentation Foundation，建立文档治理基础设施（严格范围控制，未修改已冻结架构）：
+- 新建 docs/architecture/ADR/README.md：ADR Index
+  - Accepted: ADR-0001 / 0002 / 0003 / 0004 / 0011（5 个）
+  - Proposed: ADR-0005 / 0010（2 个）
+  - Future: ADR-0006 / 0007 / 0008 / 0009（4 个，对应 Sprint 1/3/5/7）
+  - ADR 生命周期规则：Proposed → Accepted → Deprecated（不可逆向回滚）
+- 新建 docs/architecture/ADR/template.md：ADR 标准模板（Decision / Reason / Impact / Migration）
+- 新建 docs/governance/DOCUMENT_VERSION_RULE.md：版本同步规则
+  - 9 份核心文档修改条件矩阵
+  - 核心原则：代码优先 + 非必要禁止修改核心架构文档
+  - 允许场景：架构变更（需 ADR）/ Bug 修复 / 新增功能（需评估）
+- 新建 docs/AI_CHANGELOG_TEMPLATE.md：AI 行为日志模板（6 字段固定格式）
+
+
+Reason:
+
+Sprint 0 即将关闭，需要冻结文档治理规则，防止后续 Sprint 频繁修改核心架构文档导致架构漂移。ADR Index 统一管理所有 ADR 状态，版本同步规则约束修改频率（代码优先），AI_CHANGELOG 模板规范 AI 行为记录格式。
+
+
+Impact:
+
+新增 4 个文档文件，未修改任何已冻结的架构文档（ARCHITECTURE / DATABASE_DESIGN / ADR 已接受决策 / 数据模型 / 模块边界）。本文档生效后，Sprint 0 可正式关闭，进入 Sprint 1 业务代码阶段。
+
+
+Reviewer:
+
+Pending

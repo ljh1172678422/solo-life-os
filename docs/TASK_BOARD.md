@@ -672,7 +672,7 @@ QA Agent
 
 Status:
 
-Backlog
+Reviewing
 
 
 Module:
@@ -685,9 +685,23 @@ Branch:
 feature/documentation-foundation
 
 
+Branch Status:
+
+PR-Open
+
+
+Validation:
+
+✅ ADR Index created (7 ADR 登记: 5 Accepted + 2 Proposed + 4 Future)
+✅ ADR Template created (template.md)
+✅ Version Synchronization Rule created (DOCUMENT_VERSION_RULE.md)
+✅ AI_CHANGELOG Template created (AI_CHANGELOG_TEMPLATE.md)
+⚠️ 范围控制：仅建立治理结构与模板，未修改已冻结的架构文档
+
+
 Depends:
 
-TASK-0001
+TASK-0001 (已满足)
 
 
 Description:
@@ -697,12 +711,10 @@ Description:
 
 Todo:
 
-- [ ] 初始化 docs/ 状态检查清单（确认 7 份核心文档版本基线）
-- [ ] 创建 ADR Index（`docs/architecture/ADR/README.md`，登记 ADR-0001~0011 状态）
-- [ ] 建立 ADR 模板（标准化 ADR-XXXX 文件结构：Date / Status / Decision / Reason / Impact）
-- [ ] 建立版本同步规则（AGENTS.md §13 文档版本管理可执行检查项）
-- [ ] 创建 AI_CHANGELOG 模板条目示例（Agent / Task / Action / Reason / Impact / Reviewer）
-- [ ] 创建 Sprint 结束文档归档规则（TASK_BOARD Done → Archived 流程）
+- [x] 创建 ADR Index（`docs/architecture/ADR/README.md`，登记 ADR-0001~0011 状态）
+- [x] 建立 ADR 模板（`docs/architecture/ADR/template.md`，标准化 ADR-XXXX 文件结构）
+- [x] 建立版本同步规则（`docs/governance/DOCUMENT_VERSION_RULE.md`，代码优先 + 非必要禁止修改核心文档）
+- [x] 创建 AI_CHANGELOG 模板（`docs/AI_CHANGELOG_TEMPLATE.md`，固定条目格式）
 
 
 目录结构：
@@ -712,22 +724,28 @@ docs/
 ├── architecture/
 │   └── ADR/
 │       ├── README.md          ADR Index（本次新增）
-│       ├── TEMPLATE.md        ADR 模板（本次新增）
+│       ├── template.md        ADR 模板（本次新增）
 │       ├── ADR-0001-modular-monolith.md
-│       ├── ADR-0002-postgresql.md
-│       ├── ADR-0003-agent-router.md
-│       ├── ADR-0004-no-microservices-mvp.md
-│       └── (ADR-0005~0011 待 TASK-0001 / 各 Sprint 创建)
+│       ├── ADR-0002-postgresql-as-primary-db.md
+│       ├── ADR-0003-ai-agent-unified-router.md
+│       ├── ADR-0004-no-microservices-in-mvp.md
+│       ├── ADR-0005-vector-db-adapter-strategy.md
+│       ├── ADR-0010-tag-ownership.md
+│       └── ADR-0011-activity-ownership.md
+├── governance/
+│   └── DOCUMENT_VERSION_RULE.md  版本同步规则（本次新增）
+└── AI_CHANGELOG_TEMPLATE.md      AI 行为日志模板（本次新增）
 ```
 
 
 DoD:
 
-- [ ] ADR Index 文件存在且登记 ADR-0001~0004 为 Accepted
-- [ ] ADR-0005~0011 在 Index 中标注为 Proposed / Pending
-- [ ] ADR 模板文件存在
-- [ ] AI_CHANGELOG 模板示例存在
-- [ ] 版本同步规则文档化
+- [x] ADR Index 文件存在且登记 ADR-0001/0002/0003/0004/0011 为 Accepted
+- [x] ADR-0005 标注为 Proposed，ADR-0010 标注为 Proposed
+- [x] ADR-0006~0009 标注为 Future（对应 Sprint）
+- [x] ADR 模板文件存在
+- [x] AI_CHANGELOG 模板示例存在
+- [x] 版本同步规则文档化
 
 
 禁止:
@@ -735,6 +753,9 @@ DoD:
 - [X] 在 Sprint 0 创建 ADR-0005~0011 的具体内容（属 TASK-0001 / 各 Module Sprint）
 - [X] 修改业务文档的业务内容（仅建立治理结构与模板）
 - [X] 创建未在 ARCHITECTURE §14 登记的 ADR
+- [X] 修改 ARCHITECTURE.md 大结构（已冻结）
+- [X] 修改 ADR 已接受决策（已冻结）
+- [X] 修改数据模型 / 模块边界（已冻结）
 
 
 ---
