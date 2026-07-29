@@ -1,0 +1,50 @@
+# Solo Life OS - Local Development Infrastructure
+#
+# Usage:
+#   docker compose up -d            启动 PostgreSQL + Redis
+#   docker compose down             停止
+#   docker compose down -v          停止并删除数据卷
+#
+# 对齐 .env.example 中的默认凭据（仅本地开发，生产环境通过环境变量覆盖）。
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: solo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-solo_life_os}
+      POSTGRES_USER: ${DB_USERNAME:-solo}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-solo123}
+      # TZ 影响日志时间戳，不影响存储（PostgreSQL 内部用 UTC）
+      TZ: Asia/Shanghai
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - solo-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-solo} -d ${DB_NAME:-solo_life_os}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: solo-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - solo-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  solo-postgres-data:
+    name: solo-postgres-data
+  solo-redis-data:
+    name: solo-redis-data

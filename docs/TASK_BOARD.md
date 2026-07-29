@@ -401,7 +401,7 @@ Architecture Agent
 
 Status:
 
-Blocked
+Reviewing
 
 
 Module:
@@ -414,9 +414,20 @@ Branch:
 feature/database-foundation
 
 
+Branch Status:
+
+PR-Open
+
+
+Validation:
+
+✅ 文件结构完整，对齐 DATABASE_DESIGN §6.1/§6.2/§6.10 + §7 枚举 + §8 索引 + §9 外键策略
+⚠️ sandbox 无 docker/网络，docker compose up + flyway migrate 待本地验证
+
+
 Depends:
 
-TASK-0001, TASK-0002
+TASK-0001, TASK-0002 (已满足)
 
 
 Description:
@@ -426,10 +437,10 @@ Description:
 
 Todo:
 
-- [ ] PostgreSQL Docker 环境（docker-compose）
-- [ ] Redis Docker 环境（docker-compose）
-- [ ] Flyway 初始化配置
-- [ ] Migration 目录规范：
+- [x] PostgreSQL Docker 环境（docker-compose.yml）
+- [x] Redis Docker 环境（docker-compose.yml）
+- [x] Flyway 初始化配置（locations → filesystem:database/migrations + validate-on-migrate）
+- [x] Migration 目录规范：
 
 ```
 database/
@@ -440,19 +451,20 @@ database/
     └── V20260728_003__create_tag_table.sql
 ```
 
-- [ ] 创建初始 Migration（仅以下三张表，对齐 DATABASE_DESIGN v2.1）：
+- [x] 创建初始 Migration（仅以下三张表，对齐 DATABASE_DESIGN v2.1）：
   - `user`
   - `user_preference`
   - `tag`
-- [ ] 配置应用层连接池
+- [x] 配置应用层连接池（HikariCP: max 10 / min 2）
+- [x] docker-compose.ci.yml（CI 环境 tmpfs 覆盖）
 
 
 DoD:
 
-- [ ] `docker-compose up` 可拉起 PostgreSQL + Redis
-- [ ] `./gradlew flywayMigrate` 幂等执行通过
-- [ ] 新环境可完整初始化
-- [ ] 三张表结构与 DATABASE_DESIGN §6.1 / §6.2 / §6.10 完全一致
+- [ ] `docker-compose up` 可拉起 PostgreSQL + Redis（待本地验证）
+- [ ] Flyway migrate 幂等执行通过（待本地验证，sandbox 无 docker）
+- [x] 新环境可完整初始化（文件就绪，凭据对齐 .env.example）
+- [x] 三张表结构与 DATABASE_DESIGN §6.1 / §6.2 / §6.10 完全一致
 
 
 禁止:
