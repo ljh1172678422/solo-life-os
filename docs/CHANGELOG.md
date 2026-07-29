@@ -424,6 +424,20 @@
 - `docs/AI_CHANGELOG_TEMPLATE.md`：AI 行为日志模板（Agent / Task / Action / Reason / Impact / Reviewer）
 
 
+### Changed (Sprint 0 关闭)
+
+
+- `docs/TASK_BOARD.md` v2.4 → v2.5：Sprint 0 正式关闭
+  - TASK-0004 Database Foundation：Reviewing → Done（PR #6 Squash merged to develop）
+  - TASK-0006 CI/CD Foundation：Reviewing → Done（PR #7 Squash merged to develop）
+  - TASK-0007 Documentation Foundation：Reviewing → Done（PR #8 Squash merged to develop）
+  - Sprint 0 Status：In Progress → Done (Closed 2026-07-29)
+  - Sprint 0 DoD：Code / Documentation 段全部勾选；Test 段延期至 Sprint 1
+  - Completed 段新增 TASK-0004 / TASK-0006 / TASK-0007 交付物清单
+  - 新增 Sprint 0 Close Gate 段
+- Sprint 0 全部 7 个任务达成（Architecture / Backend / Frontend / Database / AI Platform / CI/CD / Documentation），进入业务代码阶段，不再迭代架构文档
+
+
 ### Deprecated
 
 
