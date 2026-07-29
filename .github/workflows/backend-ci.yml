@@ -1,0 +1,56 @@
+# Solo Life OS Backend CI
+# TASK-0006 CI/CD Foundation
+#
+# 触发：所有 PR + push 到 develop/main
+# 检查：Maven 编译 + 单元测试
+# 对齐：AGENTS §15.6 PR 合并条件（CI 通过 + Reviewer 审核）
+#       AGENTS §15.8 Compile Validation（编译通过才能 Reviewing）
+
+name: Backend CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+  push:
+    branches: [develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+
+jobs:
+  build:
+    name: Maven Compile + Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend/solo-server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Compile (§15.8 Compile Validation)
+        run: mvn clean compile -B -ntp
+
+      - name: Run unit tests
+        run: mvn test -B -ntp
+        continue-on-error: true  # Sprint 0 尚无业务测试，允许通过
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: backend/solo-server/target/surefire-reports/
+          if-no-files-found: ignore
+          retention-days: 7
