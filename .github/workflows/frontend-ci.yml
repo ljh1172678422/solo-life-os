@@ -40,7 +40,10 @@ jobs:
           cache-dependency-path: apps/h5/package.json
 
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        # --legacy-peer-deps: uni-app @dcloudio/vite-plugin-uni peer dep
+        # requires vite@^2.5.10 but project uses vite@^5.0.0. This is a known
+        # uni-app ecosystem conflict; use legacy resolution until upstream fixes.
+        run: npm install --legacy-peer-deps --no-audit --no-fund
 
       - name: Type check (CODE_RULES §2 禁 any)
         run: npm run type-check
