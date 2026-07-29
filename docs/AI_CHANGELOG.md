@@ -960,3 +960,47 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-29 (第 23 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+非任务（Sprint 0 关闭收尾）
+
+
+Action:
+
+执行 Sprint 0 关闭对账，将 PR #6 / #7 / #8 合并后的任务状态同步到 TASK_BOARD：
+- TASK-0004 Database Foundation：Reviewing → Done，Branch Status：PR-Open → Merged（PR #6）
+- TASK-0006 CI/CD Foundation：Reviewing → Done，Branch Status：PR-Open → Merged（PR #7）
+- TASK-0007 Documentation Foundation：Reviewing → Done，Branch Status：PR-Open → Merged（PR #8）
+- Sprint 0 Status：In Progress → Done (Closed 2026-07-29)
+- Sprint 0 DoD：Code / Documentation 段全部勾选；Test 段延期至 Sprint 1
+- Completed 段新增 TASK-0004 / TASK-0006 / TASK-0007 交付物清单
+- 新增 Sprint 0 Close Gate 段
+- TASK_BOARD.md v2.4 → v2.5
+
+
+Reason:
+
+PR #6 / #7 / #8 合并后，TASK_BOARD 仍停留在 Reviewing / PR-Open 状态，未做合并后对账，导致 Sprint 0 无法正式关闭。按 AGENTS §15.4 Branch Status 字段规则，PR 合并后必须将任务卡更新为 Done / Merged，并归档到 Completed 段。本次仅做状态对账，未修改任何已冻结的架构文档。
+
+
+Impact:
+
+仅影响 docs/TASK_BOARD.md / docs/CHANGELOG.md / docs/AI_CHANGELOG.md，无代码与数据库变更。本文档生效后，Sprint 0 正式关闭，进入 Sprint 1 User Module 业务代码阶段。
+
+
+Reviewer:
+
+Pending
