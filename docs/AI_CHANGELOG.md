@@ -857,3 +857,59 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-28 (第 21 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0006 CI/CD Foundation
+
+
+Action:
+
+执行 TASK-0006 CI/CD Foundation，建立 GitHub Actions CI 基础流水线：
+- 新建 .github/workflows/backend-ci.yml：
+  - 触发：PR + push 到 develop（paths: backend/**）
+  - JDK 17 + Maven 缓存（actions/setup-java@v4）
+  - 步骤：mvn clean compile -B -ntp（§15.8 编译验证）+ mvn test（单元测试，Sprint 0 continue-on-error）
+  - 测试结果上传为 artifact（7 天保留）
+- 新建 .github/workflows/frontend-ci.yml：
+  - 触发：PR + push 到 develop（paths: apps/**）
+  - Node 20 + npm 缓存（actions/setup-node@v4）
+  - 步骤：npm install + npm run type-check（CODE_RULES §2）+ npm run build:h5（Sprint 0 continue-on-error）
+  - 构建产物上传为 artifact（7 天保留）
+- 新建 .github/branch-protection.md：分支保护规则建议
+  - main：PR + 1 approval + required status checks（backend-ci, frontend-ci）+ 禁 bypass
+  - develop：同上
+  - 含 gh API 配置命令
+- 升级 .github/PULL_REQUEST_TEMPLATE.md：
+  - 新增 DevOps 变更类型
+  - 新增治理检查段（§15.6 PR 合并条件：分支正确 / 未直推 develop / CI 通过 / Reviewer 审核）
+  - 新增 TASK_BOARD 字段
+- Sprint 0 阶段 test/build 步骤使用 continue-on-error: true，Sprint 1 起收紧为必须通过
+
+
+Reason:
+
+TASK-0002/0003 已合并 develop，工程结构就绪。建立 CI 流水线使后续所有 PR 经 CI 把关，防止编译失败 / 类型错误进入 develop。分支保护规则对齐 AGENTS §5.2（AI Agent 严禁直接操作 develop/main）。
+
+
+Impact:
+
+新增 .github/workflows/backend-ci.yml / frontend-ci.yml / .github/branch-protection.md。修改 .github/PULL_REQUEST_TEMPLATE.md 与 docs/。无业务代码变更。
+⚠️ CI 实际触发待 PR 创建后 GitHub Actions 运行验证。
+
+
+Reviewer:
+
+Pending

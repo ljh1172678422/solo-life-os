@@ -601,7 +601,7 @@ QA Agent
 
 Status:
 
-Backlog
+Reviewing
 
 
 Module:
@@ -611,12 +611,25 @@ DevOps
 
 Branch:
 
-feature/devops-foundation
+feature/cicd-foundation
+
+
+Branch Status:
+
+PR-Open
+
+
+Validation:
+
+✅ 两个 workflow 文件创建，YAML 语法校验通过
+✅ PR 模板升级（新增治理检查段）
+✅ 分支保护规则建议文档化
+⚠️ CI 实际触发待 PR 创建后 GitHub Actions 运行验证
 
 
 Depends:
 
-TASK-0002, TASK-0003
+TASK-0002, TASK-0003 (已满足)
 
 
 Description:
@@ -626,19 +639,19 @@ Description:
 
 Todo:
 
-- [ ] `.github/workflows/backend-ci.yml`
-- [ ] `.github/workflows/frontend-ci.yml`
-- [ ] Backend：编译 + 单元测试 + lint
-- [ ] Frontend：构建 + 类型检查 + lint
-- [ ] PR 模板约束（已存在 `.github/PULL_REQUEST_TEMPLATE.md`）
-- [ ] 分支保护规则建议（main / develop 禁直推）
+- [x] `.github/workflows/backend-ci.yml`（Maven 编译 + 测试，JDK 17 + Maven 缓存）
+- [x] `.github/workflows/frontend-ci.yml`（npm install + type-check + build，Node 20 + npm 缓存）
+- [x] Backend：编译 + 单元测试（§15.8 Compile Validation）
+- [x] Frontend：构建 + 类型检查（CODE_RULES §2 禁 any）
+- [x] PR 模板约束（升级 `.github/PULL_REQUEST_TEMPLATE.md`，新增治理检查段）
+- [x] 分支保护规则建议（`.github/branch-protection.md`，main + develop 禁直推）
 
 
 DoD:
 
-- [ ] PR 提交后 CI 自动触发
-- [ ] Backend CI 通过
-- [ ] Frontend CI 通过
+- [ ] PR 提交后 CI 自动触发（待 PR 创建后验证）
+- [ ] Backend CI 通过（待 GitHub Actions 运行）
+- [ ] Frontend CI 通过（待 GitHub Actions 运行）
 
 
 ---

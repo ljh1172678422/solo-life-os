@@ -384,6 +384,30 @@
 - `backend/solo-server/.env.example`：新增 DB_POOL_MAX / DB_POOL_MIN / FLYWAY_LOCATIONS
 
 
+### Added (TASK-0006 CI/CD Foundation)
+
+
+- `.github/workflows/backend-ci.yml`：Backend CI 流水线
+  - 触发：PR / push 到 develop（paths: backend/**）
+  - JDK 17 + Maven 缓存
+  - 步骤：clean compile + test（§15.8 Compile Validation）
+  - 测试结果上传为 artifact
+- `.github/workflows/frontend-ci.yml`：Frontend CI 流水线
+  - 触发：PR / push 到 develop（paths: apps/**）
+  - Node 20 + npm 缓存
+  - 步骤：npm install + type-check（CODE_RULES §2）+ build:h5
+  - 构建产物上传为 artifact
+- `.github/branch-protection.md`：分支保护规则建议
+  - main：PR + 1 approval + CI + 禁 bypass
+  - develop：PR + 1 approval + CI + 禁 bypass
+  - 含 gh API 配置命令
+- `.github/PULL_REQUEST_TEMPLATE.md`：升级 PR 模板
+  - 新增 DevOps 变更类型
+  - 新增治理检查段（§15.6 PR 合并条件）
+  - 新增 TASK_BOARD 字段
+- Sprint 0 阶段 CI 中 test/build 步骤使用 continue-on-error: true（业务测试和完整构建依赖待 Sprint 1 补全）
+
+
 ### Deprecated
 
 
