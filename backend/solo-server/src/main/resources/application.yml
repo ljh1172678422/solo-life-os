@@ -22,6 +22,15 @@ spring:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
 
+  jpa:
+    hibernate:
+      ddl-auto: none  # Flyway 管理 schema (DATABASE_DESIGN §10)
+    open-in-view: false  # 禁止 OSIV，显式事务边界 (ARCHITECTURE §2)
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.time_zone: UTC
+
   flyway:
     enabled: true
     locations: ${FLYWAY_LOCATIONS:filesystem:database/migrations}
