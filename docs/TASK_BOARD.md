@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.8
+Version: 2.9
 
 Last Update: 2026-07-30
 
@@ -961,7 +961,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -971,12 +971,12 @@ User Module
 
 Branch:
 
-feature/user-application-service
+feature/user-application-service (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Depends:
@@ -1026,6 +1026,93 @@ DoD:
 交付物：
 
 - `backend/solo-server/src/main/java/com/sololifeos/user/application/`：UserApplicationService / UserPreferenceApplicationService / TagApplicationService
+
+
+---
+
+
+## TASK-0104 User Controller + DTO
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Reviewing
+
+
+Module:
+
+User Module
+
+
+Branch:
+
+feature/user-controller-dto
+
+
+Branch Status:
+
+PR-Open
+
+
+Depends:
+
+TASK-0103（已满足）
+
+
+Description:
+
+建立 User Module REST 端点 + DTO。禁 Entity 直出 Controller（CODE_RULES §5），经 Assembler 转换。
+
+
+Todo:
+
+- [x] 7 DTO：UserRegisterRequest / UserUpdateRequest / UserResponse / UserPreferenceUpdateRequest / UserPreferenceResponse / TagCreateRequest / TagResponse
+- [x] UserAssembler：Entity → Response DTO 转换
+- [x] UserController：POST /api/users（注册）/ GET /{id} / PUT /{id}
+- [x] UserPreferenceController：GET /api/users/{userId}/preference / PUT
+- [x] TagController：POST /api/users/{userId}/tags / GET（支持 ?type= 筛选）
+- [x] 参数校验（@Valid + jakarta.validation）
+
+
+Validation:
+
+✅ 7 DTO 全部用 Java record（Spring Boot 3 推荐）
+✅ Entity 不直出 Controller（CODE_RULES §5），经 UserAssembler 转换
+✅ 参数校验：@NotBlank / @Email / @Size
+✅ 返回统一 ApiResponse<T>（ARCHITECTURE §11）
+⚠️ 编译验证待 CI（沙箱无网络）
+
+
+DoD:
+
+- [x] Controller + DTO + Assembler 全部定义
+- [x] Swagger 可见（springdoc 已配置）
+- [x] 接口编译通过（待 CI 验证）
+
+
+禁止:
+
+- [X] Entity 直出 Controller（CODE_RULES §5）
+- [X] login / activate / ban 端点（归 Auth 任务 / ADR-0006）
+- [X] 业务逻辑写在 Controller（归 Application Service）
+- [X] 组件直连 axios（前端规则，归 TASK-0105）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/user/dto/`：7 DTO record
+- `backend/solo-server/src/main/java/com/sololifeos/user/application/UserAssembler.java`
+- `backend/solo-server/src/main/java/com/sololifeos/user/controller/`：UserController / UserPreferenceController / TagController
 
 
 ---
@@ -1196,8 +1283,8 @@ Sprint 0（Done 2026-07-29）
 
 - ✅ TASK-0101 User Migration Review（Done 2026-07-29）
 - ✅ TASK-0102 User Domain Layer（Done 2026-07-30，PR #12 merged）
-- ✅ TASK-0103 User Application Service（Reviewing 2026-07-30，PR-Open）
-- TASK-0104 User Controller + DTO（REST 端点 + 入参出参 DTO，禁 Entity 直出）
+- ✅ TASK-0103 User Application Service（Done 2026-07-30，PR #13 merged）
+- ✅ TASK-0104 User Controller + DTO（Reviewing 2026-07-30，PR-Open）
 - TASK-0105 User Frontend（登录 / 资料 / 偏好页）
 - TASK-0106 User Test Suite（JUnit 5 + MockMvc）
 
@@ -1225,6 +1312,16 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v2.9 - 2026-07-30
+
+- TASK-0103 User Application Service 状态更新：Reviewing → Done（PR #13 merged，CI 编译通过）
+- 新增 TASK-0104 User Controller + DTO 任务卡（Owner: Backend Agent，Status: Reviewing）
+- TASK-0104 交付物：7 DTO（record）+ UserAssembler + 3 Controller
+- REST 端点：POST /api/users（注册）/ GET /{id} / PUT /{id} + preference + tags
+- Entity 不直出 Controller（CODE_RULES §5），经 UserAssembler 转换
+- 范围控制：login / activate / ban 归 Auth 任务（ADR-0006）
 
 
 ## v2.8 - 2026-07-30

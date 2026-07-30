@@ -16,6 +16,13 @@
 
 ### Added
 
+- TASK-0104 User Controller + DTO：新增 User Module REST 端点
+  - 7 DTO（Java record）：UserRegisterRequest / UserUpdateRequest / UserResponse / UserPreferenceUpdateRequest / UserPreferenceResponse / TagCreateRequest / TagResponse
+  - UserAssembler：Entity → Response DTO 转换
+  - UserController：POST /api/users（注册）/ GET /{id} / PUT /{id}
+  - UserPreferenceController：GET/PUT /api/users/{userId}/preference
+  - TagController：POST/GET /api/users/{userId}/tags（支持 ?type= 筛选）
+  - 参数校验（@Valid + jakarta.validation）
 - TASK-0103 User Application Service：新增 User Module 应用服务层
   - UserApplicationService：注册（含默认偏好创建）/ 资料查询 / 资料更新 / 激活 / 封禁
   - UserPreferenceApplicationService：偏好查询 / 偏好更新
