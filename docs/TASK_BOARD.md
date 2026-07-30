@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 3.1
+Version: 3.2
 
 Last Update: 2026-07-30
 
@@ -1240,7 +1240,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -1250,12 +1250,12 @@ User Module（前端）
 
 Branch:
 
-feature/user-frontend
+feature/user-frontend (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Depends:
@@ -1302,7 +1302,7 @@ DoD:
 - [x] 偏好页可查看 / 编辑偏好（GET/PUT /api/users/{userId}/preference）
 - [x] 401 自动清除 token 并跳转登录页
 - [x] type-check 通过
-- [ ] CI 验证 + 合并 develop
+- [x] CI 验证 + 合并 develop（PR #16 squash merged 2026-07-30）
 
 
 禁止:
@@ -1333,6 +1333,96 @@ DoD:
 ---
 
 
+## TASK-0106 User Test Suite
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Reviewing
+
+
+Module:
+
+User Module
+
+
+Branch:
+
+feature/user-test-suite
+
+
+Branch Status:
+
+PR-Open
+
+
+Depends:
+
+TASK-0102 / TASK-0103 / TASK-0104 / TASK-0107（已满足）
+
+
+Description:
+
+建立 User Module 单元测试套件（JUnit 5 + Mockito + MockMvc），覆盖 Domain Service / Application Service / Security 组件 / Controller 全部分层。对齐 Sprint 0 DoD 中延期的「Backend 单元测试框架运行」与「API 测试框架运行」两项。
+
+
+Todo:
+
+- [x] UserDomainServiceTest：register / activate / ban / updateProfile 业务规则
+- [x] AuthServiceTest：login 成功（邮箱/手机）/ 账号不存在 / 密码错误 / 用户封禁
+- [x] JwtServiceTest：token 签发 / 解析校验 / 过期 / 篡改
+- [x] UserControllerTest：MockMvc 注册 / 查询 / 更新 + 参数校验 + 业务异常
+- [x] AuthControllerTest：MockMvc 登录 + 参数校验 + 认证异常
+- [x] mvn test 全量通过验证
+
+
+Validation:
+
+✅ mvn test passed（2026-07-30，40 tests，0 failures，0 errors，0 skipped）
+✅ 分层覆盖：Domain Service（11）/ AuthService（7）/ JwtService（7）/ UserController（10）/ AuthController（5）
+✅ Controller 测试使用 standalone MockMvc（隔离 Spring Security 自动配置）
+✅ Mockito mock-maker-subclass（绕开 inline mock maker 在 Java 25 上的字节码限制）
+✅ 业务规则全覆盖：注册校验 / 状态流转 / 登录失败路径 / JWT 签发校验
+
+
+DoD:
+
+- [x] 5 个测试类全部定义
+- [x] mvn test 全量通过（40 tests）
+- [x] 覆盖 Domain / Application / Security / Controller 四层
+- [ ] CI 验证 + 合并 develop（PR 待创建）
+
+
+禁止:
+
+- [X] 集成测试连真实数据库 / Redis（仅 Mock）
+- [X] 测试代码访问 LLM / 外部依赖
+- [X] 为通过测试修改生产代码业务逻辑（仅可补合理逻辑）
+
+
+交付物：
+
+- `backend/solo-server/src/test/java/com/sololifeos/user/domain/service/UserDomainServiceTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/user/application/AuthServiceTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/common/security/JwtServiceTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/user/controller/UserControllerTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/user/controller/AuthControllerTest.java`
+- `backend/solo-server/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker`（mock-maker-subclass）
+
+
+---
+
+
 # Sprint 0 Definition of Done
 
 
@@ -1352,8 +1442,8 @@ DoD:
 
 ## Test
 
-- [ ] Backend 单元测试框架运行（JUnit 5）（延期至 Sprint 1，Sprint 0 仅工程骨架）
-- [ ] API 测试框架运行（MockMvc / WebTestClient）（延期至 Sprint 1，Sprint 0 仅工程骨架）
+- [x] Backend 单元测试框架运行（JUnit 5）（TASK-0106 完成，40 tests passed）
+- [x] API 测试框架运行（MockMvc / WebTestClient）（TASK-0106 完成，UserControllerTest + AuthControllerTest standalone MockMvc）
 
 
 ## Documentation
@@ -1501,10 +1591,11 @@ Sprint 0（Done 2026-07-29）
 - ✅ TASK-0103 User Application Service（Done 2026-07-30，PR #13 merged）
 - ✅ TASK-0104 User Controller + DTO（Done 2026-07-30，PR #14 merged）
 - ✅ TASK-0107 Authentication（ADR-0006 JWT）（Done 2026-07-30，PR #15 merged）
-- TASK-0105 User Frontend（登录 / 资料 / 偏好页）← 进行中
-- TASK-0106 User Test Suite（JUnit 5 + MockMvc）
+- ✅ TASK-0105 User Frontend（登录 / 资料 / 偏好页）（Done 2026-07-30，PR #16 merged）
+- TASK-0106 User Test Suite（JUnit 5 + MockMvc）← Reviewing
 
 > Authentication（ADR-0006 JWT）已合并：BCrypt 密码哈希 + JWT 签发/验证 + JwtAuthFilter + POST /api/auth/login 端点，不引入完整 Spring Security 框架。
+> TASK-0106 测试套件已完成本地验证（40 tests passed），PR 待创建。
 
 
 ---
@@ -1528,6 +1619,17 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v3.2 - 2026-07-30
+
+- TASK-0105 状态 Reviewing → Done（PR #16 squash merged to develop）
+- 新增 TASK-0106 User Test Suite 任务卡（Owner: Backend Agent，Status: Reviewing）
+- TASK-0106 交付物：5 测试类（UserDomainServiceTest / AuthServiceTest / JwtServiceTest / UserControllerTest / AuthControllerTest）+ mock-maker-subclass 配置
+- 分层覆盖：Domain Service（11）/ AuthService（7）/ JwtService（7）/ UserController（10）/ AuthController（5）= 40 tests
+- Controller 测试使用 standalone MockMvc，隔离 Spring Security 自动配置
+- Mockito mock-maker-subclass：绕开 inline mock maker 在 Java 25 上的字节码限制
+- Sprint 0 DoD Test 段两项延期项完成（单元测试 + API 测试框架运行）
 
 
 ## v3.1 - 2026-07-30
