@@ -1649,7 +1649,7 @@ Sprint 1（Done 2026-07-30）
 - ✅ TASK-0201 Today Migration（daily_plan + activity 表）（Done，PR #19 merged）
 - ✅ TASK-0202 Today Domain Layer（DailyPlan / Activity Entity + Repository + TodayDomainService）（Done，PR #20 merged，含 PR #19 Review 改进：Migration V20260730_004 唯一索引 + CHECK 约束 + updated_time 策略明确 + PR #20 Review 改进：isClosed 抽取 + 实体不变式校验 + deletedTime 注解）
 - ✅ TASK-0203 Today Application Layer（DailyPlanApplicationService + ActivityApplicationService）（Done，PR #21 merged，含 PR #21 Review 改进：requirePlan/requireActivity 抽取 + endActivity/locateActivity 下沉 Domain Service + DataIntegrityViolationException 转 BusinessException）
-- 🔄 TASK-0204 Today Controller + DTO（DailyPlanController + ActivityController + TodayAssembler + 5 DTO）（Reviewing，PR #22，分支 feature/today-controller，基于 develop）
+- ✅ TASK-0204 Today Controller + DTO（DailyPlanController + ActivityController + TodayAssembler + 5 DTO）（Done，PR #22 merged，含 PR #22 Review 改进：getToday 注释修正 + requirePlan 复用去重 + cancel 收敛 isClosed）
 - ⬜ TASK-0205 Today Frontend（今日页 Page01/02/03/05）
 - ⬜ TASK-0206 Today Test Suite
 - ⬜ TASK-0207 Planner Agent 骨架（Mock Memory）
