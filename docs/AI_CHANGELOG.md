@@ -1276,12 +1276,103 @@ Action:
 
 Reason:
 
-daily_plan 与 activity 之间是 Sprint 2 Today Module 的核心业务关系（一个计划包含多个活动）。无 daily_plan_id 字段则 activity 表成为孤立的活动记录，无法归属到任何计划，Sprint 2 Sprint Goal（AI 生成每日计划含多活动）无法实现。此字段是表内 schema 完善而非跨模块契约变更：activity 仍归 Today Module Owner，不改变 ADR-0011（Activity Owner 归 Today）边界。按 §8.5 Decision Level 评估为 L1（框架/模式选择，不改变架构边界），记 AI_CHANGELOG，无需 ADR。若 Sprint Review 阶段认为应升级为 L2，再补 ADR。
+daily_plan 与 activity 之间是 Sprint 2 Today Module 的核心业务关系（一个计划包含多个活动）。无 daily_plan_id 字段则 activity 表成为孤立的活动记录，无法归属到任何计划，Sprint 2 Sprint Goal（AI 生成每日计划含多活动）无法实现。此字段是表内 schema 完善而非跨模块契约变更：activity 仍归 Today Module Owner，不改变 ADR-0011（Activity Owner 归 Today）边界。按 §8.5 Decision Level 评估为 L1（表内字段补充，不改变架构边界），记 AI_CHANGELOG，无需 ADR。文档与 Schema 对齐策略：本字段定位为「文档与 Schema 对齐」事项，Sprint 2 关闭时（Sprint Review）必须同步回写 DATABASE_DESIGN §6.4，将 daily_plan_id 纳入 activity 表正式字段定义，消除文档与实现差异。
 
 
 Impact:
 
-新增 database/migrations/V20260730_002__create_daily_plan_table.sql / V20260730_003__create_activity_table.sql。activity 表 schema 与 DATABASE_DESIGN §6.4 文档存在差异（多 daily_plan_id 字段），待 Sprint Review 时决定是否回写 DATABASE_DESIGN 或新建 ADR 正式化。无后端代码变更，无跨模块影响。
+新增 database/migrations/V20260730_002__create_daily_plan_table.sql / V20260730_003__create_activity_table.sql。activity 表 schema 暂与 DATABASE_DESIGN §6.4 文档存在差异（多 daily_plan_id 字段）。文档对齐动作：Sprint 2 Sprint Review 后同步回写 DATABASE_DESIGN §6.4 以保持文档与 Schema 一致（L1 决策，无需 ADR）。无后端代码变更，无跨模块影响。
+
+
+Reviewer:
+
+Pending
+
+
+---
+
+
+## 2026-07-30 (第 30 次变更)
+
+
+Decision Level:
+
+L1 Tech Choice（按 DOCUMENT_VERSION_RULE §8.5）
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0201 Review 改进（PR #19 Reviewer 反馈处理）
+
+
+Action:
+
+处理 PR #19 Reviewer 反馈的 4 项建议修改，作为 PR #20 的增量改进（PR #19 已合并 develop，改进随 Domain Layer PR 一并交付）：
+- 1. daily_plan(user_id, date) 唯一索引：新建 Migration V20260730_004__refine_today_schema.sql，DROP idx_daily_plan_user_date 后 CREATE UNIQUE INDEX uk_daily_plan_user_date（带 WHERE deleted_time IS NULL 部分索引，软删除记录不受约束，允许同用户同日多份已删除计划，符合软删除语义）
+- 2. status / type CHECK 约束：同 Migration 内 ALTER TABLE daily_plan ADD chk_daily_plan_status（对齐 §7 PLAN_STATUS 4 值）/ ALTER TABLE activity ADD chk_activity_type（对齐 §7 ACTIVITY_TYPE 8 值），DB 层兜底枚举合法性，Application 层枚举校验为第一道防线
+- 3. updated_time 维护策略明确：DailyPlan / Activity Entity 注释明确 created_time / updated_time 由 Hibernate @CreationTimestamp / @UpdateTimestamp 应用层自动维护，不使用 DB Trigger（避免 DB 与应用双写时间漂移）
+- 4. AI_CHANGELOG 描述调整：将 TASK-0201（第 29 次变更）的描述重新定位为「文档与 Schema 对齐」事项，明确 Sprint 2 Sprint Review 后必须同步回写 DATABASE_DESIGN §6.4，消除原「待 Sprint Review 时决定是否回写或新建 ADR」的不确定性
+
+
+Reason:
+
+PR #19 Review 结论 Schema ⭐⭐⭐⭐⭐ 正确，Reviewer 提出 4 项建议合并前完成的改进。PR #19 已合并 develop，改进随当前 Reviewing 的 PR #20（Today Domain Layer）一并交付更合适（同属 Today Module、同一 feature 分支 feature/today-domain、Domain Layer 直接依赖这些 schema 约束）。4 项改进均属 L1 层（索引/约束/注释/文档定位），不改变架构边界，无需 ADR。updated_time 选择应用层维护而非 DB Trigger：Hibernate @UpdateTimestamp 在 flush 时自动写入，与应用事务一致，避免 Trigger 在批量 / 跨库场景的时间漂移问题。
+
+
+Impact:
+
+新增 database/migrations/V20260730_004__refine_today_schema.sql；修改 backend/solo-server 下 DailyPlan.java / Activity.java（仅类注释补充，无字段 / 方法变更）；调整 docs/AI_CHANGELOG.md（TASK-0201 条目描述）。无跨模块影响，无架构边界变更。本 Migration 在 develop 上执行时幂等（DROP INDEX IF EXISTS + CREATE UNIQUE INDEX IF NOT EXISTS + DROP CONSTRAINT IF EXISTS + ADD CONSTRAINT）。Sprint 2 Sprint Review 后同步回写 DATABASE_DESIGN §8 索引段（uk_daily_plan_user_date）+ §9 约束段（两个 CHECK 约束）以保持文档与 Schema 对齐。
+
+
+Reviewer:
+
+Pending
+
+
+---
+
+
+## 2026-07-30 (第 31 次变更)
+
+
+Decision Level:
+
+L1 Tech Choice（按 DOCUMENT_VERSION_RULE §8.5）
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0202 Review 改进（PR #20 Reviewer 反馈处理）
+
+
+Action:
+
+处理 PR #20 Reviewer 反馈的 5 项建议修改，强化 Domain Layer 健壮性：
+- 1. Activity.create() / update() 增加参数合法性校验：dailyPlanId / title / type / startTime 非空校验，title 长度 ≤ 200 校验，确保 Entity 始终保持合法状态（原实现允许 null 覆盖 NOT NULL 字段，会触发 DB NOT NULL 异常而非业务异常）。校验抛 IllegalArgumentException（实体不变式），与 Domain Service 抛 BusinessException（业务规则）分层一致
+- 2. DailyPlan.create() 同步增加 userId / date 非空校验，与 Activity.create 对齐
+- 3. 抽取 DailyPlan.isClosed() 方法（status == COMPLETED || CANCELLED），TodayDomainService 在 addActivityToPlan / updateActivity 统一使用，减少散落状态判断；DailyPlan.cancel() 内仍保留原状态判断（cancel 自身的合法前置判断，与 isClosed 语义不同）
+- 4. addActivityToPlan() 增加 plan.getId() != null 校验：确保活动只能绑定到已持久化的计划（daily_plan_id 必须指向已存在记录，避免内存态计划创建出孤立活动）
+- 5. deletedTime 字段从 @Column(insertable = false) 升级为 @Column(insertable = false, updatable = false)：deletedTime 完全由 DB 维护（@SQLDelete 在删除时写入），应用层既不 insert 也不 update，更显式地表达意图。同步更新 User Entity（保持跨模块软删除模式一致）
+
+
+Reason:
+
+PR #20 Review 结论指出 Activity.update() 存在 null 安全漏洞（null 覆盖 NOT NULL 字段），以及状态判断散落、未持久化计划可创建活动、deletedTime 注解不完整等问题。本次改进遵循「Entity 始终保持合法状态」原则（Domain-Driven Design 实体不变式），将参数合法性校验下沉到 Entity 工厂方法与变更方法，Domain Service 不再重复校验（避免校验逻辑双写）。Sprint Review 时正式解决 daily_plan_id 与 DATABASE_DESIGN §6.4 的文档漂移问题，避免长期不一致。
+
+
+Impact:
+
+修改 backend/solo-server/src/main/java/com/sololifeos/today/domain/model/DailyPlan.java（create 校验 + isClosed + deletedTime 注解）、Activity.java（create / update 校验 + deletedTime 注解）、today/domain/service/TodayDomainService.java（使用 isClosed + plan.getId 校验 + 移除重复校验）、today/repository/DailyPlanRepository.java（注释漂移修复：idx → uk，DB 不强制 → DB uk 兜底）、user/domain/model/User.java（deletedTime 注解同步，保持跨模块一致）。无数据库 Migration 变更，无架构边界变更。Sprint 2 Sprint Review 时必须：①回写 DATABASE_DESIGN §6.4 补充 daily_plan_id 字段；②回写 §8 补充 uk_daily_plan_user_date 索引；③回写 §9 补充两个 CHECK 约束；④确认 isClosed 抽取后的状态判断无遗漏。
 
 
 Reviewer:

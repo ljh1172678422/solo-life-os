@@ -1646,8 +1646,8 @@ Sprint 1（Done 2026-07-30）
 
 待启动任务：
 
-- 🔄 TASK-0201 Today Migration（daily_plan + activity 表）（Developing）
-- ⬜ TASK-0202 Today Domain Layer（DailyPlan / Activity Entity + Repository）
+- ✅ TASK-0201 Today Migration（daily_plan + activity 表）（Done，PR #19 merged）
+- 🔄 TASK-0202 Today Domain Layer（DailyPlan / Activity Entity + Repository + TodayDomainService）（Reviewing，PR #20，含 PR #19 Review 改进：Migration V20260730_004 唯一索引 + CHECK 约束 + updated_time 策略明确）
 - ⬜ TASK-0203 Today Application Layer（DailyPlanApplicationService）
 - ⬜ TASK-0204 Today Controller + DTO（DailyPlanDTO / ActivityDTO）
 - ⬜ TASK-0205 Today Frontend（今日页 Page01/02/03/05）

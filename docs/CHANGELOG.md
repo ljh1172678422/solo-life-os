@@ -16,6 +16,25 @@
 
 ### Added
 
+- TASK-0202 Today Domain Layer：新增 Today Module 领域层（Entity + Repository + Domain Service）
+  - DailyPlan Entity（DATABASE_DESIGN §6.3）：状态机 PLANNING→ONGOING→COMPLETED/CANCELLED，软删除
+  - Activity Entity（DATABASE_DESIGN §6.4 + L1 daily_plan_id）：title/type/location_id/start/end_time，软删除
+  - PlanStatus / ActivityType 枚举对齐 DATABASE_DESIGN §7
+  - DailyPlanRepository：findByUserIdAndDate / existsByUserIdAndDate（业务唯一性校验）/ 日期范围查询
+  - ActivityRepository：按计划/地点/时间范围/类型查询，对齐 DATABASE_DESIGN §8 三索引
+  - TodayDomainService：计划创建校验、活动添加规则、状态变更规则、活动修改规则
+- TASK-0201 Review 改进（PR #19 Reviewer 反馈）：增量 Migration V20260730_004__refine_today_schema.sql
+  - daily_plan(user_id, date) 升级为唯一索引 uk_daily_plan_user_date（带 WHERE deleted_time IS NULL，软删除记录不受约束）
+  - daily_plan.status 增加 CHECK 约束 chk_daily_plan_status（对齐 §7 PLAN_STATUS 4 值）
+  - activity.type 增加 CHECK 约束 chk_activity_type（对齐 §7 ACTIVITY_TYPE 8 值）
+  - 明确 updated_time 维护策略：Hibernate @UpdateTimestamp 应用层维护，不使用 DB Trigger
+  - 文档与 Schema 对齐：Sprint 2 Sprint Review 后同步回写 DATABASE_DESIGN §6.4 / §8 / §9
+- TASK-0202 Review 改进（PR #20 Reviewer 反馈）：强化 Domain Layer 健壮性
+  - Activity.create() / update() 增加参数合法性校验，确保实体始终处于合法状态（防 null 覆盖 NOT NULL 字段）
+  - DailyPlan.create() 同步增加 userId / date 非空校验，与 Activity.create 对齐
+  - 抽取 DailyPlan.isClosed() 方法，Domain Service 统一使用，减少散落状态判断
+  - addActivityToPlan() 增加 plan.getId() != null 校验，避免未持久化计划创建孤立活动
+  - deletedTime 注解升级为 insertable=false, updatable=false（由 DB @SQLDelete 维护，应用层不读写），同步更新 User Entity
 - TASK-0201 Today Migration：新增 daily_plan + activity 两张表 Migration，启动 Sprint 2 Today Module
   - daily_plan 表（DATABASE_DESIGN §6.3）：user_id / date / status（PLAN_STATUS 枚举）/ 软删除
   - activity 表（DATABASE_DESIGN §6.4 + L1 决策补充）：title / type（ACTIVITY_TYPE 枚举）/ location_id / start/end_time
