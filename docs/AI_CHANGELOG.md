@@ -1378,3 +1378,92 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-30 (第 32 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0203 Today Application Layer
+
+
+Action:
+
+建立 Today Module 应用服务层（CODE_RULES §3.1 Application Service），镜像 Sprint 1 User Module 模式（TASK-0103）：
+- DailyPlanApplicationService：计划生命周期用例协调
+  - createPlan：Domain Service 当日唯一性校验 + 持久化（DB uk_daily_plan_user_date 兜底）
+  - getPlanById / getPlanByUserAndDate（今日计划，返回 Optional）/ listUserPlans / listPlansByDateRange / listPlansByStatus
+  - startPlan / completePlan / cancelPlan：加载计划 → Domain Service 状态变更委托 → 持久化
+- ActivityApplicationService：活动用例协调（活动归属 DailyPlan）
+  - addActivity：加载所属计划 → Domain Service addActivityToPlan（计划未关闭 + 已持久化校验）→ 持久化
+  - getActivity / listActivitiesByPlan / listActivitiesByPlans（批量）/ listActivitiesByLocation / listActivitiesByTimeRange
+  - updateActivity：加载计划 + 活动 + 归属校验（activity.dailyPlanId == planId）→ Domain Service updateActivity → 持久化
+  - endActivity / locateActivity：加载活动 + 所属计划 → isClosed 校验 → 委托 Activity 变更 → 持久化
+- 事务边界：写操作 @Transactional，读操作 @Transactional(readOnly=true)
+- 入参原始类型，出参 Domain Entity（DTO 转换归 Controller 层 TASK-0204）
+- 构造器注入（CODE_RULES §3.3），注入 TodayDomainService + ActivityRepository + DailyPlanRepository
+- 分支策略：feature/today-application 基于 feature/today-domain tip 创建（PR #20 待合并），待 PR #20 合并后 rebase 到 develop 再开 PR
+
+
+Reason:
+
+TASK-0202 已建立 Domain Layer（Entity / Repository / Domain Service），Application Service 作为用例协调层连接 Domain Service 与 Repository，提供事务边界。拆分为 2 个服务（DailyPlan / Activity）镜像 User Module 模式（User / UserPreference / Tag 各一服务）。Activity 写操作需先加载所属计划做 isClosed 校验，复用 DailyPlan.isClosed()（PR #20 Review 改进）。endActivity / locateActivity 未走 Domain Service（Domain Service 未提供对应方法），直接在 Application Service 调用 plan.isClosed() 校验后委托 Entity 变更——isClosed 是 Entity 领域行为，Application Service 调用符合分层约定。
+
+
+Impact:
+
+新增 backend/solo-server/src/main/java/com/sololifeos/today/application/ 下 2 个 Java 源文件（DailyPlanApplicationService + ActivityApplicationService）；更新 docs/CHANGELOG.md、docs/AI_CHANGELOG.md、docs/TASK_BOARD.md。无数据库 Migration 变更，无架构边界变更，未修改 Domain Layer。本任务生效后，TASK-0204（Controller + DTO + Assembler）可基于这 2 个 Application Service 构建 REST API。编译验证待 CI（沙箱 mvn compile 通过）。
+
+
+Reviewer:
+
+Pending
+
+
+---
+
+
+## 2026-07-30 (第 33 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0203 Review 改进（PR #21 Reviewer 反馈处理）+ PR #20 合并对账
+
+
+Action:
+
+合并 PR #20（TASK-0202 Today Domain Layer，Squash merge，commit 9a4df93），并处理 PR #21 Reviewer 反馈的 3 项企业级 DDD 优化建议：
+- 1. 抽取 requirePlan() / requireActivity() / requireActivityBelongsToPlan() 私有方法：消除 Application Service 中 5 处重复的 findById + orElseThrow 异常处理代码，统一为私有加载方法（DailyPlanApplicationService.requirePlan / ActivityApplicationService.requirePlan + requireActivity + requireActivityBelongsToPlan）
+- 2. endActivity / locateActivity 业务校验下沉到 TodayDomainService：新增 TodayDomainService.endActivity(plan, activity, endTime) / locateActivity(plan, activity, locationId) 方法（含 isClosed 校验），Application Service 调用后委托。Application Service 现仅负责事务 / 加载聚合 / 持久化，不再内嵌 isClosed 业务判断
+- 3. DataIntegrityViolationException 转 BusinessException：createPlan（并发创建同日计划冲突，DB uk_daily_plan_user_date 兜底）/ addActivity + updateActivity（DB CHECK 约束 chk_activity_type 兜底）捕获 DataIntegrityViolationException 转为 BusinessException，避免并发或边界场景返回 500 错误
+- PR #20 合并对账：TASK-0202 状态 Reviewing → Done，TASK_BOARD 待启动任务清单更新
+
+
+Reason:
+
+PR #21 Review 结论「达到比较成熟的企业级 DDD 实践水平」，3 项建议作为后续优化重点但不阻塞合并。考虑到本 PR 尚未开 PR（PR #20 刚合并，分支已 rebase 到 develop），直接将 3 项改进合入本 commit 更高效，避免开 PR 后立即追加改进 commit。改进遵循 DDD 分层原则：Application Service 薄层（事务+协调+持久化），Domain Service 持业务规则，DB 约束作兜底防线。并发唯一约束异常处理是生产级必需（业务校验无法消除 TOCTOU 竞态）。
+
+
+Impact:
+
+修改 backend/solo-server/src/main/java/com/sololifeos/today/application/DailyPlanApplicationService.java（requirePlan + createPlan 并发异常处理）、ActivityApplicationService.java（requirePlan/requireActivity/requireActivityBelongsToPlan + endActivity/locateActivity 委托 Domain Service + addActivity/updateActivity 异常处理）、today/domain/service/TodayDomainService.java（新增 endActivity / locateActivity 方法）；更新 docs/CHANGELOG.md、docs/AI_CHANGELOG.md、docs/TASK_BOARD.md（TASK-0202 Done + TASK-0203 Reviewing）。无数据库 Migration 变更，无架构边界变更。Sprint 2 Sprint Review 时仍需回写 DATABASE_DESIGN §6.4/§8/§9（PR #19/20 改进承诺）。
+
+
+Reviewer:
+
+Pending
