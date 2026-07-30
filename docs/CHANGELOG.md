@@ -16,6 +16,11 @@
 
 ### Added
 
+- TASK-0103 User Application Service：新增 User Module 应用服务层
+  - UserApplicationService：注册（含默认偏好创建）/ 资料查询 / 资料更新 / 激活 / 封禁
+  - UserPreferenceApplicationService：偏好查询 / 偏好更新
+  - TagApplicationService：标签创建 / 标签查询
+  - 事务边界：写 @Transactional，读 @Transactional(readOnly=true)
 - TASK-0102 User Domain Layer：新增 User Module 领域层
   - JPA Entity：User / UserPreference / Tag（对齐 DATABASE_DESIGN §6.1/6.2/6.10）
   - 枚举：UserStatus / BudgetLevel / TagType（对齐 §7）

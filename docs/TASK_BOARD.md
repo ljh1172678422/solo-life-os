@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.7
+Version: 2.8
 
 Last Update: 2026-07-30
 
@@ -868,7 +868,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -878,12 +878,12 @@ User Module
 
 Branch:
 
-feature/user-domain-layer
+feature/user-domain-layer (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Depends:
@@ -915,13 +915,14 @@ Validation:
 ✅ 外键策略：逻辑关联不建 FK（§9），Entity 间无 @ManyToOne 物理映射
 ✅ User 软删除：@SQLDelete + @SQLRestriction（Hibernate 6.4）
 ✅ password 字段未加入 Entity（归 Auth 任务 / ADR-0006）
-⚠️ 编译验证待 CI（沙箱无网络，JPA 依赖未在本地 Maven 缓存）
+✅ CI 编译通过（PR #12, Backend CI, 2026-07-30）
+✅ Squash merged to develop (PR #12, 2026-07-30)
 
 
 DoD:
 
 - [x] 3 Entity + 3 Repository + 3 Domain Service + 3 枚举全部定义
-- [x] 接口编译通过（待 CI 验证）
+- [x] 接口编译通过（CI 验证通过，PR #12）
 - [x] 代码与 ARCHITECTURE §2 分层 / CODE_RULES §3 一致
 
 
@@ -940,6 +941,91 @@ DoD:
 - `backend/solo-server/src/main/java/com/sololifeos/user/domain/model/`：User / UserPreference / Tag Entity + UserStatus / BudgetLevel / TagType 枚举
 - `backend/solo-server/src/main/java/com/sololifeos/user/repository/`：UserRepository / UserPreferenceRepository / TagRepository
 - `backend/solo-server/src/main/java/com/sololifeos/user/domain/service/`：UserDomainService / UserPreferenceDomainService / TagDomainService
+
+
+---
+
+
+## TASK-0103 User Application Service
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Reviewing
+
+
+Module:
+
+User Module
+
+
+Branch:
+
+feature/user-application-service
+
+
+Branch Status:
+
+PR-Open
+
+
+Depends:
+
+TASK-0102（已满足）
+
+
+Description:
+
+建立 User Module 应用服务层：用例协调 + 事务边界。调用 Domain Service 做业务规则，调用 Repository 做持久化。不实现 Controller / DTO（归 TASK-0104）。
+
+
+Todo:
+
+- [x] UserApplicationService：注册（含默认偏好创建）/ 资料查询 / 资料更新 / 激活 / 封禁
+- [x] UserPreferenceApplicationService：偏好查询 / 偏好更新
+- [x] TagApplicationService：标签创建 / 标签查询（按用户 / 按类型）
+- [x] 事务边界：写操作 @Transactional，读操作 @Transactional(readOnly=true)
+- [x] 注册闭环：注册时事务内创建 user + 默认 preference
+
+
+Validation:
+
+✅ 3 Application Service 全部定义（对齐 CODE_RULES §3.1 Application Service 职责）
+✅ 入参用原始类型，出参用 Domain Entity（DTO 转换归 Controller TASK-0104）
+✅ 事务边界明确：写 @Transactional，读 @Transactional(readOnly=true)
+✅ 注册闭环：register 方法事务内创建 user + 默认 preference
+✅ 构造器注入（CODE_RULES §3.3）
+⚠️ 编译验证待 CI（沙箱无网络）
+
+
+DoD:
+
+- [x] 3 Application Service 全部定义
+- [x] 接口编译通过（待 CI 验证）
+- [x] 事务边界与 CODE_RULES §3.1 一致
+
+
+禁止:
+
+- [X] Controller / DTO 实现（归 TASK-0104）
+- [X] 业务规则写在 Application Service（归 Domain Service）
+- [X] SQL 写在 Application Service（归 Repository）
+- [X] Entity 直出 Controller（CODE_RULES §5）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/user/application/`：UserApplicationService / UserPreferenceApplicationService / TagApplicationService
 
 
 ---
@@ -1109,8 +1195,8 @@ Sprint 0（Done 2026-07-29）
 待启动任务：
 
 - ✅ TASK-0101 User Migration Review（Done 2026-07-29）
-- ✅ TASK-0102 User Domain Layer（Reviewing 2026-07-30，PR-Open）
-- TASK-0103 User Application Service（注册 / 资料 / 偏好读写用例）
+- ✅ TASK-0102 User Domain Layer（Done 2026-07-30，PR #12 merged）
+- ✅ TASK-0103 User Application Service（Reviewing 2026-07-30，PR-Open）
 - TASK-0104 User Controller + DTO（REST 端点 + 入参出参 DTO，禁 Entity 直出）
 - TASK-0105 User Frontend（登录 / 资料 / 偏好页）
 - TASK-0106 User Test Suite（JUnit 5 + MockMvc）
@@ -1139,6 +1225,16 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v2.8 - 2026-07-30
+
+- TASK-0102 User Domain Layer 状态更新：Reviewing → Done（PR #12 merged，CI 编译通过）
+- 新增 TASK-0103 User Application Service 任务卡（Owner: Backend Agent，Status: Reviewing）
+- TASK-0103 交付物：3 Application Service（UserApplicationService / UserPreferenceApplicationService / TagApplicationService）
+- 注册闭环：register 方法事务内创建 user + 默认 preference
+- 事务边界：写 @Transactional，读 @Transactional(readOnly=true)
+- 范围控制：未实现 Controller / DTO（归 TASK-0104），业务规则归 Domain Service
 
 
 ## v2.7 - 2026-07-30
