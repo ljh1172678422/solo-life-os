@@ -1,6 +1,6 @@
 # Document Version Synchronization Rule
 
-Version: 1.2
+Version: 1.3
 
 Last Update: 2026-07-30
 
@@ -73,6 +73,34 @@ Last Update: 2026-07-30
 - [X] 用 CHANGELOG 作为 Task 状态来源（CHANGELOG 是历史，不是当前状态）
 - [X] 多文档维护同一份状态数据，导致冲突时无法裁决
 - [X] 在 PR / Commit message / Issue 中维护脱离 TASK_BOARD 的私有任务状态
+
+### 2.5 Domain Ownership Matrix
+
+§1 定义「谁修改什么文件」，本节定义「谁负责什么领域」。非 Owner 修改他人领域必须显式声明，防止跨边界污染。
+
+| Domain | Owner | 主要文件范围 |
+|--------|-------|------------|
+| Architecture | Architecture Agent | `docs/ARCHITECTURE.md` / `docs/architecture/ADR/*` / `docs/SPRINT_PLAN.md` |
+| Backend | Backend Agent | `backend/solo-server/src/main/java/**`（业务模块） / `backend/solo-server/pom.xml` |
+| Frontend | Frontend Agent | `apps/h5/src/**` / `apps/h5/package.json` |
+| Database | Backend + Architecture（协作） | `database/migrations/*`（Backend 起草，Architecture 审 Schema） |
+| CI/CD | DevOps Agent | `.github/workflows/*` / `.github/branch-protection.md` |
+| AI Capability | AI Agent | `backend/solo-server/src/main/java/com/sololifeos/ai/**` |
+| Governance | Architecture Agent | `docs/governance/*` / `docs/AGENTS.md` / `docs/CODE_RULES.md` |
+| Documentation | Architecture Agent | `README.md` / `docs/CHANGELOG.md` / `docs/AI_CHANGELOG.md` / `docs/TASK_BOARD.md`（状态字段） |
+
+非 Owner 修改他人领域的规则：
+
+1. PR 描述必须说明跨领域原因（为什么需要动他人领域）
+2. `AI_CHANGELOG.md` 必须记录（按 §8.1「跨越 Owner 边界操作」）
+3. Reviewer 必须 Approve（默认 Reviewer 即该领域 Owner）
+4. 紧急修复也必须遵守，事后补流程
+
+禁止：
+
+- [X] Backend Agent 直接修改 `apps/h5/src/**`（应通过 Frontend Agent 或 PR 协作）
+- [X] 任何 Agent 直接修改 `docs/ARCHITECTURE.md` 核心边界（必须走 ADR，§3.1）
+- [X] Frontend Agent 修改 `database/migrations/*`（Schema 变更归 Architecture）
 
 ---
 
@@ -162,9 +190,26 @@ README 至少包含以下区域：
 ## Development Workflow（Feature Branch → PR → CI → Merge Develop）
 ```
 
-### 6.4 数据来源
+### 6.4 数据来源（Source vs Projection）
 
-README 的状态字段来源于 `TASK_BOARD.md` 的 `Project Snapshot` 段（Current Sprint / Current Task / Last Milestone），保证单一数据源。
+README 本身不是状态 Source，只是 TASK_BOARD 的 Projection。两者是单向数据流，非双向同步。
+
+```
+TASK_BOARD.md (Project Snapshot 段)
+   │  Current Sprint / Current Task / Last Milestone
+   │
+   ▼  单向投影
+README.md (Project Status 区域)
+```
+
+- **Source**：`TASK_BOARD.md` Project Snapshot 段
+- **Projection**：`README.md` Project Status 区域
+
+规则：
+
+- README 不允许独立维护状态字段，必须从 TASK_BOARD 投影
+- TASK_BOARD 更新后，README 在下次 §6.1 触发时同步投影（不强制实时同步）
+- 若发现 README 与 TASK_BOARD 状态冲突，以 TASK_BOARD 为准（§2.4）
 
 ### 6.5 禁止
 
@@ -187,13 +232,36 @@ README 的状态字段来源于 `TASK_BOARD.md` 的 `Project Snapshot` 段（Cur
 | Feature 分支创建 | `git checkout -b feature/*` | `TASK_BOARD.md` | Status: Developing，Branch |
 | PR 创建 | `gh pr create` | `TASK_BOARD.md` | Status: Reviewing，Branch Status: PR-Open，记录 PR # |
 | CI 通过 | GitHub Actions 绿 | `TASK_BOARD.md` | Validation 段补 ✅ CI 通过记录 |
-| PR Review 需修改 | Reviewer 反馈 | 无需改文档 | 直接改代码 + push，CI 重跑 |
+| Changes Requested | Reviewer 请求修改 | `TASK_BOARD.md` | Status: Changes Requested |
+| Developer 修复中 | 本地改代码 | `TASK_BOARD.md` | Status: Developing |
+| Re-push | `git push`（CI 重跑） | `TASK_BOARD.md` | Status: Reviewing |
 | PR Merge | `gh pr merge --squash` | `CHANGELOG.md` + `TASK_BOARD.md` | CHANGELOG 加条目；TASK_BOARD Status → Done，Branch Status → Merged，DoD 勾选 CI 验证 + 合并 |
 | Sprint 关闭 | Sprint 全部 Task Done | `README.md` + `TASK_BOARD.md` | README 状态快照刷新（§6）；TASK_BOARD 加 Close Gate 段 |
 
-### 7.2 禁止
+### 7.2 Task 状态机
+
+PR Review 阶段多次往返时，TASK_BOARD 必须随状态机流转，不能永远停在 Reviewing：
+
+```
+Backlog → Assigned → Developing → Reviewing
+                                    │
+                                    ├─ CI 失败 ────────→ Developing（修复）
+                                    │
+                                    └─ Changes Requested → Developing（修复）→ Reviewing（re-push）
+                                    │
+                                    └─ Approved → Done（merge）
+```
+
+关键状态：
+
+- **Changes Requested**：Reviewer 已明确请求修改，TASK_BOARD 必须从 Reviewing 切到 Changes Requested
+- **Developing（修复中）**：开发者开始改代码，从 Changes Requested 切回 Developing
+- **Reviewing（re-push）**：修复后 re-push，CI 重跑，切回 Reviewing
+
+### 7.3 禁止
 
 - [X] Feature 开发完成后才补 TASK_BOARD 状态（应在分支创建时即 Developing）
+- [X] PR Review 往返时 TASK_BOARD 永远停在 Reviewing（必须走 Changes Requested → Developing → Reviewing）
 - [X] PR 合并后跳过 CHANGELOG 条目
 - [X] Sprint 关闭后 README 仍停留在旧 Sprint 状态（违反 §6.1）
 - [X] 用 Commit message / PR body 维护脱离 TASK_BOARD 的任务状态（违反 §2.4）
@@ -247,17 +315,92 @@ README 的状态字段来源于 `TASK_BOARD.md` 的 `Project Snapshot` 段（Cur
 - [X] 用 AI_CHANGELOG 代替 CHANGELOG（CHANGELOG 记录"做了什么"，AI_CHANGELOG 记录"为什么这样决策"）
 - [X] 一条 AI_CHANGELOG 跨多个不相关决策（应拆分）
 
+### 8.5 Decision Level（决策分级）
+
+AI 决策数量随 Sprint 增长会快速上升，按影响范围分级，避免「什么都记」或「重大决策漏记」。
+
+| Level | 范围 | 记录位置 | 示例 |
+|-------|------|----------|------|
+| **L0** Routine | 按 ADR / ARCHITECTURE 既定路径的常规实现 | 无需记录 | 新增一个 Controller、一个 Vue 组件 |
+| **L1 Tech Choice** | 框架/库/模式选择，不改变架构边界 | `AI_CHANGELOG.md` | 选 Redis Stream 替代 RabbitMQ 做某用例 |
+| **L2 Architecture Impact** | 影响模块边界 / 数据流 / 跨模块契约 | 新建 `ADR` + `AI_CHANGELOG.md` | 引入 Event Driven，跨模块异步 |
+| **L3 Critical** | 修改核心系统边界 / 颠覆性架构变化 | Architecture Review + ADR + AI_CHANGELOG | 重划模块边界、替换主 DB |
+
+规则：
+
+- AI 必须先评估决策的 Level，再决定记录方式
+- L0 不记录；L1 记 AI_CHANGELOG；L2 必须 ADR（按 §3.1 流程）；L3 必须 Architecture Review
+- 跨级误判（如把 L2 当 L1 处理）应在 PR Review 阶段由 Architecture Agent 纠正
+
 
 ---
 
-## 9. Roadmap（v1.3+，待 Sprint Review 落地）
+## 10. Document Validation Checklist
 
-以下规则在 v1.2 已识别但暂缓实现，留待 Sprint Review 阶段视规模需要再落地，避免过早复杂化。
+PR Merge 前 PR 提交者必须逐项确认（v1.3 提前落地，原 §9.2 Roadmap 项）。先以人工 checklist 形式执行，成熟后迁入 GitHub Actions 自动化（届时升 v2.0）。
 
-### 9.1 Documentation Freeze Period（待 §2.5）
+### 10.1 通用检查（每个 PR）
+
+- [ ] 触及的文件属于提交者 Owner 领域（§2.5）；若跨领域，PR 描述已说明原因 + AI_CHANGELOG 已记录
+- [ ] 改动 `docs/` 下任何治理 / 架构文档 → Version 字段已更新，CHANGELOG 已记录
+- [ ] 不修改已冻结文档（ARCHITECTURE / DATABASE_DESIGN / ADR Accepted）除非有 ADR 支撑
+- [ ] 文档修改走 feature 分支 + PR（§11），禁止直推 develop / main
+
+### 10.2 PR Merge 时检查
+
+- [ ] `TASK_BOARD.md` 对应 Task Status → Done，Branch Status → Merged，DoD 已勾选 CI 验证 + 合并（§7.1）
+- [ ] `CHANGELOG.md` 有本次合并条目（Squash 粒度，不逐 feature commit 记录）
+- [ ] L1+ AI 决策 → `AI_CHANGELOG.md` 有对应条目（§8.5）
+- [ ] L2+ 架构影响 → ADR 已创建或更新
+
+### 10.3 Sprint 关闭时检查
+
+- [ ] `README.md` Project Status 已按 §6.1 刷新到当前 Sprint 状态
+- [ ] `TASK_BOARD.md` 有 Close Gate 段
+- [ ] README 与 TASK_BOARD 状态一致（§6.4 Projection 一致性）
+
+---
+
+## 11. Git Governance Integration
+
+本规则不重复 Git 工作流定义，依赖 `docs/AGENTS.md` §15 Git Branch Governance。文档修改与代码修改遵循同一 Git 流程。
+
+```
+feature/<domain>-<task> 分支
+        │
+        ▼
+开发 + 文档同步（§7 PR Lifecycle）
+        │
+        ▼
+PR + CI Validation
+        │
+        ▼
+Reviewer Approve（默认为该领域 Owner，§2.5）
+        │
+        ▼
+Squash merge to develop
+```
+
+核心约束（引自 AGENTS §15）：
+
+- [X] 禁止直推 `develop` / `main`（包括纯文档修改）
+- [X] 所有文档修改必须走 feature 分支 + PR
+- [X] Commit message 遵循 Conventional Commits（`docs(scope): ...`）
+- [X] PR 描述说明文档修改原因（治理规则变更需引用对应 §节）
+
+> 本节仅引用 AGENTS §15，不复制其完整内容。Git 工作流细则以 AGENTS §15 为唯一来源。
+
+
+---
+
+## 12. Roadmap（v2.0+，待规模需要再落地）
+
+v1.3 完成后本规则进入 v2.0 冻结期：后续仅通过 ADR 修改，禁止零散调整。以下规则已识别但暂缓实现，留待规模需要时再评估。
+
+### 12.1 Documentation Freeze Period（待 §2.6）
 
 Sprint 开始后核心架构文档（ARCHITECTURE / DATABASE_DESIGN / SPRINT_PLAN）冻结，Sprint 内仅可在 ADR Accepted 或 Critical Architecture Bug 时修改。
 
-### 9.2 Document Validation CI（待 §10）
+### 12.2 Document Validation Automation（GitHub Actions）
 
-PR Merge 前自动检查：README 是否满足 Snapshot / TASK_BOARD 状态正确 / Version 是否更新 / CHANGELOG 是否存在 / AI_CHANGELOG 是否存在。先以 PR 模板 checklist 形式落地，成熟后迁入 GitHub Actions。
+§10 checklist 成熟后迁入 `.github/workflows/` 自动化检查（README Snapshot 合规 / TASK_BOARD 状态校验 / Version 字段校验）。
