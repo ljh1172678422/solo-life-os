@@ -16,6 +16,17 @@
 
 ### Added
 
+- TASK-0204 Today Controller + DTO：新增 Today Module REST API 层（CODE_RULES §3.1 Controller）
+  - DailyPlanController（7 端点）：POST /api/users/{userId}/plans（创建）/ GET /api/users/{userId}/plans/today?date=（今日计划）/ GET /api/users/{userId}/plans（列表，支持日期范围+状态筛选）/ GET /api/plans/{planId} / POST /api/plans/{planId}/start|complete|cancel（状态变更）
+  - ActivityController（6 端点）：POST /api/plans/{planId}/activities（添加）/ GET /api/plans/{planId}/activities（列表）/ GET /api/activities/{id} / PUT /api/plans/{planId}/activities/{id}（修改）/ POST /api/activities/{id}/end / POST /api/activities/{id}/locate（Sprint 3）
+  - TodayAssembler：Entity → Response DTO 转换（与 UserAssembler 模式一致）
+  - DTO（5 个）：DailyPlanResponse / ActivityResponse / DailyPlanCreateRequest / ActivityCreateRequest / ActivityUpdateRequest（record + Jakarta Validation）
+  - 路由设计：资源归属清晰（用户维度 /api/users/{userId}/plans，计划维度 /api/plans/{planId}/activities，单资源 /api/plans/{id} /api/activities/{id}）
+  - 权限：所有端点需 JWT 认证（JwtAuthFilter）
+- TASK-0204 Review 改进（PR #22 Reviewer 反馈）：领域一致性 + 去重
+  - 修正 getToday() 注释：实际返回 200 + data=null（用户尚未创建当日计划属正常状态），非 404
+  - ActivityApplicationService 复用 DailyPlanApplicationService.getPlanById()，消除重复的私有 requirePlan()
+  - DailyPlan.cancel() 收敛使用 isClosed()，「已关闭计划」语义单一来源
 - TASK-0203 Today Application Layer：新增 Today Module 应用服务层（CODE_RULES §3.1 Application Service）
   - DailyPlanApplicationService：createPlan / getPlanById / getPlanByUserAndDate / listUserPlans / listPlansByDateRange / listPlansByStatus / startPlan / completePlan / cancelPlan
   - ActivityApplicationService：addActivity / getActivity / listActivitiesByPlan / listActivitiesByPlans / listActivitiesByLocation / listActivitiesByTimeRange / updateActivity / endActivity / locateActivity

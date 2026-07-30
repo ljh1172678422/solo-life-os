@@ -115,18 +115,24 @@ public class DailyPlan {
         this.status = PlanStatus.COMPLETED;
     }
 
-    /** 取消计划：PLANNING / ONGOING → CANCELLED。 */
+    /**
+     * 取消计划：PLANNING / ONGOING → CANCELLED。
+     * <p>
+     * PR #22 Review 改进：收敛使用 {@link #isClosed()}，消除重复状态判断，
+     * 保证「已关闭计划」语义单一来源。
+     */
     public void cancel() {
-        if (this.status == PlanStatus.COMPLETED || this.status == PlanStatus.CANCELLED) {
+        if (isClosed()) {
             throw new IllegalStateException("Cannot cancel a " + this.status + " plan");
         }
         this.status = PlanStatus.CANCELLED;
     }
 
     /**
-     * 计划是否已关闭（不可再添加 / 修改活动）。
+     * 计划是否已关闭（不可再添加 / 修改活动 / 取消）。
      * <p>
      * PR #20 Review 反馈：抽取重复状态判断，减少 COMPLETED / CANCELLED 散落。
+     * PR #22 Review 改进：cancel() 也收敛到此方法，「已关闭」语义单一来源。
      *
      * @return status == COMPLETED || status == CANCELLED
      */
