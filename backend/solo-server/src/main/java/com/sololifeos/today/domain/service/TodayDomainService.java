@@ -123,4 +123,44 @@ public class TodayDomainService {
         }
         activity.update(title, type, startTime, endTime);
     }
+
+    /**
+     * 设置活动结束时间。校验所属计划未关闭后委托给 Activity。
+     * <p>
+     * PR #21 Review 改进：业务校验下沉到 Domain Service，
+     * Application Service 只负责事务、加载聚合和持久化。
+     *
+     * @param plan     所属计划（必须未关闭）
+     * @param activity 活动（必须属于该计划，归属校验归 Application Service）
+     * @param endTime  结束时间（可空，非空时需晚于 startTime）
+     */
+    public void endActivity(DailyPlan plan, Activity activity, LocalDateTime endTime) {
+        if (plan == null || activity == null) {
+            throw new BusinessException("计划与活动不可为空");
+        }
+        if (plan.isClosed()) {
+            throw new BusinessException("已" + plan.getStatus() + "的计划不可修改活动");
+        }
+        activity.end(endTime);
+    }
+
+    /**
+     * 绑定活动地点。校验所属计划未关闭后委托给 Activity。
+     * <p>
+     * PR #21 Review 改进：业务校验下沉到 Domain Service，
+     * Application Service 只负责事务、加载聚合和持久化。
+     *
+     * @param plan       所属计划（必须未关闭）
+     * @param activity   活动（必须属于该计划，归属校验归 Application Service）
+     * @param locationId 地点 ID（Explore Module, Sprint 3 后可用）
+     */
+    public void locateActivity(DailyPlan plan, Activity activity, Long locationId) {
+        if (plan == null || activity == null) {
+            throw new BusinessException("计划与活动不可为空");
+        }
+        if (plan.isClosed()) {
+            throw new BusinessException("已" + plan.getStatus() + "的计划不可修改活动");
+        }
+        activity.locate(locationId);
+    }
 }

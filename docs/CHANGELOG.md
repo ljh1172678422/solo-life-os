@@ -16,6 +16,17 @@
 
 ### Added
 
+- TASK-0203 Today Application Layer：新增 Today Module 应用服务层（CODE_RULES §3.1 Application Service）
+  - DailyPlanApplicationService：createPlan / getPlanById / getPlanByUserAndDate / listUserPlans / listPlansByDateRange / listPlansByStatus / startPlan / completePlan / cancelPlan
+  - ActivityApplicationService：addActivity / getActivity / listActivitiesByPlan / listActivitiesByPlans / listActivitiesByLocation / listActivitiesByTimeRange / updateActivity / endActivity / locateActivity
+  - 事务边界：写操作 @Transactional，读操作 @Transactional(readOnly=true)
+  - 入参原始类型，出参 Domain Entity（DTO 转换归 TASK-0204）
+  - 写操作加载所属计划经 Domain Service 校验（计划未关闭）后持久化
+  - updateActivity 增加活动归属校验（activity.dailyPlanId == planId）
+- TASK-0203 Review 改进（PR #21 Reviewer 反馈）：企业级 DDD 实践优化
+  - 抽取 requirePlan() / requireActivity() 私有方法，消除 Application Service 中重复的查询 + 异常处理代码
+  - endActivity / locateActivity 业务校验下沉到 TodayDomainService，Application Service 只负责事务 / 加载聚合 / 持久化
+  - createPlan / addActivity / updateActivity 捕获 DataIntegrityViolationException 转为 BusinessException，避免并发创建计划时返回 500
 - TASK-0202 Today Domain Layer：新增 Today Module 领域层（Entity + Repository + Domain Service）
   - DailyPlan Entity（DATABASE_DESIGN §6.3）：状态机 PLANNING→ONGOING→COMPLETED/CANCELLED，软删除
   - Activity Entity（DATABASE_DESIGN §6.4 + L1 daily_plan_id）：title/type/location_id/start/end_time，软删除
