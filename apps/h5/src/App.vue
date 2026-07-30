@@ -8,7 +8,7 @@ onLaunch(() => {
 
 <template>
   <view>
-    <router-view />
+    <!-- uni-app 自动注入页面渲染，无需 router-view -->
   </view>
 </template>
 

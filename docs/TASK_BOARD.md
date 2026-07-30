@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 3.0
+Version: 3.1
 
 Last Update: 2026-07-30
 
@@ -1133,7 +1133,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -1143,12 +1143,12 @@ User Module / common
 
 Branch:
 
-feature/auth-jwt
+feature/auth-jwt (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Depends:
@@ -1200,7 +1200,7 @@ DoD:
 - [x] JwtAuthFilter 拦截 /api/** 请求，白名单路径放行
 - [x] token 无效 / 缺失返回 401 + ApiResponse JSON
 - [x] 编译通过（mvn clean compile）
-- [ ] CI 验证 + 合并 develop
+- [x] CI 验证 + 合并 develop（PR #15 squash merged 2026-07-30）
 
 
 禁止:
@@ -1220,6 +1220,114 @@ DoD:
 - `backend/solo-server/src/main/java/com/sololifeos/user/application/AuthService.java`
 - `backend/solo-server/src/main/java/com/sololifeos/user/controller/AuthController.java`
 - 修改：User Entity（加 password）/ UserRegisterRequest（加 password）/ UserDomainService.register（加 hashedPassword）/ UserApplicationService.register（加 rawPassword + BCrypt）/ UserController.register（传 password）/ application.yml（jwt 配置）/ pom.xml（jjwt + spring-security-crypto）
+
+
+---
+
+
+## TASK-0105 User Frontend
+
+
+Owner:
+
+Frontend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Reviewing
+
+
+Module:
+
+User Module（前端）
+
+
+Branch:
+
+feature/user-frontend
+
+
+Branch Status:
+
+PR-Open
+
+
+Depends:
+
+TASK-0104（已满足）/ TASK-0107（已满足，登录依赖 JWT）
+
+
+Description:
+
+实现 User Module 前端页面，完成 Sprint 1 DoD 要求的"注册→登录→设置偏好"闭环（SPRINT_PLAN §4）。基于 uni-app + Vue3 + TypeScript + Pinia。
+
+
+Todo:
+
+- [x] 重构 api/request.ts：支持 Authorization header 注入 + ApiError 异常体系 + 401 自动跳登录
+- [x] 新增 api/types.ts：UserProfile / UserPreference / Tag / LoginRequest 等 TS 类型（禁 any）
+- [x] 新增 api/user.ts：auth（login）+ user（register/get/update）+ preference（get/update）+ tag（create/list）API 封装
+- [x] 新增 stores/user.ts：token + userInfo 持久化（localStorage），setAuth / setUser / clearAuth
+- [x] 新增 pages/login：登录页（账号 + 密码，调用 /api/auth/login，跳转资料页）
+- [x] 新增 pages/register：注册页（昵称 + 邮箱/手机号 + 密码，调用 POST /api/users）
+- [x] 新增 pages/profile：资料页（查看 / 编辑昵称/头像/城市，退出登录）
+- [x] 新增 pages/preference：偏好设置页（兴趣 / 预算等级 / 生活方式）
+- [x] 更新 pages.json：注册 5 个页面（index / login / register / profile / preference）
+- [x] 更新 pages/index：登录态守卫（已登录跳资料页，未登录跳登录页）
+- [x] 修正 App.vue：移除 vue-router 依赖，改用 uni-app 原生路由 API（uni.reLaunch / navigateTo / navigateBack）
+- [x] 新增 @dcloudio/types devDependency：声明 uni 全局类型
+
+
+Validation:
+
+✅ vue-tsc --noEmit passed（0 errors，TS strict mode）
+✅ npm install --legacy-peer-deps 成功（uni-app peer dep 冲突已知问题）
+✅ 所有页面使用 uni-app 原生路由 API（非 vue-router）
+✅ api 层封装（CODE_RULES §2：禁组件直连 fetch）
+✅ TS 类型完整（CODE_RULES §2：禁 any/as any）
+✅ token 持久化 localStorage，刷新保持登录态
+
+
+DoD:
+
+- [x] 注册页可完成注册（POST /api/users + password）
+- [x] 登录页可完成登录并获取 JWT token（POST /api/auth/login）
+- [x] 资料页可查看 / 编辑用户资料（GET/PUT /api/users/{id}）
+- [x] 偏好页可查看 / 编辑偏好（GET/PUT /api/users/{userId}/preference）
+- [x] 401 自动清除 token 并跳转登录页
+- [x] type-check 通过
+- [ ] CI 验证 + 合并 develop
+
+
+禁止:
+
+- [X] 组件直连 fetch（必须经 api/ 封装，CODE_RULES §2）
+- [X] 使用 any / as any（CODE_RULES §2）
+- [X] 引入 vue-router（uni-app 用原生路由 API）
+- [X] 明文密码持久化到 localStorage（仅存 token + userId/nickname）
+
+
+交付物：
+
+- `apps/h5/src/api/request.ts`（重构：Authorization + ApiError + 401 处理）
+- `apps/h5/src/api/types.ts`（新增：User Module TS 类型）
+- `apps/h5/src/api/user.ts`（新增：auth + user + preference + tag API）
+- `apps/h5/src/stores/user.ts`（新增：认证状态 Store）
+- `apps/h5/src/pages/login/index.vue`（新增：登录页）
+- `apps/h5/src/pages/register/index.vue`（新增：注册页）
+- `apps/h5/src/pages/profile/index.vue`（新增：资料页）
+- `apps/h5/src/pages/preference/index.vue`（新增：偏好设置页）
+- `apps/h5/src/pages/index/index.vue`（修改：登录态守卫）
+- `apps/h5/src/pages.json`（修改：注册 5 个页面）
+- `apps/h5/src/App.vue`（修改：移除 router-view）
+- `apps/h5/src/env.d.ts`（修改：reference @dcloudio/types）
+- `apps/h5/package.json`（修改：加 @dcloudio/types devDependency）
 
 
 ---
@@ -1391,12 +1499,12 @@ Sprint 0（Done 2026-07-29）
 - ✅ TASK-0101 User Migration Review（Done 2026-07-29）
 - ✅ TASK-0102 User Domain Layer（Done 2026-07-30，PR #12 merged）
 - ✅ TASK-0103 User Application Service（Done 2026-07-30，PR #13 merged）
-- ✅ TASK-0104 User Controller + DTO（Reviewing 2026-07-30，PR-Open）
-- ✅ TASK-0107 Authentication（ADR-0006 JWT）（Reviewing 2026-07-30，PR-Open）
-- TASK-0105 User Frontend（登录 / 资料 / 偏好页）
+- ✅ TASK-0104 User Controller + DTO（Done 2026-07-30，PR #14 merged）
+- ✅ TASK-0107 Authentication（ADR-0006 JWT）（Done 2026-07-30，PR #15 merged）
+- TASK-0105 User Frontend（登录 / 资料 / 偏好页）← 进行中
 - TASK-0106 User Test Suite（JUnit 5 + MockMvc）
 
-> Authentication（ADR-0006 JWT）已落地：BCrypt 密码哈希 + JWT 签发/验证 + JwtAuthFilter + POST /api/auth/login 端点，不引入完整 Spring Security 框架。
+> Authentication（ADR-0006 JWT）已合并：BCrypt 密码哈希 + JWT 签发/验证 + JwtAuthFilter + POST /api/auth/login 端点，不引入完整 Spring Security 框架。
 
 
 ---
@@ -1420,6 +1528,17 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v3.1 - 2026-07-30
+
+- TASK-0107 状态 Reviewing → Done（PR #15 squash merged to develop）
+- TASK-0104 状态 Reviewing → Done（PR #14 squash merged to develop）
+- 新增 TASK-0105 User Frontend 任务卡（Owner: Frontend Agent，Status: Reviewing）
+- TASK-0105 交付物：api 层重构（Authorization + ApiError）+ user API + user store + 4 页面（login/register/profile/preference）+ 登录态守卫
+- 修正 App.vue 移除 vue-router 依赖，改用 uni-app 原生路由 API
+- 新增 @dcloudio/types devDependency（uni 全局类型声明）
+- vue-tsc --noEmit passed（0 errors）
 
 
 ## v3.0 - 2026-07-30
