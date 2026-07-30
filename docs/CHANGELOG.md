@@ -16,6 +16,13 @@
 
 ### Added
 
+- Sprint 1 Close：User Module 全部 7 个任务交付（TASK-0101~0107），Sprint 1 关闭（2026-07-30）
+  - Sprint Goal（注册、登录、资料、偏好设置闭环）达成
+  - 后端：Domain / Application / Controller / Auth 四层 + 40 单元测试全绿（PR #17）
+  - 前端：注册 / 登录 / 资料 / 偏好四页面 + token 持久化 + 401 守卫（PR #16）
+  - 数据库：user / user_preference / tag 三表 + password 增量 Migration
+  - 认证：JWT + BCrypt + JwtAuthFilter，不引入完整 Spring Security
+  - CI：Backend Maven Compile + Test / Frontend type-check + build 双流水线
 - TASK-0106 User Test Suite：新增 User Module 单元测试套件（JUnit 5 + Mockito + MockMvc）
   - 5 个测试类，40 个测试用例全部通过（0 failures / 0 errors / 0 skipped）
   - UserDomainServiceTest（11）：register / activate / ban / updateProfile 业务规则
@@ -26,6 +33,7 @@
   - Controller 测试使用 standalone MockMvc，隔离 Spring Security 自动配置
   - mock-maker-subclass 配置：绕开 inline mock maker 在 Java 25 上的字节码限制
   - Sprint 0 DoD Test 段两项延期项完成（单元测试 + API 测试框架运行）
+  - PR #17 squash merged to develop（2026-07-30，CI Backend Maven 通过）
 - TASK-0105 User Frontend：新增 User Module 前端页面，完成注册→登录→设置偏好闭环
   - api 层重构：request.ts 支持 Authorization header 注入 + ApiError 异常体系 + 401 自动跳登录
   - api/types.ts：UserProfile / UserPreference / Tag / LoginRequest 等 TS 类型（禁 any）

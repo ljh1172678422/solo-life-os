@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 3.2
+Version: 3.3
 
 Last Update: 2026-07-30
 
@@ -20,7 +20,7 @@ Sprint 1：User Module
 
 Status:
 
-In Progress
+Done (Closed 2026-07-30)
 
 
 Sprint Goal:
@@ -38,7 +38,7 @@ Reviewer Gate:
 Architecture Agent
 
 
-> Sprint 0 已于 2026-07-29 关闭，全部 7 个基础任务达成。进入业务代码阶段，不再迭代架构文档。
+> Sprint 1 已于 2026-07-30 关闭，全部 7 个 User Module 任务达成（TASK-0101~0107）。下一阶段 Sprint 2 待启动。
 
 
 ---
@@ -1348,7 +1348,7 @@ Architecture Agent
 
 Status:
 
-Reviewing
+Done
 
 
 Module:
@@ -1358,12 +1358,12 @@ User Module
 
 Branch:
 
-feature/user-test-suite
+feature/user-test-suite (已删除)
 
 
 Branch Status:
 
-PR-Open
+Merged
 
 
 Depends:
@@ -1393,6 +1393,8 @@ Validation:
 ✅ Controller 测试使用 standalone MockMvc（隔离 Spring Security 自动配置）
 ✅ Mockito mock-maker-subclass（绕开 inline mock maker 在 Java 25 上的字节码限制）
 ✅ 业务规则全覆盖：注册校验 / 状态流转 / 登录失败路径 / JWT 签发校验
+✅ CI Backend Maven Compile + Test 通过（PR #17，2026-07-30 06:41 UTC）
+✅ Squash merged to develop（PR #17，2026-07-30 06:48 UTC，commit 165586d）
 
 
 DoD:
@@ -1400,7 +1402,7 @@ DoD:
 - [x] 5 个测试类全部定义
 - [x] mvn test 全量通过（40 tests）
 - [x] 覆盖 Domain / Application / Security / Controller 四层
-- [ ] CI 验证 + 合并 develop（PR 待创建）
+- [x] CI 验证 + 合并 develop（PR #17 squash merged 2026-07-30）
 
 
 禁止:
@@ -1592,10 +1594,38 @@ Sprint 0（Done 2026-07-29）
 - ✅ TASK-0104 User Controller + DTO（Done 2026-07-30，PR #14 merged）
 - ✅ TASK-0107 Authentication（ADR-0006 JWT）（Done 2026-07-30，PR #15 merged）
 - ✅ TASK-0105 User Frontend（登录 / 资料 / 偏好页）（Done 2026-07-30，PR #16 merged）
-- TASK-0106 User Test Suite（JUnit 5 + MockMvc）← Reviewing
+- ✅ TASK-0106 User Test Suite（JUnit 5 + MockMvc）（Done 2026-07-30，PR #17 merged）
 
 > Authentication（ADR-0006 JWT）已合并：BCrypt 密码哈希 + JWT 签发/验证 + JwtAuthFilter + POST /api/auth/login 端点，不引入完整 Spring Security 框架。
-> TASK-0106 测试套件已完成本地验证（40 tests passed），PR 待创建。
+> Sprint 1 全部 7 个任务达成，正式关闭（见下方 Sprint 1 Close Gate）。
+
+
+---
+
+
+# Sprint 1 Close Gate
+
+Sprint 1 全部 7 个任务达成，正式关闭：
+
+| Task | Owner | Status | PR |
+|------|-------|--------|-----|
+| TASK-0101 User Migration Review | Architecture Agent | ✅ Done | PR #10 |
+| TASK-0102 User Domain Layer | Backend Agent | ✅ Done | PR #12 |
+| TASK-0103 User Application Service | Backend Agent | ✅ Done | PR #13 |
+| TASK-0104 User Controller + DTO | Backend Agent | ✅ Done | PR #14 |
+| TASK-0107 Authentication (ADR-0006 JWT) | Backend Agent | ✅ Done | PR #15 |
+| TASK-0105 User Frontend | Frontend Agent | ✅ Done | PR #16 |
+| TASK-0106 User Test Suite | Backend Agent | ✅ Done | PR #17 |
+
+Sprint Goal（注册、登录、资料、偏好设置闭环）全部交付：
+
+- 后端：Domain / Application / Controller / Auth 四层 + 40 单元测试全绿
+- 前端：注册 / 登录 / 资料 / 偏好四页面 + token 持久化 + 401 守卫
+- 数据库：user / user_preference / tag 三表 + password 增量 Migration
+- 认证：JWT + BCrypt + JwtAuthFilter，不引入完整 Spring Security
+- CI：Backend Maven Compile + Test / Frontend type-check + build
+
+进入 Sprint 2 阶段。
 
 
 ---
@@ -1619,6 +1649,14 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v3.3 - 2026-07-30
+
+- TASK-0106 状态 Reviewing → Done（PR #17 squash merged to develop，CI Backend Maven 通过）
+- Sprint 1 Status: In Progress → Done (Closed 2026-07-30)，全部 7 个 User Module 任务达成
+- 新增 Sprint 1 Close Gate 段（7 个任务 Owner / Status / PR 全量登记）
+- Sprint Goal（注册、登录、资料、偏好设置闭环）全部交付：后端四层 + 40 单测 / 前端四页面 / JWT 认证 / CI 双流水线
 
 
 ## v3.2 - 2026-07-30
