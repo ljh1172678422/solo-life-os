@@ -16,6 +16,13 @@
 
 ### Added
 
+- TASK-0202 Today Domain Layer：新增 Today Module 领域层（Entity + Repository + Domain Service）
+  - DailyPlan Entity（DATABASE_DESIGN §6.3）：状态机 PLANNING→ONGOING→COMPLETED/CANCELLED，软删除
+  - Activity Entity（DATABASE_DESIGN §6.4 + L1 daily_plan_id）：title/type/location_id/start/end_time，软删除
+  - PlanStatus / ActivityType 枚举对齐 DATABASE_DESIGN §7
+  - DailyPlanRepository：findByUserIdAndDate / existsByUserIdAndDate（业务唯一性校验）/ 日期范围查询
+  - ActivityRepository：按计划/地点/时间范围/类型查询，对齐 DATABASE_DESIGN §8 三索引
+  - TodayDomainService：计划创建校验、活动添加规则、状态变更规则、活动修改规则
 - TASK-0201 Today Migration：新增 daily_plan + activity 两张表 Migration，启动 Sprint 2 Today Module
   - daily_plan 表（DATABASE_DESIGN §6.3）：user_id / date / status（PLAN_STATUS 枚举）/ 软删除
   - activity 表（DATABASE_DESIGN §6.4 + L1 决策补充）：title / type（ACTIVITY_TYPE 枚举）/ location_id / start/end_time
