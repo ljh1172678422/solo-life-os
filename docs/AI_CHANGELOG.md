@@ -1247,3 +1247,43 @@ vue-tsc --noEmit passed（0 errors，TS strict mode）。npm install --legacy-pe
 Reviewer:
 
 Pending
+
+
+---
+
+## 2026-07-30 (第 29 次变更)
+
+
+Decision Level:
+
+L1 Tech Choice（按 DOCUMENT_VERSION_RULE §8.5）
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0201 Today Migration
+
+
+Action:
+
+为 activity 表补充 daily_plan_id BIGINT NOT NULL 字段，建立 daily_plan 1:N activity 关系。DATABASE_DESIGN §6.4 activity 表原始设计未含此字段，仅有 location_id / start_time / end_time 等活动属性字段。本次 Migration V20260730_003 在建表时直接加入 daily_plan_id 字段 + 配套索引 idx_activity_daily_plan。不修改冻结的 DATABASE_DESIGN.md（Sprint 内禁止，需走 ADR 才能改），PR 描述标注 + 本 AI_CHANGELOG 记录。
+
+
+Reason:
+
+daily_plan 与 activity 之间是 Sprint 2 Today Module 的核心业务关系（一个计划包含多个活动）。无 daily_plan_id 字段则 activity 表成为孤立的活动记录，无法归属到任何计划，Sprint 2 Sprint Goal（AI 生成每日计划含多活动）无法实现。此字段是表内 schema 完善而非跨模块契约变更：activity 仍归 Today Module Owner，不改变 ADR-0011（Activity Owner 归 Today）边界。按 §8.5 Decision Level 评估为 L1（框架/模式选择，不改变架构边界），记 AI_CHANGELOG，无需 ADR。若 Sprint Review 阶段认为应升级为 L2，再补 ADR。
+
+
+Impact:
+
+新增 database/migrations/V20260730_002__create_daily_plan_table.sql / V20260730_003__create_activity_table.sql。activity 表 schema 与 DATABASE_DESIGN §6.4 文档存在差异（多 daily_plan_id 字段），待 Sprint Review 时决定是否回写 DATABASE_DESIGN 或新建 ADR 正式化。无后端代码变更，无跨模块影响。
+
+
+Reviewer:
+
+Pending

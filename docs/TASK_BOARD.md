@@ -14,23 +14,22 @@ Last Update: 2026-07-30
 
 # Current Sprint
 
-
-Sprint 1：User Module
+Sprint 2：Today Module
 
 
 Status:
 
-Done (Closed 2026-07-30)
+In Progress（启动 2026-07-30）
 
 
 Sprint Goal:
 
-完成用户注册、登录、资料、偏好设置。
+完成 Today Module MVP，支持 AI 生成每日计划（Planner Agent 用 Mock Memory）。
 
 
 Depends:
 
-Sprint 0（Done 2026-07-29）
+Sprint 1（Done 2026-07-30，User Module 全部交付）
 
 
 Reviewer Gate:
@@ -38,7 +37,7 @@ Reviewer Gate:
 Architecture Agent
 
 
-> Sprint 1 已于 2026-07-30 关闭，全部 7 个 User Module 任务达成（TASK-0101~0107）。下一阶段 Sprint 2 待启动。
+> Sprint 2 启动。首个任务 TASK-0201 Today Migration 开发中。Planner Agent 依赖 Sprint 5 Memory，本 Sprint 用 Mock Memory。
 
 
 ---
@@ -1626,6 +1625,42 @@ Sprint Goal（注册、登录、资料、偏好设置闭环）全部交付：
 - CI：Backend Maven Compile + Test / Frontend type-check + build
 
 进入 Sprint 2 阶段。
+
+
+---
+
+# Sprint 2 Task Plan
+
+Sprint 2 已启动（Current Sprint）。以下为待启动任务，按依赖顺序推进：
+
+
+Sprint Goal:
+
+完成 Today Module MVP，支持 AI 生成每日计划（Planner Agent 用 Mock Memory）。
+
+
+Depends:
+
+Sprint 1（Done 2026-07-30）
+
+
+待启动任务：
+
+- 🔄 TASK-0201 Today Migration（daily_plan + activity 表）（Developing）
+- ⬜ TASK-0202 Today Domain Layer（DailyPlan / Activity Entity + Repository）
+- ⬜ TASK-0203 Today Application Layer（DailyPlanApplicationService）
+- ⬜ TASK-0204 Today Controller + DTO（DailyPlanDTO / ActivityDTO）
+- ⬜ TASK-0205 Today Frontend（今日页 Page01/02/03/05）
+- ⬜ TASK-0206 Today Test Suite
+- ⬜ TASK-0207 Planner Agent 骨架（Mock Memory）
+
+
+Sprint 2 设计决策（TASK-0201）：
+
+- activity 表新增 daily_plan_id BIGINT NOT NULL 字段（外键引用 daily_plan.id），建立 daily_plan 1:N activity 关系
+- 原因：DATABASE_DESIGN §6.4 activity 表未含此字段，但 1:N 关系是 Sprint 2 业务必需
+- Decision Level: L1 Tech Choice（表内 schema 完善，不改模块边界，不跨模块契约）
+- 处理：Migration 直接补字段，AI_CHANGELOG 记录，PR 描述标注，不修改冻结的 DATABASE_DESIGN（Sprint 内）
 
 
 ---

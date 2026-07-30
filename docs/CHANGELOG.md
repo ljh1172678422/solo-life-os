@@ -16,6 +16,12 @@
 
 ### Added
 
+- TASK-0201 Today Migration：新增 daily_plan + activity 两张表 Migration，启动 Sprint 2 Today Module
+  - daily_plan 表（DATABASE_DESIGN §6.3）：user_id / date / status（PLAN_STATUS 枚举）/ 软删除
+  - activity 表（DATABASE_DESIGN §6.4 + L1 决策补充）：title / type（ACTIVITY_TYPE 枚举）/ location_id / start/end_time
+  - L1 决策：activity 表补充 daily_plan_id 字段建立 1:N 关系（DATABASE_DESIGN §6.4 原未含此字段）
+  - 索引对齐 DATABASE_DESIGN §8：idx_daily_plan_user_date / idx_activity_daily_plan / idx_activity_location / idx_activity_start_time
+  - 外键策略：逻辑关联不建物理 FK（DATABASE_DESIGN §9）
 - Sprint 1 Close：User Module 全部 7 个任务交付（TASK-0101~0107），Sprint 1 关闭（2026-07-30）
   - Sprint Goal（注册、登录、资料、偏好设置闭环）达成
   - 后端：Domain / Application / Controller / Auth 四层 + 40 单元测试全绿（PR #17）
