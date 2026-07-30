@@ -15,6 +15,7 @@ Solo Life OS Architecture Decision Records
 | ADR-0002 | PostgreSQL as Primary Database | Accepted | [ADR-0002-postgresql-as-primary-db.md](./ADR-0002-postgresql-as-primary-db.md) |
 | ADR-0003 | AI Agent Unified Router | Accepted | [ADR-0003-ai-agent-unified-router.md](./ADR-0003-ai-agent-unified-router.md) |
 | ADR-0004 | No Microservices in MVP | Accepted | [ADR-0004-no-microservices-in-mvp.md](./ADR-0004-no-microservices-in-mvp.md) |
+| ADR-0006 | JWT Authentication | Accepted | [ADR-0006-jwt-authentication.md](./ADR-0006-jwt-authentication.md) |
 | ADR-0011 | Activity Ownership | Accepted | [ADR-0011-activity-ownership.md](./ADR-0011-activity-ownership.md) |
 
 ## Proposed ADR
@@ -28,7 +29,6 @@ Solo Life OS Architecture Decision Records
 
 | ADR | Title | Sprint | Note |
 |-----|-------|--------|------|
-| ADR-0006 | JWT Authentication | Sprint 1 | User Module 启动时创建 |
 | ADR-0007 | Map Provider Adapter | Sprint 3 | Explore Module 启动时创建 |
 | ADR-0008 | LLM Provider Strategy | Sprint 5 | AI Platform 启动时创建 |
 | ADR-0009 | Payment Adapter | Sprint 7 | Community 商业化时创建 |

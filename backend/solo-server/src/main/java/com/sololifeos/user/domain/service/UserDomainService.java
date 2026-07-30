@@ -25,17 +25,21 @@ public class UserDomainService {
     /**
      * 注册新用户。校验邮箱/手机号唯一后创建未激活用户对象。
      *
-     * @param nickname 昵称（必填）
-     * @param email    邮箱（可空，非空时需唯一）
-     * @param phone    手机号（可空，非空时需唯一）
+     * @param nickname       昵称（必填）
+     * @param email          邮箱（可空，非空时需唯一）
+     * @param phone          手机号（可空，非空时需唯一）
+     * @param hashedPassword BCrypt 哈希后的密码（明文哈希归 Application Service，ADR-0006）
      * @return 未持久化的 INACTIVE 状态 User
      */
-    public User register(String nickname, String email, String phone) {
+    public User register(String nickname, String email, String phone, String hashedPassword) {
         if (nickname == null || nickname.isBlank()) {
             throw new BusinessException("用户昵称不可为空");
         }
+        if (hashedPassword == null || hashedPassword.isBlank()) {
+            throw new BusinessException("用户密码不可为空");
+        }
         validateContactUnique(email, phone);
-        return User.register(nickname, email, phone);
+        return User.register(nickname, email, phone, hashedPassword);
     }
 
     private void validateContactUnique(String email, String phone) {

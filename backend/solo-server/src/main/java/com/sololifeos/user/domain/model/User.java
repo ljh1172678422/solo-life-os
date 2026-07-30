@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
  * 软删除：{@code deleted_time} 非空表示已删除 (DATABASE_DESIGN §9)。
  * 查询自动过滤已删除记录（{@code @SQLRestriction}），删除走 UPDATE 而非物理删除。
  * <p>
- * 注意：{@code password} 字段未包含在 Entity 中 —— 登录凭证归
- * Authentication 任务 (ADR-0006 JWT)，与认证逻辑同期落地，避免在 ADR 未定时
- * 过早锁定 schema (TASK-0101 Migration Review 结论)。
+ * {@code password} 字段存储 BCrypt 哈希密码（ADR-0006 JWT Authentication）。
+ * Migration V20260730_001 已加列；注册时由 Application Service 写入哈希值，
+ * 登录时由 AuthService 经 BCryptPasswordEncoder 校验。明文密码永不入库。
  */
 @Entity
 @Table(name = "\"user\"")
@@ -52,6 +52,10 @@ public class User {
 
     @Column(length = 100)
     private String city;
+
+    /** BCrypt 哈希密码（ADR-0006），nullable 兼容存量数据。明文不入库。 */
+    @Column(length = 100)
+    private String password;
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
@@ -80,12 +84,17 @@ public class User {
         this.status = UserStatus.ACTIVE;
     }
 
-    /** 业务构造：注册新用户（无邮箱/手机号场景传 null）。 */
-    public static User register(String nickname, String email, String phone) {
+    /**
+     * 业务构造：注册新用户（无邮箱/手机号场景传 null）。
+     *
+     * @param hashedPassword BCrypt 哈希后的密码（明文由 Application Service 哈希，ADR-0006）
+     */
+    public static User register(String nickname, String email, String phone, String hashedPassword) {
         User user = new User();
         user.nickname = nickname;
         user.email = email;
         user.phone = phone;
+        user.password = hashedPassword;
         user.status = UserStatus.INACTIVE;
         return user;
     }
@@ -128,6 +137,11 @@ public class User {
 
     public String getCity() {
         return city;
+    }
+
+    /** BCrypt 哈希密码。 */
+    public String getPassword() {
+        return password;
     }
 
     public UserStatus getStatus() {

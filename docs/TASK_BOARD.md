@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.9
+Version: 3.0
 
 Last Update: 2026-07-30
 
@@ -1118,6 +1118,113 @@ DoD:
 ---
 
 
+## TASK-0107 Authentication (ADR-0006 JWT)
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Reviewing
+
+
+Module:
+
+User Module / common
+
+
+Branch:
+
+feature/auth-jwt
+
+
+Branch Status:
+
+PR-Open
+
+
+Depends:
+
+TASK-0103（已满足）/ TASK-0104（已满足）
+
+
+Description:
+
+实现 JWT 认证闭环（ADR-0006）：BCrypt 密码哈希 + JWT 签发/验证 + 请求拦截 Filter + login 端点。不引入完整 Spring Security 框架。
+
+
+Todo:
+
+- [x] 创建 ADR-0006 JWT Authentication（Accepted）
+- [x] 添加 jjwt 0.12.6 + spring-security-crypto 依赖
+- [x] application.yml 配置 jwt.secret + jwt.expiration-ms（环境变量注入）
+- [x] Migration V20260730_001__add_password_to_user.sql（ALTER TABLE "user" ADD COLUMN password varchar(100)）
+- [x] User Entity 加 password 字段 + getPassword
+- [x] UserRegisterRequest 加 password 字段（@NotBlank + @Size 6-100）
+- [x] UserApplicationService.register 接受 rawPassword，BCrypt 哈希后入库
+- [x] UserDomainService.register 加 hashedPassword 参数
+- [x] common/security/JwtProperties（@ConfigurationProperties("jwt")）
+- [x] common/security/JwtService（HS256 签发/验证，jjwt 0.12 API）
+- [x] common/security/UserContext（ThreadLocal 持有当前 userId）
+- [x] common/security/JwtAuthFilter（白名单 + Bearer token 解析 + 401 响应）
+- [x] common/security/PasswordEncoderConfig（BCryptPasswordEncoder Bean）
+- [x] user/dto/LoginRequest（account + password）
+- [x] user/dto/LoginResponse（token + userId + nickname）
+- [x] user/application/AuthService（登录用例：账号查询 + BCrypt 校验 + JWT 签发）
+- [x] user/controller/AuthController（POST /api/auth/login）
+- [x] UserController.register 传 password 参数
+
+
+Validation:
+
+✅ mvn clean compile passed（2026-07-30，67 source files，jjwt + spring-security-crypto 依赖下载成功）
+✅ ADR-0006 已 Accepted 并登记在 ADR Index
+✅ 密码明文不入库 / 不记日志（BCrypt 哈希在 Application Service 层）
+✅ 登录失败 message 统一（防账号枚举）
+✅ JwtAuthFilter 白名单：/api/auth/login + POST /api/users + /health + /swagger-ui + /actuator
+✅ 不引入完整 Spring Security 框架（仅 spring-security-crypto 的 BCryptPasswordEncoder）
+
+
+DoD:
+
+- [x] 注册端点 POST /api/users 接受 password 并 BCrypt 哈希入库
+- [x] 登录端点 POST /api/auth/login 返回 JWT token
+- [x] JwtAuthFilter 拦截 /api/** 请求，白名单路径放行
+- [x] token 无效 / 缺失返回 401 + ApiResponse JSON
+- [x] 编译通过（mvn clean compile）
+- [ ] CI 验证 + 合并 develop
+
+
+禁止:
+
+- [X] 引入完整 Spring Security 框架（SecurityFilterChain / UserDetailsService / OAuth2）
+- [X] 明文密码入库 / 记日志 / 出现在异常 message
+- [X] Session 认证（JWT 无状态）
+- [X] 业务逻辑写在 Controller（归 Application Service）
+
+
+交付物：
+
+- `docs/architecture/ADR/ADR-0006-jwt-authentication.md`（Accepted）
+- `database/migrations/V20260730_001__add_password_to_user.sql`
+- `backend/solo-server/src/main/java/com/sololifeos/common/security/`：JwtProperties / JwtService / JwtAuthFilter / UserContext / PasswordEncoderConfig
+- `backend/solo-server/src/main/java/com/sololifeos/user/dto/`：LoginRequest / LoginResponse
+- `backend/solo-server/src/main/java/com/sololifeos/user/application/AuthService.java`
+- `backend/solo-server/src/main/java/com/sololifeos/user/controller/AuthController.java`
+- 修改：User Entity（加 password）/ UserRegisterRequest（加 password）/ UserDomainService.register（加 hashedPassword）/ UserApplicationService.register（加 rawPassword + BCrypt）/ UserController.register（传 password）/ application.yml（jwt 配置）/ pom.xml（jjwt + spring-security-crypto）
+
+
+---
+
+
 # Sprint 0 Definition of Done
 
 
@@ -1285,10 +1392,11 @@ Sprint 0（Done 2026-07-29）
 - ✅ TASK-0102 User Domain Layer（Done 2026-07-30，PR #12 merged）
 - ✅ TASK-0103 User Application Service（Done 2026-07-30，PR #13 merged）
 - ✅ TASK-0104 User Controller + DTO（Reviewing 2026-07-30，PR-Open）
+- ✅ TASK-0107 Authentication（ADR-0006 JWT）（Reviewing 2026-07-30，PR-Open）
 - TASK-0105 User Frontend（登录 / 资料 / 偏好页）
 - TASK-0106 User Test Suite（JUnit 5 + MockMvc）
 
-> 注意：Authentication（ADR-0006 JWT，含 password 字段增量 Migration）为 Sprint 1 关键项，任务编号待与 User Domain Layer 依赖关系确认后定稿。password 字段归此任务，与 ADR-0006 同期落地。
+> Authentication（ADR-0006 JWT）已落地：BCrypt 密码哈希 + JWT 签发/验证 + JwtAuthFilter + POST /api/auth/login 端点，不引入完整 Spring Security 框架。
 
 
 ---
@@ -1312,6 +1420,18 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v3.0 - 2026-07-30
+
+- 新增 TASK-0107 Authentication（ADR-0006 JWT）任务卡（Owner: Backend Agent，Status: Reviewing）
+- TASK-0107 交付物：ADR-0006 + password Migration + JwtProperties + JwtService + JwtAuthFilter + UserContext + PasswordEncoderConfig + AuthService + AuthController + LoginRequest/LoginResponse
+- 修改：User Entity 加 password 字段 / UserRegisterRequest 加 password / UserDomainService.register 加 hashedPassword / UserApplicationService.register 加 BCrypt 哈希
+- 依赖：jjwt 0.12.6（HS256 签发/验证）+ spring-security-crypto（BCryptPasswordEncoder）
+- 认证端点：POST /api/auth/login（返回 JWT token）
+- 安全规则：明文密码不入库 / 不记日志；登录失败 message 统一防账号枚举
+- 范围控制：不引入完整 Spring Security 框架，仅用 BCryptPasswordEncoder
+- 编译验证：mvn clean compile passed（67 source files）
 
 
 ## v2.9 - 2026-07-30

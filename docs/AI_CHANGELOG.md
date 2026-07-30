@@ -1136,3 +1136,63 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-30 (第 27 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0107 Authentication（ADR-0006 JWT）
+
+
+Action:
+
+实现 JWT 认证闭环（ADR-0006），建立 MVP 阶段认证基础设施：
+- 创建 ADR-0006 JWT Authentication（Accepted）：HS256 + BCrypt + 自定义 JwtAuthFilter，不引入完整 Spring Security 框架
+- 数据库 Migration：V20260730_001__add_password_to_user.sql（ALTER TABLE "user" ADD COLUMN password varchar(100)，nullable 兼容存量数据）
+- 依赖：jjwt 0.12.6（HS256 签发/验证）+ spring-security-crypto（BCryptPasswordEncoder）
+- 配置：application.yml 根级 jwt.secret + jwt.expiration-ms（环境变量 JWT_SECRET / JWT_EXPIRATION_MS 注入）
+- common/security 新增 5 个组件：
+  - JwtProperties（@ConfigurationProperties("jwt")，@Validated 校验）
+  - JwtService（HS256 签发/验证，jjwt 0.12 API，subject + uid + nickname claim）
+  - JwtAuthFilter（白名单 + Bearer token 解析 + 401 ApiResponse 响应，@Order HIGHEST_PRECEDENCE+10）
+  - UserContext（ThreadLocal 持有当前 userId，Filter finally 清除防泄漏）
+  - PasswordEncoderConfig（BCryptPasswordEncoder Bean）
+- user Module 认证组件：
+  - AuthService（登录用例：邮箱/手机号查询 + BCrypt 校验 + JWT 签发，登录失败 message 统一防账号枚举）
+  - AuthController（POST /api/auth/login，返回 LoginResponse）
+  - LoginRequest（account + password，@Valid 校验）/ LoginResponse（token + userId + nickname）
+- 修改既有代码：
+  - User Entity 加 password 字段（@Column length=100）+ getPassword
+  - User.register 工厂方法加 hashedPassword 参数
+  - UserDomainService.register 加 hashedPassword 参数 + 非空校验
+  - UserApplicationService.register 接受 rawPassword，BCrypt 哈希后传 Domain Service
+  - UserRegisterRequest 加 password 字段（@NotBlank + @Size 6-100）
+  - UserController.register 传 request.password() 参数
+- SoloLifeOsApplication 加 @ConfigurationPropertiesScan 启用 JwtProperties 绑定
+
+
+Reason:
+
+SPRINT_PLAN Sprint 1 DoD 要求"注册→登录→设置偏好"闭环，必须实现 login 端点与 token 机制。ADR-0006 已决策采用 JWT（HS256）+ BCrypt，不引入完整 Spring Security 框架（避免 SecurityFilterChain / UserDetailsService / OAuth2 复杂度）。password 字段 nullable 兼容存量数据，明文密码经 HTTPS 传输在 Application Service 层 BCrypt 哈希后入库。
+
+
+Impact:
+
+新增 docs/architecture/ADR/ADR-0006-jwt-authentication.md（Accepted）；新增 database/migrations/V20260730_001__add_password_to_user.sql；新增 backend/solo-server/src/main/java/com/sololifeos/common/security/ 下 5 个 Java 源文件；新增 backend/solo-server/src/main/java/com/sololifeos/user/ 下 AuthService + AuthController + LoginRequest + LoginResponse；修改 User Entity / UserRegisterRequest / UserDomainService / UserApplicationService / UserController / application.yml / pom.xml / SoloLifeOsApplication。更新 docs/TASK_BOARD.md（v2.9→v3.0，新增 TASK-0107 任务卡）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md、docs/architecture/ADR/README.md（ADR-0006 登记到 Accepted）。
+
+mvn clean compile passed（67 source files，jjwt + spring-security-crypto 依赖经 Aliyun 镜像 + HTTP 代理下载成功）。
+
+
+Reviewer:
+
+Pending
