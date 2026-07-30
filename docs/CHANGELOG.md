@@ -438,6 +438,20 @@
 - Sprint 0 全部 7 个任务达成（Architecture / Backend / Frontend / Database / AI Platform / CI/CD / Documentation），进入业务代码阶段，不再迭代架构文档
 
 
+### Added (Sprint 1 启动 / TASK-0101 User Migration Review)
+
+
+- Sprint 1：User Module 启动（Current Sprint 从 Sprint 0 切换至 Sprint 1）
+- `docs/modules/user/MIGRATION_REVIEW.md`：User Module Migration Review
+  - 字段逐项核对：user（10）+ user_preference（7）+ tag（5）= 22/22 全部对齐 DATABASE_DESIGN §6.1/§6.2/§6.10
+  - 索引核对：5/5 全部对齐（uk_user_email / uk_user_phone / idx_user_status / uk_user_preference_user_id / uk_tag_user_name_type）
+  - 枚举核对：3/3 全部对齐（USER_STATUS / BUDGET_LEVEL / TAG_TYPE）
+  - 外键策略：逻辑关联，无物理 FK（§9）
+  - Gap 分析：password 字段缺失，归 Auth 任务（ADR-0006 JWT），不在 TASK-0101 扩展
+  - 审查结论：无需增量 Migration，User Domain Layer 可直接基于现有 schema 开发
+- `docs/TASK_BOARD.md` v2.5 → v2.6：新增 TASK-0101 任务卡（Done），Sprint 1 剩余任务清单（TASK-0102~0106）
+
+
 ### Deprecated
 
 

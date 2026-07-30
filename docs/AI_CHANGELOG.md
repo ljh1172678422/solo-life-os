@@ -1004,3 +1004,48 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-29 (第 24 次变更)
+
+
+Agent:
+
+Architecture Agent
+
+
+Task:
+
+TASK-0101 User Migration Review
+
+
+Action:
+
+执行 Sprint 1 首个任务 TASK-0101 User Migration Review，对 Sprint 0（TASK-0004）创建的三张表做字段逐项核对：
+- user 表 vs DATABASE_DESIGN §6.1：10/10 字段对齐
+- user_preference 表 vs §6.2：7/7 字段对齐
+- tag 表 vs §6.10：5/5 字段对齐
+- 索引：5/5 对齐（uk_user_email / uk_user_phone / idx_user_status / uk_user_preference_user_id / uk_tag_user_name_type）
+- 枚举：3/3 对齐（USER_STATUS / BUDGET_LEVEL / TAG_TYPE）
+- 外键策略：逻辑关联，无物理 FK（§9）
+- Gap 分析：user 表缺 password 字段，归 Auth 任务（ADR-0006 JWT）处理，不在 TASK-0101 扩展
+- 结论：无需增量 Migration，三表完全符合 User Module Domain Design
+- 新建 docs/modules/user/MIGRATION_REVIEW.md 记录审查结果
+
+
+Reason:
+
+Sprint 1 User Module 启动前，必须确认 Sprint 0 创建的数据基线符合 User Module Domain Design，避免 Domain Layer 开发时发现 schema 与设计不符返工。password 字段因与 ADR-0006 认证策略（哈希算法 / OAuth 字段）耦合，归 Auth 任务同期落地，避免在 ADR 未定时过早锁定 schema。
+
+
+Impact:
+
+新增 docs/modules/user/MIGRATION_REVIEW.md（审查记录）；更新 docs/TASK_BOARD.md（v2.5→v2.6，新增 TASK-0101 任务卡 + Sprint 1 剩余任务清单）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无代码与数据库变更，未修改任何已冻结架构文档（DATABASE_DESIGN §6.1/§6.2/§6.10）。
+
+
+Reviewer:
+
+Pending
