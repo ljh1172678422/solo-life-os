@@ -1196,3 +1196,54 @@ mvn clean compile passed（67 source files，jjwt + spring-security-crypto 依�
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-30 (第 28 次变更)
+
+
+Agent:
+
+Frontend Agent
+
+
+Task:
+
+TASK-0105 User Frontend
+
+
+Action:
+
+实现 User Module 前端页面，完成 Sprint 1 DoD 要求的"注册→登录→设置偏好"闭环（SPRINT_PLAN §4）：
+- api 层重构：request.ts 支持 Authorization header 注入（从 user store 读 token）+ ApiError 异常体系 + 401 自动清除 token 并 uni.reLaunch 跳登录
+- 新增 api/types.ts：UserProfile / UserPreference / Tag / LoginRequest / LoginResponse / RegisterRequest / UpdateProfileRequest / UpdatePreferenceRequest / CreateTagRequest（禁 any，CODE_RULES §2）
+- 新增 api/user.ts：login / registerUser / getUser / updateUserProfile / getUserPreference / updateUserPreference / createTag / listTags API 封装
+- 新增 stores/user.ts：token + userInfo 持久化 localStorage，setAuth（登录）/ setUser（资料）/ clearAuth（登出/401），isLoggedIn / userId / nickname computed
+- 新增 4 个页面：
+  - pages/login：账号（邮箱/手机号）+ 密码登录，调用 /api/auth/login，成功跳资料页
+  - pages/register：昵称 + 邮箱/手机号 + 密码注册，调用 POST /api/users，成功跳登录
+  - pages/profile：资料查看 / 编辑（昵称/头像/城市），退出登录，跳偏好设置
+  - pages/preference：偏好设置（兴趣/预算等级/生活方式），保存成功提示
+- 更新 pages.json：注册 5 个页面（index / login / register / profile / preference）
+- 更新 pages/index：登录态守卫（已登录 uni.reLaunch 资料页，未登录跳登录页）
+- 修正 App.vue：移除 vue-router 的 router-view 依赖，改用 uni-app 原生路由 API（uni.reLaunch / navigateTo / navigateBack）
+- 新增 @dcloudio/types devDependency：声明 uni 全局类型，解决 vue-tsc "Cannot find name 'uni'" 错误
+
+
+Reason:
+
+SPRINT_PLAN §4 Sprint 1 DoD 要求"前端可完成注册→登录→设置偏好闭环"。TASK-0104（Controller + DTO）与 TASK-0107（JWT 认证）已合并，后端 API 就绪，前端需对接。原 TASK-0003 Frontend Foundation 仅建立工程骨架（health API + 空 index 页），无业务页面。本次实现 User Module 完整前端闭环。
+
+
+Impact:
+
+新增 apps/h5/src/api/types.ts / apps/h5/src/api/user.ts / apps/h5/src/stores/user.ts / apps/h5/src/pages/login/index.vue / apps/h5/src/pages/register/index.vue / apps/h5/src/pages/profile/index.vue / apps/h5/src/pages/preference/index.vue（7 个新文件）；修改 apps/h5/src/api/request.ts / apps/h5/src/pages/index/index.vue / apps/h5/src/pages.json / apps/h5/src/App.vue / apps/h5/src/env.d.ts / apps/h5/package.json（6 个修改）。更新 docs/TASK_BOARD.md（v3.0→v3.1，TASK-0107 Done + TASK-0104 Done + 新增 TASK-0105 卡片）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无后端 / 数据库变更。
+
+vue-tsc --noEmit passed（0 errors，TS strict mode）。npm install --legacy-peer-deps 成功（uni-app peer dep 冲突已知问题）。
+
+
+Reviewer:
+
+Pending

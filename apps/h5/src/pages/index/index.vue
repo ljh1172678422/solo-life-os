@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { onMounted, ref } from 'vue'
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore()
 const title = ref('Solo Life OS')
 
-onLoad(() => {
-  console.log('Index page loaded')
+onMounted(() => {
+  // 未登录跳登录页，已登录跳资料页
+  if (userStore.isLoggedIn) {
+    uni.reLaunch({ url: '/pages/profile/index' })
+  } else {
+    uni.reLaunch({ url: '/pages/login/index' })
+  }
 })
 </script>
 

@@ -16,6 +16,16 @@
 
 ### Added
 
+- TASK-0105 User Frontend：新增 User Module 前端页面，完成注册→登录→设置偏好闭环
+  - api 层重构：request.ts 支持 Authorization header 注入 + ApiError 异常体系 + 401 自动跳登录
+  - api/types.ts：UserProfile / UserPreference / Tag / LoginRequest 等 TS 类型（禁 any）
+  - api/user.ts：auth（login）+ user（register/get/update）+ preference（get/update）+ tag（create/list）API 封装
+  - stores/user.ts：token + userInfo 持久化（localStorage），setAuth / setUser / clearAuth
+  - 4 个页面：login（登录）/ register（注册）/ profile（资料查看编辑）/ preference（偏好设置）
+  - pages/index 登录态守卫：已登录跳资料页，未登录跳登录页
+  - 修正 App.vue 移除 vue-router 依赖，改用 uni-app 原生路由 API（uni.reLaunch / navigateTo / navigateBack）
+  - 新增 @dcloudio/types devDependency：声明 uni 全局类型
+  - vue-tsc --noEmit passed（0 errors，TS strict mode）
 - TASK-0107 Authentication（ADR-0006 JWT）：新增 JWT 认证闭环
   - ADR-0006 JWT Authentication（Accepted）：HS256 + BCrypt + 自定义 JwtAuthFilter，不引入完整 Spring Security
   - 数据库 Migration：user 表增加 password 字段（varchar(100)，BCrypt 哈希，nullable）
