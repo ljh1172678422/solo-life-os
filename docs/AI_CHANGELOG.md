@@ -1049,3 +1049,46 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-30 (第 25 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0102 User Domain Layer
+
+
+Action:
+
+建立 User Module 领域层，基于 TASK-0101 已审查的 user / user_preference / tag schema：
+- 引入 Spring Data JPA 依赖到 pom.xml，配置 ddl-auto=none（Flyway 管理 schema）+ open-in-view=false（显式事务边界）
+- 创建 user 模块包结构：domain/model + domain/service + repository（对齐 CODE_RULES §4）
+- 创建 3 枚举：UserStatus / BudgetLevel / TagType（对齐 DATABASE_DESIGN §7）
+- 创建 3 JPA Entity：User（软删除 @SQLDelete + @SQLRestriction）/ UserPreference / Tag（对齐 §6.1/6.2/6.10）
+- 创建 3 Repository：UserRepository / UserPreferenceRepository / TagRepository（Spring Data JPA 代理实现）
+- 创建 3 Domain Service：UserDomainService / UserPreferenceDomainService / TagDomainService（业务规则，不持久化）
+- 范围控制：未实现 Application Service / Controller / DTO（归 TASK-0103/0104），未添加 password 字段（归 Auth/ADR-0006），Entity 间无物理 FK 映射（§9 逻辑关联）
+
+
+Reason:
+
+TASK-0101 确认 Sprint 0 三表完全符合 User Module Domain Design 后，Domain Layer 可直接基于现有 schema 开发。本任务为后续 Application Service（TASK-0103）与 Controller（TASK-0104）提供领域对象与业务规则层。password 字段因与 ADR-0006 认证策略耦合，归 Auth 任务同期落地。
+
+
+Impact:
+
+新增 backend/solo-server 下 user 模块 12 个 Java 源文件（3 Entity + 3 枚举 + 3 Repository + 3 Domain Service）；修改 pom.xml（加 JPA 依赖）+ application.yml（加 JPA 配置）；更新 docs/TASK_BOARD.md（v2.6→v2.7）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无数据库 Migration 变更，未修改已冻结架构文档。编译验证待 CI（沙箱无网络，JPA 依赖未在本地 Maven 缓存）。
+
+
+Reviewer:
+
+Pending

@@ -16,6 +16,14 @@
 
 ### Added
 
+- TASK-0102 User Domain Layer：新增 User Module 领域层
+  - JPA Entity：User / UserPreference / Tag（对齐 DATABASE_DESIGN §6.1/6.2/6.10）
+  - 枚举：UserStatus / BudgetLevel / TagType（对齐 §7）
+  - Repository Interface：UserRepository / UserPreferenceRepository / TagRepository
+  - Domain Service：UserDomainService / UserPreferenceDomainService / TagDomainService
+  - 引入 Spring Data JPA 依赖，配置 ddl-auto=none（Flyway 管理 schema）
+  - User 软删除支持（@SQLDelete + @SQLRestriction，Hibernate 6.4）
+
 - 初始化 AI 研发管理包目录结构
 - 新增 `.ai/AGENTS.md` Agent 工作规范
 - 新增 `.ai/CODE_RULES.md` 编码规范

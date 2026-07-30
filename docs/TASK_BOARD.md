@@ -1,8 +1,8 @@
 # Solo Life OS Task Board
 
-Version: 2.6
+Version: 2.7
 
-Last Update: 2026-07-29
+Last Update: 2026-07-30
 
 
 > 本看板是 Sprint 执行层入口，所有 AI Agent 领取任务、更新状态、提交 PR 必须先查阅本文档。
@@ -853,6 +853,98 @@ DoD:
 ---
 
 
+## TASK-0102 User Domain Layer
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Reviewing
+
+
+Module:
+
+User Module
+
+
+Branch:
+
+feature/user-domain-layer
+
+
+Branch Status:
+
+PR-Open
+
+
+Depends:
+
+TASK-0101（已满足）
+
+
+Description:
+
+建立 User Module 领域层：JPA Entity + Repository Interface + Domain Service，基于 TASK-0101 已审查的 user / user_preference / tag schema。不实现 Application Service / Controller / DTO（归 TASK-0103 / 0104）。
+
+
+Todo:
+
+- [x] 引入 Spring Data JPA 依赖（pom.xml）
+- [x] 配置 JPA（ddl-auto=none，Flyway 管理schema，open-in-view=false）
+- [x] 创建 User 模块包结构（domain/model + domain/service + repository）
+- [x] 创建枚举：UserStatus / BudgetLevel / TagType（对齐 §7）
+- [x] 创建 JPA Entity：User / UserPreference / Tag（对齐 §6.1/6.2/6.10）
+- [x] 创建 Repository Interface：UserRepository / UserPreferenceRepository / TagRepository
+- [x] 创建 Domain Service：UserDomainService / UserPreferenceDomainService / TagDomainService
+
+
+Validation:
+
+✅ 代码结构完整，对齐 CODE_RULES §3 分层 + §4 包结构 + §5 DTO/Entity 边界
+✅ Entity 字段与 DATABASE_DESIGN §6.1/6.2/6.10 逐项对齐（22 字段）
+✅ 枚举与 §7 USER_STATUS / BUDGET_LEVEL / TAG_TYPE 对齐
+✅ 外键策略：逻辑关联不建 FK（§9），Entity 间无 @ManyToOne 物理映射
+✅ User 软删除：@SQLDelete + @SQLRestriction（Hibernate 6.4）
+✅ password 字段未加入 Entity（归 Auth 任务 / ADR-0006）
+⚠️ 编译验证待 CI（沙箱无网络，JPA 依赖未在本地 Maven 缓存）
+
+
+DoD:
+
+- [x] 3 Entity + 3 Repository + 3 Domain Service + 3 枚举全部定义
+- [x] 接口编译通过（待 CI 验证）
+- [x] 代码与 ARCHITECTURE §2 分层 / CODE_RULES §3 一致
+
+
+禁止:
+
+- [X] Application Service 实现（归 TASK-0103）
+- [X] Controller / DTO 实现（归 TASK-0104）
+- [X] 数据库 Migration（三表已由 TASK-0004 创建）
+- [X] 添加 password 字段（归 Auth 任务 / ADR-0006 JWT）
+- [X] Entity 间建物理 FK 关系映射（违反 §9 逻辑关联策略）
+- [X] Entity 直出 Controller（CODE_RULES §5）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/user/domain/model/`：User / UserPreference / Tag Entity + UserStatus / BudgetLevel / TagType 枚举
+- `backend/solo-server/src/main/java/com/sololifeos/user/repository/`：UserRepository / UserPreferenceRepository / TagRepository
+- `backend/solo-server/src/main/java/com/sololifeos/user/domain/service/`：UserDomainService / UserPreferenceDomainService / TagDomainService
+
+
+---
+
+
 # Sprint 0 Definition of Done
 
 
@@ -1017,7 +1109,7 @@ Sprint 0（Done 2026-07-29）
 待启动任务：
 
 - ✅ TASK-0101 User Migration Review（Done 2026-07-29）
-- TASK-0102 User Domain Layer（Entity / Repository / Domain Service，基于已审查的 user / user_preference schema）
+- ✅ TASK-0102 User Domain Layer（Reviewing 2026-07-30，PR-Open）
 - TASK-0103 User Application Service（注册 / 资料 / 偏好读写用例）
 - TASK-0104 User Controller + DTO（REST 端点 + 入参出参 DTO，禁 Entity 直出）
 - TASK-0105 User Frontend（登录 / 资料 / 偏好页）
@@ -1047,6 +1139,15 @@ Sprint 0（Done 2026-07-29）
 ---
 
 # Version History
+
+
+## v2.7 - 2026-07-30
+
+- 新增 TASK-0102 User Domain Layer 任务卡（Owner: Backend Agent，Status: Reviewing）
+- TASK-0102 交付物：3 Entity + 3 Repository + 3 Domain Service + 3 枚举（对齐 DATABASE_DESIGN §6.1/6.2/6.10 + §7）
+- 引入 Spring Data JPA 依赖，配置 ddl-auto=none（Flyway 管理 schema）
+- User 软删除：@SQLDelete + @SQLRestriction（Hibernate 6.4）
+- 范围控制：未实现 Application Service / Controller / DTO（归 TASK-0103/0104），未添加 password（归 Auth/ADR-0006）
 
 
 ## v2.6 - 2026-07-29
