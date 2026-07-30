@@ -1,6 +1,6 @@
 # Document Version Synchronization Rule
 
-Version: 1.1
+Version: 1.2
 
 Last Update: 2026-07-30
 
@@ -21,7 +21,7 @@ Last Update: 2026-07-30
 | `SPRINT_PLAN.md` | Sprint 范围变化、Sprint 顺序调整 | Architecture Agent |
 | `CODE_RULES.md` | 编码规范变化、新增语言规则 | Architecture Agent |
 | `CHANGELOG.md` | 每次 PR 合并 | PR 提交者 |
-| `AI_CHANGELOG.md` | 每次 AI Agent 行为 | AI Agent |
+| `AI_CHANGELOG.md` | AI 架构决策 / 治理规则修改 / 非预期技术方案 / 重要依赖引入（见 §8） | AI Agent |
 | `ADR/*` | 新建 ADR / ADR 状态变更 | Architecture Agent |
 
 ---
@@ -51,9 +51,28 @@ Last Update: 2026-07-30
 任何核心文档修改必须：
 
 1. 在 `CHANGELOG.md` 记录修改内容
-2. 在 `AI_CHANGELOG.md` 记录修改原因（AI Agent 行为）
+2. 在 `AI_CHANGELOG.md` 记录修改原因（AI Agent 行为，详见 §8）
 3. 更新文件头部的 `Version` 和 `Last Update`
 4. 在 PR 描述中说明修改原因
+
+### 2.4 状态唯一来源原则（Single Source Of Truth）
+
+项目状态有且仅有一个权威来源，其他文档只做引用，不做覆盖。
+
+| 状态类型 | 唯一来源 | 派生引用 |
+|----------|----------|----------|
+| Task 生命周期（Status / Branch / PR / Validation） | `TASK_BOARD.md` | README "In Progress" 摘要 |
+| 提交历史（每次合并做了什么） | `CHANGELOG.md` | 无 |
+| 项目当前阶段快照（Current Sprint / Completed / Next） | `README.md`（数据源自 TASK_BOARD） | 无 |
+| 架构决策 | `ADR/*` + `ARCHITECTURE.md` | 无 |
+| AI 行为决策 | `AI_CHANGELOG.md` | 无 |
+
+禁止：
+
+- [X] README 状态覆盖 TASK_BOARD（如 README 写 "TASK-0200 Completed" 但 TASK_BOARD 是 "Reviewing"）
+- [X] 用 CHANGELOG 作为 Task 状态来源（CHANGELOG 是历史，不是当前状态）
+- [X] 多文档维护同一份状态数据，导致冲突时无法裁决
+- [X] 在 PR / Commit message / Issue 中维护脱离 TASK_BOARD 的私有任务状态
 
 ---
 
@@ -153,3 +172,77 @@ README 的状态字段来源于 `TASK_BOARD.md` 的 `Project Snapshot` 段（Cur
 - [X] 在 README 记录详细变更历史（归 CHANGELOG）
 - [X] 在 README 记录 Task 生命周期细节（归 TASK_BOARD）
 - [X] 把 README 当作第二个 TASK_BOARD
+
+
+---
+
+## 7. PR Lifecycle Synchronization
+
+防止「feature 分支开发完毕才一次性补 TASK_BOARD」导致状态滞后。每个 PR 阶段都有明确的文档同步动作，由 PR 提交者在对应阶段实时执行。
+
+### 7.1 PR 生命周期文档同步矩阵
+
+| 阶段 | 触发动作 | 同步文件 | 字段 |
+|------|----------|----------|------|
+| Feature 分支创建 | `git checkout -b feature/*` | `TASK_BOARD.md` | Status: Developing，Branch |
+| PR 创建 | `gh pr create` | `TASK_BOARD.md` | Status: Reviewing，Branch Status: PR-Open，记录 PR # |
+| CI 通过 | GitHub Actions 绿 | `TASK_BOARD.md` | Validation 段补 ✅ CI 通过记录 |
+| PR Review 需修改 | Reviewer 反馈 | 无需改文档 | 直接改代码 + push，CI 重跑 |
+| PR Merge | `gh pr merge --squash` | `CHANGELOG.md` + `TASK_BOARD.md` | CHANGELOG 加条目；TASK_BOARD Status → Done，Branch Status → Merged，DoD 勾选 CI 验证 + 合并 |
+| Sprint 关闭 | Sprint 全部 Task Done | `README.md` + `TASK_BOARD.md` | README 状态快照刷新（§6）；TASK_BOARD 加 Close Gate 段 |
+
+### 7.2 禁止
+
+- [X] Feature 开发完成后才补 TASK_BOARD 状态（应在分支创建时即 Developing）
+- [X] PR 合并后跳过 CHANGELOG 条目
+- [X] Sprint 关闭后 README 仍停留在旧 Sprint 状态（违反 §6.1）
+- [X] 用 Commit message / PR body 维护脱离 TASK_BOARD 的任务状态（违反 §2.4）
+
+
+---
+
+## 8. AI_CHANGELOG 边界
+
+`AI_CHANGELOG.md` 记录 AI Agent 做出的**有治理影响的决策**，不是 AI 的操作日志。防止退化为「AI 创建了文件 X / AI 编辑了文件 Y」的流水账。
+
+### 8.1 必须记录
+
+- AI 做出的架构决策（如选用某框架、某模式、某 Provider）
+- AI 修改治理规则（AGENTS / CODE_RULES / 本规则 / SPRINT_PLAN）
+- AI 采取非预期技术方案（偏离 ARCHITECTURE 或 ADR 默认路径）
+- AI 引入重要依赖（pom.xml / package.json 新增非传递依赖）
+- AI 跨越 Owner 边界操作（如 Backend Agent 修改 Frontend 文件，需说明原因）
+- AI 创建 / 修改 ADR
+- AI 主动暂停或回滚任务
+
+### 8.2 无需记录
+
+- 普通代码生成（按 ADR 和 ARCHITECTURE 既定路径实现）
+- 文件创建 / 编辑 / 删除（这些归 Git log）
+- Bug fix（归 CHANGELOG）
+- 格式调整 / 排版修正 / 错别字
+- 测试代码编写（除非引入新测试框架）
+- 依赖版本小版本升级
+
+### 8.3 格式
+
+每条 AI_CHANGELOG 条目至少包含：
+
+```
+## YYYY-MM-DD
+
+### <决策标题>
+
+- Agent: <Backend / Frontend / AI / Architecture / QA>
+- Task: TASK-XXXX
+- 决策: <一句话描述>
+- 原因: <为什么偏离默认或为什么需要记录>
+- 影响: <涉及哪些文件 / 模块 / 依赖>
+```
+
+### 8.4 禁止
+
+- [X] 把 AI_CHANGELOG 当成 AI 操作日志（"AI 创建了文件 X"）
+- [X] 记录普通代码生成（无治理价值的执行细节）
+- [X] 用 AI_CHANGELOG 代替 CHANGELOG（CHANGELOG 记录"做了什么"，AI_CHANGELOG 记录"为什么这样决策"）
+- [X] 一条 AI_CHANGELOG 跨多个不相关决策（应拆分）
