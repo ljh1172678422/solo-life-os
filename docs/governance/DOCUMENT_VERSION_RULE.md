@@ -1,8 +1,8 @@
 # Document Version Synchronization Rule
 
-Version: 1.0
+Version: 1.1
 
-Last Update: 2026-07-28
+Last Update: 2026-07-30
 
 > 本规则约束核心文档的修改条件，防止文档频繁变更导致架构漂移。
 > 对齐 AGENTS §13 文档版本管理 / §8 Architecture Change Process。
@@ -13,6 +13,7 @@ Last Update: 2026-07-28
 
 | 文件 | 修改条件 | 修改人 |
 |------|----------|--------|
+| `README.md` | Sprint 完成 / Major milestone / Release 发布 / 架构阶段切换（见 §6） | Architecture Agent |
 | `ARCHITECTURE.md` | 架构边界变化、新增模块、新增 ADR | Architecture Agent |
 | `DATABASE_DESIGN.md` | Schema 变化、新增表、新增字段、枚举变化 | Architecture Agent |
 | `AGENTS.md` | AI 行为规则变化、权限分级变化、Git 工作流变化 | Architecture Agent |
@@ -104,3 +105,51 @@ ADR Accepted
 - [X] 在 Sprint 进行中修改 Sprint 范围（应等到 Sprint 回顾）
 - [X] 修改文档不记录版本号
 - [X] 修改文档不更新 CHANGELOG / AI_CHANGELOG
+
+
+---
+
+## 6. README Status Snapshot
+
+`README.md` 是项目当前状态的对外入口（GitHub 仓库首页），不记录开发过程，只记录当前状态快照。
+
+### 6.1 必须更新
+
+- Sprint 完成
+- Major milestone 完成
+- Release version 发布
+- 架构阶段切换（如 Foundation → Domain Development）
+- Public API 变化
+
+### 6.2 无需更新
+
+- 单个 Task 完成（归 TASK_BOARD）
+- Bug 修复（归 CHANGELOG）
+- 普通 Feature PR（归 CHANGELOG）
+- Refactor（归 CHANGELOG）
+
+### 6.3 固定区域
+
+README 至少包含以下区域：
+
+```
+# Solo Life OS
+
+## Project Status      （Current Phase / Current Sprint / Status）
+## Completed           （已完成能力，按 Sprint 分组）
+## In Progress         （当前进行中的任务）
+## Tech Stack          （Backend / Frontend / Database / DevOps）
+## Repository Structure（顶层目录说明）
+## Development Workflow（Feature Branch → PR → CI → Merge Develop）
+```
+
+### 6.4 数据来源
+
+README 的状态字段来源于 `TASK_BOARD.md` 的 `Project Snapshot` 段（Current Sprint / Current Task / Last Milestone），保证单一数据源。
+
+### 6.5 禁止
+
+- [X] 每个 commit 修改 README（会产生 merge conflict + 污染 PR diff）
+- [X] 在 README 记录详细变更历史（归 CHANGELOG）
+- [X] 在 README 记录 Task 生命周期细节（归 TASK_BOARD）
+- [X] 把 README 当作第二个 TASK_BOARD

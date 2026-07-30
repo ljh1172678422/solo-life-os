@@ -8,9 +8,37 @@ AI 不只是回答问题，而是理解用户的生活，并主动帮助用户�
 
 ## 项目状态
 
-Phase 0：基础平台搭建中
+Phase 0：基础平台已完成，进入业务模块开发
 
-当前 Sprint：Sprint 0（基础工程）
+当前 Sprint：Sprint 1（User Module）— ✅ Done (Closed 2026-07-30)
+
+下一阶段：Sprint 2 待启动
+
+### 已完成
+
+**Sprint 0 — Foundation（Done 2026-07-29）**
+
+- ✅ Architecture Foundation（8 模块 + AI Platform 边界冻结）
+- ✅ Backend Foundation（Spring Boot 3.2.5 + Java 17 Modular Monolith）
+- ✅ Frontend Foundation（uni-app + Vue3 + TypeScript H5）
+- ✅ AI Foundation（6 个核心 Interface：Agent / Router / Memory / Conversation / VectorStoreAdapter / LLMProvider）
+- ✅ Database Foundation（PostgreSQL 16 + Redis 7 + Flyway + 三表初始化）
+- ✅ CI/CD Foundation（Backend Maven + Frontend npm 双流水线）
+- ✅ Documentation Foundation（ADR Index + 模板 + 版本同步规则）
+
+**Sprint 1 — User Module（Done 2026-07-30）**
+
+- ✅ User Migration Review（TASK-0101，PR #10）
+- ✅ User Domain Layer（Entity / Repository / Domain Service，PR #12）
+- ✅ User Application Service（注册 / 资料 / 偏好 / 标签用例，PR #13）
+- ✅ User Controller + DTO（7 DTO + Assembler + 4 Controller，PR #14）
+- ✅ Authentication（ADR-0006 JWT：BCrypt + JwtAuthFilter + /api/auth/login，PR #15）
+- ✅ User Frontend（注册 / 登录 / 资料 / 偏好四页面，PR #16）
+- ✅ User Test Suite（JUnit 5 + Mockito + MockMvc，40 tests，PR #17）
+
+### 进行中
+
+无（Sprint 1 已关闭，Sprint 2 待启动）
 
 详见 [docs/TASK_BOARD.md](docs/TASK_BOARD.md)。
 
