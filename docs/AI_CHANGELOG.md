@@ -1086,7 +1086,51 @@ TASK-0101 确认 Sprint 0 三表完全符合 User Module Domain Design 后，Dom
 
 Impact:
 
-新增 backend/solo-server 下 user 模块 12 个 Java 源文件（3 Entity + 3 枚举 + 3 Repository + 3 Domain Service）；修改 pom.xml（加 JPA 依赖）+ application.yml（加 JPA 配置）；更新 docs/TASK_BOARD.md（v2.6→v2.7）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无数据库 Migration 变更，未修改已冻结架构文档。编译验证待 CI（沙箱无网络，JPA 依赖未在本地 Maven 缓存）。
+新增 backend/solo-server 下 user 模块 12 个 Java 源文件（3 Entity + 3 枚举 + 3 Repository + 3 Domain Service）；修改 pom.xml（加 JPA 依赖）+ application.yml（加 JPA 配置）；更新 docs/TASK_BOARD.md（v2.6→v2.7）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无数据库 Migration 变更，未修改已冻结架构文档。编译验证待 CI（沙箱无网络，JPA 依赖未在本地 Maven 缓存）。CI 通过，PR #12 已合并。
+
+
+Reviewer:
+
+Pending
+
+
+---
+
+
+## 2026-07-30 (第 26 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0103 User Application Service
+
+
+Action:
+
+建立 User Module 应用服务层（CODE_RULES §3.1 Application Service）：
+- UserApplicationService：register（事务内创建 user + 默认 preference）/ getById / getByEmail / getByPhone / updateProfile / activate / ban
+- UserPreferenceApplicationService：getByUserId / update
+- TagApplicationService：create / listByUser / listByUserAndType
+- 事务边界：写操作 @Transactional，读操作 @Transactional(readOnly=true)
+- 入参用原始类型，出参用 Domain Entity（DTO 转换归 Controller TASK-0104）
+- 构造器注入（CODE_RULES §3.3），注入 Domain Service + Repository
+- 注册闭环：register 方法事务内创建 user + 默认 preference（SPRINT_PLAN: 注册→登录→设置偏好闭环）
+- TASK-0102 状态对账：Reviewing → Done（PR #12 merged，CI 编译通过）
+
+
+Reason:
+
+TASK-0102 已建立 Domain Layer（Entity / Repository / Domain Service），Application Service 作为用例协调层连接 Domain Service 与 Repository，提供事务边界。注册时自动创建默认偏好，保证注册→登录→设置偏好的用户闭环完整。password 字段与认证逻辑归 Auth 任务（ADR-0006），本任务不涉及。
+
+
+Impact:
+
+新增 backend/solo-server/src/main/java/com/sololifeos/user/application/ 下 3 个 Java 源文件；更新 docs/TASK_BOARD.md（v2.7→v2.8，TASK-0102 Done + 新增 TASK-0103 卡片）、docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无数据库 Migration 变更，未修改已冻结架构文档。编译验证待 CI（沙箱无网络）。
 
 
 Reviewer:
