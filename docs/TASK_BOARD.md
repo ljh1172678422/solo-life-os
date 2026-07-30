@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 2.5
+Version: 2.6
 
 Last Update: 2026-07-29
 
@@ -15,27 +15,30 @@ Last Update: 2026-07-29
 # Current Sprint
 
 
-Sprint 0：工程初始化
+Sprint 1：User Module
 
 
 Status:
 
-Done (Closed 2026-07-29)
+In Progress
 
 
 Sprint Goal:
 
-建立多端研发基础设施，使后续 Module Sprint 可以进入开发。
+完成用户注册、登录、资料、偏好设置。
 
 
 Depends:
 
-无（首个 Sprint）
+Sprint 0（Done 2026-07-29）
 
 
 Reviewer Gate:
 
 Architecture Agent
+
+
+> Sprint 0 已于 2026-07-29 关闭，全部 7 个基础任务达成。进入业务代码阶段，不再迭代架构文档。
 
 
 ---
@@ -764,6 +767,92 @@ DoD:
 ---
 
 
+## TASK-0101 User Migration Review
+
+
+Owner:
+
+Architecture Agent
+
+
+Reviewer:
+
+QA Agent
+
+
+Status:
+
+Done
+
+
+Module:
+
+User Module
+
+
+Branch:
+
+feature/user-migration-review (已删除)
+
+
+Branch Status:
+
+Merged
+
+
+Depends:
+
+Sprint 0 TASK-0004（已满足）
+
+
+Description:
+
+确认 Sprint 0 创建的 user / user_preference / tag 三张表符合 User Module Domain Design；如需字段扩展，通过增量 Migration 修改，禁止重复创建表。
+
+
+Todo:
+
+- [x] 核对 user 表 vs DATABASE_DESIGN §6.1（10 字段 + 索引 + 枚举）
+- [x] 核对 user_preference 表 vs DATABASE_DESIGN §6.2（7 字段 + 索引 + 枚举）
+- [x] 核对 tag 表 vs DATABASE_DESIGN §6.10（5 字段 + 索引 + 枚举）
+- [x] 核对外键策略（§9，逻辑关联不建 FK）
+- [x] Gap 分析：password 字段缺失，归 Auth 任务（ADR-0006）
+- [x] 输出审查记录 docs/modules/user/MIGRATION_REVIEW.md
+
+
+Validation:
+
+✅ 字段对齐：22/22 全部对齐（user 10 + user_preference 7 + tag 5）
+✅ 索引对齐：5/5 全部对齐
+✅ 枚举对齐：3/3 全部对齐（USER_STATUS / BUDGET_LEVEL / TAG_TYPE）
+✅ 外键策略：逻辑关联，无物理 FK
+✅ 无重复建表（TASK-0004 已创建，本任务未重建）
+✅ 无需增量 Migration（password 字段归 Auth 任务 / ADR-0006）
+
+
+DoD:
+
+- [x] 三张表字段与 DATABASE_DESIGN 完全对齐
+- [x] 索引 / 枚举 / 外键策略对齐
+- [x] Gap 已识别并归口（password → Auth 任务）
+- [x] 审查记录文档化
+
+
+禁止:
+
+- [X] 重复创建 user / user_preference / tag 表
+- [X] 在 TASK-0101 添加 password 字段（归 Auth 任务，与 ADR-0006 耦合）
+- [X] 修改 DATABASE_DESIGN §6.1/§6.2/§6.10（核心架构文档已冻结）
+
+
+交付物：
+
+- `docs/modules/user/MIGRATION_REVIEW.md`：字段逐项核对 + 索引 / 枚举 / 外键策略核对 + Gap 分析 + 后续任务依赖
+
+
+---
+
+
 # Sprint 0 Definition of Done
 
 
@@ -909,30 +998,32 @@ Sprint 0 全部 7 个任务达成，正式关闭：
 
 ---
 
-# Next Sprint
+# Sprint 1 Remaining Tasks
 
 
-Sprint 1：User Module
+Sprint 1 已启动（Current Sprint）。TASK-0101 User Migration Review 已完成（见 Active Tasks 段）。以下为待启动任务，按依赖顺序推进：
 
 
-Goal:
+Sprint 1 Goal:
 
 完成用户注册、登录、资料、偏好设置。
 
 
 Depends:
 
-Sprint 0
+Sprint 0（Done 2026-07-29）
 
 
-预计任务（Sprint 1 启动时拆分）：
+待启动任务：
 
-- TASK-0101 User Migration Review（确认 Sprint 0 创建的 user / user_preference / tag 符合 User Module Domain Design；如需字段扩展，通过增量 Migration 修改，禁止重复创建表）
-- TASK-0102 User Domain Layer
-- TASK-0103 User Application Service
-- TASK-0104 User Controller + DTO
+- ✅ TASK-0101 User Migration Review（Done 2026-07-29）
+- TASK-0102 User Domain Layer（Entity / Repository / Domain Service，基于已审查的 user / user_preference schema）
+- TASK-0103 User Application Service（注册 / 资料 / 偏好读写用例）
+- TASK-0104 User Controller + DTO（REST 端点 + 入参出参 DTO，禁 Entity 直出）
 - TASK-0105 User Frontend（登录 / 资料 / 偏好页）
-- TASK-0106 User Test Suite
+- TASK-0106 User Test Suite（JUnit 5 + MockMvc）
+
+> 注意：Authentication（ADR-0006 JWT，含 password 字段增量 Migration）为 Sprint 1 关键项，任务编号待与 User Domain Layer 依赖关系确认后定稿。password 字段归此任务，与 ADR-0006 同期落地。
 
 
 ---
@@ -956,6 +1047,16 @@ Sprint 0
 ---
 
 # Version History
+
+
+## v2.6 - 2026-07-29
+
+- Sprint 1：User Module 启动（Current Sprint 从 Sprint 0 切换至 Sprint 1）
+- Sprint 0 Status：Done (Closed 2026-07-29) → 已归档，进入业务代码阶段
+- 新增 TASK-0101 User Migration Review 任务卡（Owner: Architecture Agent，Status: Done）
+- TASK-0101 审查结论：Sprint 0 三表（user / user_preference / tag）22 字段 + 5 索引 + 3 枚举 + 外键策略全部对齐 DATABASE_DESIGN，无需增量 Migration
+- Gap 归口：password 字段缺失，归 Authentication 任务（ADR-0006 JWT），不在 TASK-0101 扩展
+- 新增交付物：docs/modules/user/MIGRATION_REVIEW.md
 
 
 ## v2.5 - 2026-07-29
