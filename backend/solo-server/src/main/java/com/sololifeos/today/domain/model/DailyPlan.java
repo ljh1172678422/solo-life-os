@@ -19,11 +19,16 @@ import java.time.LocalDateTime;
 /**
  * 每日计划 Entity (DATABASE_DESIGN §6.3, Owner: Today Module)。
  * <p>
- * 一个用户一天一个计划，按 (user_id, date) 查询索引（DATABASE_DESIGN §8 idx_daily_plan_user_date）。
- * 业务唯一性由 Application Service 校验，数据库层不强制唯一约束（DATABASE_DESIGN §8 仅列为普通索引）。
+ * 一个用户一天一个计划，按 (user_id, date) 唯一索引约束（PR #19 Review 改进，
+ * Migration V20260730_004 升级 idx → uk_daily_plan_user_date，软删除记录不受约束）。
+ * 业务层 Application Service 做唯一性校验作为第一道防线，DB 唯一索引作为兜底。
  * 计划包含多个 {@link Activity}，通过 activity.daily_plan_id 逻辑关联（L1 决策补充，不建物理 FK）。
  * <p>
  * 软删除：{@code deleted_time} 非空表示已删除 (DATABASE_DESIGN §9)，查询自动过滤（@SQLRestriction）。
+ * <p>
+ * 时间维护策略（PR #19 Review 改进明确）：
+ * {@code created_time} / {@code updated_time} 由 Hibernate {@code @CreationTimestamp} /
+ * {@code @UpdateTimestamp} 在应用层自动维护，不使用 DB Trigger。
  * <p>
  * 状态流转：PLANNING → ONGOING → COMPLETED / CANCELLED。
  */

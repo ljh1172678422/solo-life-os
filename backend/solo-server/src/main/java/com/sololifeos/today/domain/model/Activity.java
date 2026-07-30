@@ -25,6 +25,14 @@ import java.time.LocalDateTime;
  * {@code location_id} 逻辑关联 location.id（Explore Module, Sprint 3 创建，本 Sprint 可空）。
  * <p>
  * 软删除：{@code deleted_time} 非空表示已删除 (DATABASE_DESIGN §9)，查询自动过滤（@SQLRestriction）。
+ * <p>
+ * 时间维护策略（PR #19 Review 改进明确）：
+ * {@code created_time} / {@code updated_time} 由 Hibernate {@code @CreationTimestamp} /
+ * {@code @UpdateTimestamp} 在应用层自动维护，不使用 DB Trigger。
+ * <p>
+ * 枚举合法性：{@code type} 由 DB 层 CHECK 约束 {@code chk_activity_type} 兜底
+ * （Migration V20260730_004，对齐 DATABASE_DESIGN §7 ACTIVITY_TYPE），
+ * Application 层枚举校验为第一道防线。
  */
 @Entity
 @Table(name = "activity")

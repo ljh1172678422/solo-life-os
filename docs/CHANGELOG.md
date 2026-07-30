@@ -23,6 +23,12 @@
   - DailyPlanRepository：findByUserIdAndDate / existsByUserIdAndDate（业务唯一性校验）/ 日期范围查询
   - ActivityRepository：按计划/地点/时间范围/类型查询，对齐 DATABASE_DESIGN §8 三索引
   - TodayDomainService：计划创建校验、活动添加规则、状态变更规则、活动修改规则
+- TASK-0201 Review 改进（PR #19 Reviewer 反馈）：增量 Migration V20260730_004__refine_today_schema.sql
+  - daily_plan(user_id, date) 升级为唯一索引 uk_daily_plan_user_date（带 WHERE deleted_time IS NULL，软删除记录不受约束）
+  - daily_plan.status 增加 CHECK 约束 chk_daily_plan_status（对齐 §7 PLAN_STATUS 4 值）
+  - activity.type 增加 CHECK 约束 chk_activity_type（对齐 §7 ACTIVITY_TYPE 8 值）
+  - 明确 updated_time 维护策略：Hibernate @UpdateTimestamp 应用层维护，不使用 DB Trigger
+  - 文档与 Schema 对齐：Sprint 2 Sprint Review 后同步回写 DATABASE_DESIGN §6.4 / §8 / §9
 - TASK-0201 Today Migration：新增 daily_plan + activity 两张表 Migration，启动 Sprint 2 Today Module
   - daily_plan 表（DATABASE_DESIGN §6.3）：user_id / date / status（PLAN_STATUS 枚举）/ 软删除
   - activity 表（DATABASE_DESIGN §6.4 + L1 决策补充）：title / type（ACTIVITY_TYPE 枚举）/ location_id / start/end_time
