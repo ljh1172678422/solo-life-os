@@ -16,6 +16,15 @@
 
 ### Added
 
+- TASK-0107 Authentication（ADR-0006 JWT）：新增 JWT 认证闭环
+  - ADR-0006 JWT Authentication（Accepted）：HS256 + BCrypt + 自定义 JwtAuthFilter，不引入完整 Spring Security
+  - 数据库 Migration：user 表增加 password 字段（varchar(100)，BCrypt 哈希，nullable）
+  - common/security：JwtProperties / JwtService（签发/验证）/ JwtAuthFilter（请求拦截）/ UserContext / PasswordEncoderConfig
+  - user/application/AuthService：登录用例（账号查询 + BCrypt 校验 + JWT 签发）
+  - user/controller/AuthController：POST /api/auth/login（返回 JWT token）
+  - user/dto：LoginRequest（account + password）/ LoginResponse（token + userId + nickname）
+  - 修改：User Entity 加 password / UserRegisterRequest 加 password / UserDomainService.register + UserApplicationService.register 支持 BCrypt 哈希
+  - 安全规则：明文密码不入库 / 不记日志；登录失败 message 统一防账号枚举
 - TASK-0104 User Controller + DTO：新增 User Module REST 端点
   - 7 DTO（Java record）：UserRegisterRequest / UserUpdateRequest / UserResponse / UserPreferenceUpdateRequest / UserPreferenceResponse / TagCreateRequest / TagResponse
   - UserAssembler：Entity → Response DTO 转换

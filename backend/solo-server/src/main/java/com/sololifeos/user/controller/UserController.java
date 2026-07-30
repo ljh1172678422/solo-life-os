@@ -33,11 +33,13 @@ public class UserController {
     }
 
     /**
-     * 注册新用户。事务内创建用户 + 默认偏好。
+     * 注册新用户。事务内创建用户（含 BCrypt 哈希密码） + 默认偏好。
+     * 路径 {@code POST /api/users} 已加入 JwtAuthFilter 白名单（MVP 开放注册）。
      */
     @PostMapping
     public ApiResponse<UserResponse> register(@Valid @RequestBody UserRegisterRequest request) {
-        User user = userApplicationService.register(request.nickname(), request.email(), request.phone());
+        User user = userApplicationService.register(
+                request.nickname(), request.email(), request.phone(), request.password());
         return ApiResponse.success(UserAssembler.toResponse(user));
     }
 

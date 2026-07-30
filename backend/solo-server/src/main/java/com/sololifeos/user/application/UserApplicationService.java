@@ -7,6 +7,7 @@ import com.sololifeos.user.domain.service.UserDomainService;
 import com.sololifeos.user.domain.service.UserPreferenceDomainService;
 import com.sololifeos.user.repository.UserPreferenceRepository;
 import com.sololifeos.user.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,23 +25,29 @@ public class UserApplicationService {
     private final UserPreferenceDomainService preferenceDomainService;
     private final UserRepository userRepository;
     private final UserPreferenceRepository preferenceRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserApplicationService(UserDomainService userDomainService,
                                   UserPreferenceDomainService preferenceDomainService,
                                   UserRepository userRepository,
-                                  UserPreferenceRepository preferenceRepository) {
+                                  UserPreferenceRepository preferenceRepository,
+                                  PasswordEncoder passwordEncoder) {
         this.userDomainService = userDomainService;
         this.preferenceDomainService = preferenceDomainService;
         this.userRepository = userRepository;
         this.preferenceRepository = preferenceRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
-     * 注册新用户。事务内创建用户 + 默认偏好（注册闭环）。
+     * 注册新用户。事务内创建用户（含 BCrypt 哈希密码） + 默认偏好（注册闭环）。
+     *
+     * @param rawPassword 明文密码，由本方法 BCrypt 哈希后入库，明文不入库 / 不记日志
      */
     @Transactional
-    public User register(String nickname, String email, String phone) {
-        User user = userDomainService.register(nickname, email, phone);
+    public User register(String nickname, String email, String phone, String rawPassword) {
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        User user = userDomainService.register(nickname, email, phone, hashedPassword);
         userRepository.save(user);
         // 注册时自动创建默认偏好（SPRINT_PLAN: 注册→登录→设置偏好闭环）
         UserPreference preference = preferenceDomainService.createDefault(user.getId());
