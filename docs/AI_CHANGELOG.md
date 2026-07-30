@@ -1467,3 +1467,87 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-30 (第 34 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0203 合并对账 + TASK-0204 Today Controller + DTO
+
+
+Action:
+
+合并 PR #21（TASK-0203 Today Application Layer，Squash merge，commit e3d10d5），TASK_BOARD TASK-0203 状态 Reviewing → Done。建立 Today Module REST API 层（CODE_RULES §3.1 Controller），镜像 Sprint 1 User Module TASK-0104 模式（UserController + UserAssembler + record DTO + Jakarta Validation）：
+- DailyPlanController（7 端点）：POST /api/users/{userId}/plans（创建）/ GET /api/users/{userId}/plans/today?date=（今日计划，不存在返回 data=null）/ GET /api/users/{userId}/plans（列表，支持 ?startDate=&endDate= 日期范围 + ?status= 状态筛选）/ GET /api/plans/{planId} / POST /api/plans/{planId}/start|complete|cancel（状态变更）
+- ActivityController（6 端点）：POST /api/plans/{planId}/activities（添加）/ GET /api/plans/{planId}/activities（按计划列表）/ GET /api/activities/{id} / PUT /api/plans/{planId}/activities/{id}（修改，路径含 planId 做归属校验）/ POST /api/activities/{id}/end / POST /api/activities/{id}/locate（Sprint 3 后用）
+- TodayAssembler：Entity → Response DTO 转换（toResponse / toPlanResponseList / toActivityResponseList），与 UserAssembler 模式一致
+- DTO（5 个 record）：DailyPlanResponse / ActivityResponse / DailyPlanCreateRequest / ActivityCreateRequest / ActivityUpdateRequest
+  - Response DTO：status / type 以字符串返回（前端不依赖 Java 枚举），对齐 DATABASE_DESIGN §7
+  - Request DTO：userId / planId 来自路径变量，不在请求体；Jakarta Validation（@NotBlank / @NotNull / @Size）
+  - endActivity / locateActivity 端点用 Controller 内嵌 record（EndActivityRequest / LocateActivityRequest），因字段极少不值得独立文件
+- 路由设计原则：资源归属清晰——用户维度 /api/users/{userId}/plans，计划维度 /api/plans/{planId}/activities，单资源 /api/plans/{id} /api/activities/{id}；状态变更用 POST /resource/{id}/action（动词子资源），符合 RESTful 习惯
+- 权限：所有端点需 JWT 认证（JwtAuthFilter），userId 校验归后续中间件 / ADR 任务（本 Sprint 不实现）
+
+
+Reason:
+
+TASK-0203 已建立 Application Service 层，Controller 层是 DDD 最后一层（接收请求 / 参数校验 / 调用 App Service / DTO 转换 / 返回封装）。路由设计采用「资源归属路径优先」原则（与 TagController 的 /api/users/{userId}/tags 一致），单资源操作用扁平路径 /api/plans/{id}。endActivity / locateActivity 未下沉到 DTO 文件而是内嵌 Controller record，因字段单一（endTime / locationId），独立文件过度工程化。状态变更端点用 POST /resource/{id}/action 而非 PATCH /resource/{id}（body: {status}），因状态变更是业务行为（含状态机校验）非字段更新，动词语义更清晰。
+
+
+Impact:
+
+新增 backend/solo-server/src/main/java/com/sololifeos/today/controller/ 下 2 个 Java 源文件（DailyPlanController + ActivityController）、today/application/ 下 1 个（TodayAssembler）、today/dto/ 下 5 个 record（DailyPlanResponse / ActivityResponse / DailyPlanCreateRequest / ActivityCreateRequest / ActivityUpdateRequest）；更新 docs/CHANGELOG.md、docs/AI_CHANGELOG.md、docs/TASK_BOARD.md（TASK-0203 Done + TASK-0204 Reviewing）。无数据库 Migration 变更，无架构边界变更，未修改 Domain/Application 层。本任务生效后，Today Module 后端 MVP 闭环完成（Migration + Domain + Application + Controller），TASK-0205（前端今日页）可基于这 13 个端点对接。编译验证待 CI（沙箱 mvn compile 通过）。
+
+
+Reviewer:
+
+Pending
+
+
+---
+
+
+## 2026-07-30 (第 35 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0204 Review 改进（PR #22 Reviewer 反馈处理）
+
+
+Action:
+
+处理 PR #22 Reviewer 反馈的 3 项建议，强化领域一致性 + 去重：
+- 1. 修正 getToday() 注释与实际返回行为不一致：注释原写「不存在返回 404（data=null）」，但实际代码返回 200 + data=null（ApiResponse.success(null)）。修正为「不存在时返回 200 + data=null（用户尚未创建当日计划属正常状态，非错误，故不用 404）」。语义对齐：查今日计划不存在是正常状态而非资源缺失错误
+- 2. 消除 Application Service 中重复的 requirePlan()：ActivityApplicationService 原有私有 requirePlan(planId) 与 DailyPlanApplicationService.requirePlan 逻辑完全重复。改为注入 DailyPlanApplicationService，复用其 public getPlanById(planId)（已含 orElseThrow BusinessException）。移除 ActivityApplicationService 的私有 requirePlan 及 DailyPlanRepository 依赖。活动天然依赖计划，单向依赖无环，符合 DDD 聚合间天然依赖关系
+- 3. DailyPlan.cancel() 收敛使用 isClosed()：原 cancel() 内联 `this.status == COMPLETED || this.status == CANCELLED` 判断，与 isClosed() 逻辑重复。改为 `if (isClosed())`，「已关闭计划」语义单一来源，避免两处判断未来漂移。isClosed() 注释同步补充「不可取消」
+
+
+Reason:
+
+PR #22 Review 结论通过，3 项建议聚焦领域一致性 + DRY。getToday 注释漂移是低级错误需立即修正。requirePlan 跨两个 Application Service 重复违反 DRY，复用 getPlanById 既去重又让「计划加载 + 异常」逻辑单一来源。isClosed() 在 PR #20 抽取后 cancel() 仍内联判断是遗留漂移，本次收敛完成「已关闭」语义单一来源。三项均为 L1，不改架构边界，无 ADR。
+
+
+Impact:
+
+修改 backend/solo-server/src/main/java/com/sololifeos/today/controller/DailyPlanController.java（getToday 注释）、today/application/ActivityApplicationService.java（注入 DailyPlanApplicationService + 移除 requirePlan/DailyPlanRepository 依赖）、today/domain/model/DailyPlan.java（cancel 使用 isClosed + isClosed 注释补充）；更新 docs/CHANGELOG.md、docs/AI_CHANGELOG.md。无数据库 Migration 变更，无架构边界变更。Sprint 2 Sprint Review 时仍需回写 DATABASE_DESIGN §6.4/§8/§9（PR #19/20 改进承诺）。
+
+
+Reviewer:
+
+Pending

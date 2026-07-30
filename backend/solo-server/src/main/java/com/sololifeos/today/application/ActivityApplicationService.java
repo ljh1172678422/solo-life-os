@@ -6,7 +6,6 @@ import com.sololifeos.today.domain.model.ActivityType;
 import com.sololifeos.today.domain.model.DailyPlan;
 import com.sololifeos.today.domain.service.TodayDomainService;
 import com.sololifeos.today.repository.ActivityRepository;
-import com.sololifeos.today.repository.DailyPlanRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,25 +22,28 @@ import java.util.List;
  * <p>
  * PR #21 Review 改进：
  * <ul>
- *   <li>抽取 {@link #requirePlan(Long)} / {@link #requireActivity(Long)} 私有方法消除重复查询 + 异常处理</li>
+ *   <li>抽取 {@link #requireActivity(Long)} 私有方法消除重复查询 + 异常处理</li>
  *   <li>endActivity / locateActivity 业务校验下沉到 Domain Service，本层只负责事务 / 加载聚合 / 持久化</li>
  *   <li>写操作捕获 {@link DataIntegrityViolationException}（DB 层 CHECK / 唯一约束兜底）转为 BusinessException，
  *       避免并发或边界场景返回 500</li>
  * </ul>
+ * <p>
+ * PR #22 Review 改进：计划加载复用 {@link DailyPlanApplicationService#getPlanById(Long)}，
+ * 消除与 DailyPlanApplicationService 重复的 requirePlan()（活动天然依赖计划，单向依赖无环）。
  */
 @Service
 public class ActivityApplicationService {
 
     private final TodayDomainService todayDomainService;
     private final ActivityRepository activityRepository;
-    private final DailyPlanRepository dailyPlanRepository;
+    private final DailyPlanApplicationService planApplicationService;
 
     public ActivityApplicationService(TodayDomainService todayDomainService,
                                       ActivityRepository activityRepository,
-                                      DailyPlanRepository dailyPlanRepository) {
+                                      DailyPlanApplicationService planApplicationService) {
         this.todayDomainService = todayDomainService;
         this.activityRepository = activityRepository;
-        this.dailyPlanRepository = dailyPlanRepository;
+        this.planApplicationService = planApplicationService;
     }
 
     /**
@@ -55,7 +57,7 @@ public class ActivityApplicationService {
      */
     @Transactional
     public Activity addActivity(Long planId, String title, ActivityType type, LocalDateTime startTime) {
-        DailyPlan plan = requirePlan(planId);
+        DailyPlan plan = planApplicationService.getPlanById(planId);
         Activity activity = todayDomainService.addActivityToPlan(plan, title, type, startTime);
         try {
             return activityRepository.save(activity);
@@ -114,7 +116,7 @@ public class ActivityApplicationService {
     @Transactional
     public Activity updateActivity(Long planId, Long activityId, String title, ActivityType type,
                                    LocalDateTime startTime, LocalDateTime endTime) {
-        DailyPlan plan = requirePlan(planId);
+        DailyPlan plan = planApplicationService.getPlanById(planId);
         Activity activity = requireActivity(activityId);
         requireActivityBelongsToPlan(activity, plan);
         todayDomainService.updateActivity(plan, activity, title, type, startTime, endTime);
@@ -131,7 +133,7 @@ public class ActivityApplicationService {
     @Transactional
     public Activity endActivity(Long activityId, LocalDateTime endTime) {
         Activity activity = requireActivity(activityId);
-        DailyPlan plan = requirePlan(activity.getDailyPlanId());
+        DailyPlan plan = planApplicationService.getPlanById(activity.getDailyPlanId());
         todayDomainService.endActivity(plan, activity, endTime);
         return activityRepository.save(activity);
     }
@@ -142,21 +144,12 @@ public class ActivityApplicationService {
     @Transactional
     public Activity locateActivity(Long activityId, Long locationId) {
         Activity activity = requireActivity(activityId);
-        DailyPlan plan = requirePlan(activity.getDailyPlanId());
+        DailyPlan plan = planApplicationService.getPlanById(activity.getDailyPlanId());
         todayDomainService.locateActivity(plan, activity, locationId);
         return activityRepository.save(activity);
     }
 
     // --- 私有加载方法（PR #21 Review 改进：消除重复查询 + 异常处理） ---
-
-    /** 加载计划，不存在抛 BusinessException。 */
-    private DailyPlan requirePlan(Long planId) {
-        if (planId == null) {
-            throw new BusinessException("计划 ID 不可为空");
-        }
-        return dailyPlanRepository.findById(planId)
-                .orElseThrow(() -> new BusinessException("计划不存在: id=" + planId));
-    }
 
     /** 加载活动，不存在抛 BusinessException。 */
     private Activity requireActivity(Long activityId) {
@@ -174,3 +167,4 @@ public class ActivityApplicationService {
         }
     }
 }
+
