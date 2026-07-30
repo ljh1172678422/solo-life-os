@@ -60,8 +60,8 @@ public class DailyPlan {
     @Column(nullable = false)
     private LocalDateTime updatedTime;
 
-    /** 软删除时间，NULL 表示未删除。不参与常规查询（见 @SQLRestriction）。 */
-    @Column(insertable = false)
+    /** 软删除时间，NULL 表示未删除。不参与常规查询（见 @SQLRestriction）。由 DB 维护（@SQLDelete）。 */
+    @Column(insertable = false, updatable = false)
     private LocalDateTime deletedTime;
 
     protected DailyPlan() {
@@ -74,8 +74,24 @@ public class DailyPlan {
         this.status = PlanStatus.PLANNING;
     }
 
-    /** 业务构造：创建新计划，初始状态 PLANNING。 */
+    /**
+     * 业务构造：创建新计划，初始状态 PLANNING。
+     * <p>
+     * 参数合法性由本方法强制保证，确保 Entity 始终处于合法状态（PR #20 Review 反馈，
+     * 与 Activity.create 对齐）：userId / date 非空。
+     *
+     * @param userId 用户 ID（非空）
+     * @param date   计划日期（非空）
+     * @return 合法状态的 DailyPlan
+     * @throws IllegalArgumentException 参数非法时抛出
+     */
     public static DailyPlan create(Long userId, LocalDate date) {
+        if (userId == null) {
+            throw new IllegalArgumentException("userId 不可为空");
+        }
+        if (date == null) {
+            throw new IllegalArgumentException("计划日期不可为空");
+        }
         DailyPlan plan = new DailyPlan();
         plan.userId = userId;
         plan.date = date;
@@ -105,6 +121,17 @@ public class DailyPlan {
             throw new IllegalStateException("Cannot cancel a " + this.status + " plan");
         }
         this.status = PlanStatus.CANCELLED;
+    }
+
+    /**
+     * 计划是否已关闭（不可再添加 / 修改活动）。
+     * <p>
+     * PR #20 Review 反馈：抽取重复状态判断，减少 COMPLETED / CANCELLED 散落。
+     *
+     * @return status == COMPLETED || status == CANCELLED
+     */
+    public boolean isClosed() {
+        return this.status == PlanStatus.COMPLETED || this.status == PlanStatus.CANCELLED;
     }
 
     // --- getters ---

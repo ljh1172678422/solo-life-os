@@ -69,8 +69,8 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedTime;
 
-    /** 软删除时间，NULL 表示未删除。不参与常规查询（见 @SQLRestriction）。 */
-    @Column(insertable = false)
+    /** 软删除时间，NULL 表示未删除。不参与常规查询（见 @SQLRestriction）。由 DB 维护（@SQLDelete）。 */
+    @Column(insertable = false, updatable = false)
     private LocalDateTime deletedTime;
 
     protected User() {

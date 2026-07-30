@@ -1332,3 +1332,49 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-07-30 (第 31 次变更)
+
+
+Decision Level:
+
+L1 Tech Choice（按 DOCUMENT_VERSION_RULE §8.5）
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0202 Review 改进（PR #20 Reviewer 反馈处理）
+
+
+Action:
+
+处理 PR #20 Reviewer 反馈的 5 项建议修改，强化 Domain Layer 健壮性：
+- 1. Activity.create() / update() 增加参数合法性校验：dailyPlanId / title / type / startTime 非空校验，title 长度 ≤ 200 校验，确保 Entity 始终保持合法状态（原实现允许 null 覆盖 NOT NULL 字段，会触发 DB NOT NULL 异常而非业务异常）。校验抛 IllegalArgumentException（实体不变式），与 Domain Service 抛 BusinessException（业务规则）分层一致
+- 2. DailyPlan.create() 同步增加 userId / date 非空校验，与 Activity.create 对齐
+- 3. 抽取 DailyPlan.isClosed() 方法（status == COMPLETED || CANCELLED），TodayDomainService 在 addActivityToPlan / updateActivity 统一使用，减少散落状态判断；DailyPlan.cancel() 内仍保留原状态判断（cancel 自身的合法前置判断，与 isClosed 语义不同）
+- 4. addActivityToPlan() 增加 plan.getId() != null 校验：确保活动只能绑定到已持久化的计划（daily_plan_id 必须指向已存在记录，避免内存态计划创建出孤立活动）
+- 5. deletedTime 字段从 @Column(insertable = false) 升级为 @Column(insertable = false, updatable = false)：deletedTime 完全由 DB 维护（@SQLDelete 在删除时写入），应用层既不 insert 也不 update，更显式地表达意图。同步更新 User Entity（保持跨模块软删除模式一致）
+
+
+Reason:
+
+PR #20 Review 结论指出 Activity.update() 存在 null 安全漏洞（null 覆盖 NOT NULL 字段），以及状态判断散落、未持久化计划可创建活动、deletedTime 注解不完整等问题。本次改进遵循「Entity 始终保持合法状态」原则（Domain-Driven Design 实体不变式），将参数合法性校验下沉到 Entity 工厂方法与变更方法，Domain Service 不再重复校验（避免校验逻辑双写）。Sprint Review 时正式解决 daily_plan_id 与 DATABASE_DESIGN §6.4 的文档漂移问题，避免长期不一致。
+
+
+Impact:
+
+修改 backend/solo-server/src/main/java/com/sololifeos/today/domain/model/DailyPlan.java（create 校验 + isClosed + deletedTime 注解）、Activity.java（create / update 校验 + deletedTime 注解）、today/domain/service/TodayDomainService.java（使用 isClosed + plan.getId 校验 + 移除重复校验）、today/repository/DailyPlanRepository.java（注释漂移修复：idx → uk，DB 不强制 → DB uk 兜底）、user/domain/model/User.java（deletedTime 注解同步，保持跨模块一致）。无数据库 Migration 变更，无架构边界变更。Sprint 2 Sprint Review 时必须：①回写 DATABASE_DESIGN §6.4 补充 daily_plan_id 字段；②回写 §8 补充 uk_daily_plan_user_date 索引；③回写 §9 补充两个 CHECK 约束；④确认 isClosed 抽取后的状态判断无遗漏。
+
+
+Reviewer:
+
+Pending

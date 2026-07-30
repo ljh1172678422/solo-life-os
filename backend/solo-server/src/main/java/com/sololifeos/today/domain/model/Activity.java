@@ -72,8 +72,8 @@ public class Activity {
     @Column(nullable = false)
     private LocalDateTime updatedTime;
 
-    /** 软删除时间，NULL 表示未删除。不参与常规查询（见 @SQLRestriction）。 */
-    @Column(insertable = false)
+    /** 软删除时间，NULL 表示未删除。不参与常规查询（见 @SQLRestriction）。由 DB 维护（@SQLDelete）。 */
+    @Column(insertable = false, updatable = false)
     private LocalDateTime deletedTime;
 
     protected Activity() {
@@ -87,12 +87,36 @@ public class Activity {
         this.startTime = startTime;
     }
 
-    /** 业务构造：在计划下创建活动。 */
+    /**
+     * 业务构造：在计划下创建活动。
+     * <p>
+     * 参数合法性由本方法强制保证，确保 Entity 始终处于合法状态（PR #20 Review 反馈）：
+     * dailyPlanId / title / startTime 非空，type 为空时回退 OTHER。
+     *
+     * @param dailyPlanId 所属计划 ID（必须已持久化，由 Domain Service 校验）
+     * @param title       活动标题（非空，长度 1-200）
+     * @param type        活动类型（可空，null → OTHER）
+     * @param startTime   开始时间（非空）
+     * @return 合法状态的 Activity
+     * @throws IllegalArgumentException 参数非法时抛出
+     */
     public static Activity create(Long dailyPlanId, String title, ActivityType type, LocalDateTime startTime) {
+        if (dailyPlanId == null) {
+            throw new IllegalArgumentException("dailyPlanId 不可为空");
+        }
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("活动标题不可为空");
+        }
+        if (title.length() > 200) {
+            throw new IllegalArgumentException("活动标题长度不可超过 200");
+        }
+        if (startTime == null) {
+            throw new IllegalArgumentException("活动开始时间不可为空");
+        }
         Activity activity = new Activity();
         activity.dailyPlanId = dailyPlanId;
         activity.title = title;
-        activity.type = type;
+        activity.type = type != null ? type : ActivityType.OTHER;
         activity.startTime = startTime;
         return activity;
     }
@@ -110,9 +134,30 @@ public class Activity {
         this.locationId = locationId;
     }
 
-    /** 修改活动信息。 */
+    /**
+     * 修改活动信息。参数合法性由本方法强制保证，确保 Entity 始终处于合法状态
+     * （PR #20 Review 反馈：原实现允许 null 覆盖 NOT NULL 字段）。
+     *
+     * @param title     新标题（非空，长度 1-200）
+     * @param type      新类型（非空，由 Domain Service 保证；防御性兜底）
+     * @param startTime 新开始时间（非空）
+     * @param endTime   新结束时间（可空，非空时需晚于 startTime）
+     * @throws IllegalArgumentException 参数非法时抛出
+     */
     public void update(String title, ActivityType type, LocalDateTime startTime, LocalDateTime endTime) {
-        if (startTime != null && endTime != null && endTime.isBefore(startTime)) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("活动标题不可为空");
+        }
+        if (title.length() > 200) {
+            throw new IllegalArgumentException("活动标题长度不可超过 200");
+        }
+        if (type == null) {
+            throw new IllegalArgumentException("活动类型不可为空");
+        }
+        if (startTime == null) {
+            throw new IllegalArgumentException("活动开始时间不可为空");
+        }
+        if (endTime != null && endTime.isBefore(startTime)) {
             throw new IllegalStateException("end_time cannot be earlier than start_time");
         }
         this.title = title;

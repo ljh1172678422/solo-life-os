@@ -29,6 +29,12 @@
   - activity.type 增加 CHECK 约束 chk_activity_type（对齐 §7 ACTIVITY_TYPE 8 值）
   - 明确 updated_time 维护策略：Hibernate @UpdateTimestamp 应用层维护，不使用 DB Trigger
   - 文档与 Schema 对齐：Sprint 2 Sprint Review 后同步回写 DATABASE_DESIGN §6.4 / §8 / §9
+- TASK-0202 Review 改进（PR #20 Reviewer 反馈）：强化 Domain Layer 健壮性
+  - Activity.create() / update() 增加参数合法性校验，确保实体始终处于合法状态（防 null 覆盖 NOT NULL 字段）
+  - DailyPlan.create() 同步增加 userId / date 非空校验，与 Activity.create 对齐
+  - 抽取 DailyPlan.isClosed() 方法，Domain Service 统一使用，减少散落状态判断
+  - addActivityToPlan() 增加 plan.getId() != null 校验，避免未持久化计划创建孤立活动
+  - deletedTime 注解升级为 insertable=false, updatable=false（由 DB @SQLDelete 维护，应用层不读写），同步更新 User Entity
 - TASK-0201 Today Migration：新增 daily_plan + activity 两张表 Migration，启动 Sprint 2 Today Module
   - daily_plan 表（DATABASE_DESIGN §6.3）：user_id / date / status（PLAN_STATUS 枚举）/ 软删除
   - activity 表（DATABASE_DESIGN §6.4 + L1 决策补充）：title / type（ACTIVITY_TYPE 枚举）/ location_id / start/end_time
