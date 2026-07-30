@@ -16,6 +16,16 @@
 
 ### Added
 
+- TASK-0106 User Test Suite：新增 User Module 单元测试套件（JUnit 5 + Mockito + MockMvc）
+  - 5 个测试类，40 个测试用例全部通过（0 failures / 0 errors / 0 skipped）
+  - UserDomainServiceTest（11）：register / activate / ban / updateProfile 业务规则
+  - AuthServiceTest（7）：login 成功（邮箱/手机）/ 账号不存在 / 密码错误 / 用户封禁
+  - JwtServiceTest（7）：token 签发 / 解析校验 / 过期 / 篡改
+  - UserControllerTest（10）：MockMvc 注册 / 查询 / 更新 + 参数校验 + 业务异常
+  - AuthControllerTest（5）：MockMvc 登录 + 参数校验 + 认证异常
+  - Controller 测试使用 standalone MockMvc，隔离 Spring Security 自动配置
+  - mock-maker-subclass 配置：绕开 inline mock maker 在 Java 25 上的字节码限制
+  - Sprint 0 DoD Test 段两项延期项完成（单元测试 + API 测试框架运行）
 - TASK-0105 User Frontend：新增 User Module 前端页面，完成注册→登录→设置偏好闭环
   - api 层重构：request.ts 支持 Authorization header 注入 + ApiError 异常体系 + 401 自动跳登录
   - api/types.ts：UserProfile / UserPreference / Tag / LoginRequest 等 TS 类型（禁 any）
