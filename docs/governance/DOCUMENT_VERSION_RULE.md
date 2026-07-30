@@ -246,3 +246,18 @@ README 的状态字段来源于 `TASK_BOARD.md` 的 `Project Snapshot` 段（Cur
 - [X] 记录普通代码生成（无治理价值的执行细节）
 - [X] 用 AI_CHANGELOG 代替 CHANGELOG（CHANGELOG 记录"做了什么"，AI_CHANGELOG 记录"为什么这样决策"）
 - [X] 一条 AI_CHANGELOG 跨多个不相关决策（应拆分）
+
+
+---
+
+## 9. Roadmap（v1.3+，待 Sprint Review 落地）
+
+以下规则在 v1.2 已识别但暂缓实现，留待 Sprint Review 阶段视规模需要再落地，避免过早复杂化。
+
+### 9.1 Documentation Freeze Period（待 §2.5）
+
+Sprint 开始后核心架构文档（ARCHITECTURE / DATABASE_DESIGN / SPRINT_PLAN）冻结，Sprint 内仅可在 ADR Accepted 或 Critical Architecture Bug 时修改。
+
+### 9.2 Document Validation CI（待 §10）
+
+PR Merge 前自动检查：README 是否满足 Snapshot / TASK_BOARD 状态正确 / Version 是否更新 / CHANGELOG 是否存在 / AI_CHANGELOG 是否存在。先以 PR 模板 checklist 形式落地，成熟后迁入 GitHub Actions。
