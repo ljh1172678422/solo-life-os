@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日生活</title>
+    <style id="theme-vars">
+/* Solo - AI Life OS Brand CSS */
+/* Warm sunrise orange - representing sunlight, warmth, and new beginnings */
+
+:root {
+  /* Primary: Warm Sunrise Orange */
+  --solo-primary-50: #FFF7ED;
+  --solo-primary-100: #FFEDD5;
+  --solo-primary-200: #FED7AA;
+  --solo-primary-300: #FDBA74;
+  --solo-primary-400: #FB923C;
+  --solo-primary-500: #F97316;
+  --solo-primary-600: #EA580C;
+  --solo-primary-700: #C2410C;
+  --solo-primary-800: #9A3412;
+  --solo-primary-900: #7C2D12;
+
+  /* Neutral: Warm Stone */
+  --solo-neutral-50: #FAFAF9;
+  --solo-neutral-100: #F5F5F4;
+  --solo-neutral-200: #E7E5E4;
+  --solo-neutral-300: #D6D3D1;
+  --solo-neutral-400: #A8A29E;
+  --solo-neutral-500: #78716C;
+  --solo-neutral-600: #57534E;
+  --solo-neutral-700: #44403C;
+  --solo-neutral-800: #292524;
+  --solo-neutral-900: #1C1917;
+
+  /* Semantic Status Colors */
+  --state-success: #22C55E;
+  --state-warning: #F59E0B;
+  --state-error: #EF4444;
+  --state-info: #3B82F6;
+
+  /* Semantic Aliases */
+  --solo-background: var(--solo-neutral-50);
+  --solo-foreground: var(--solo-neutral-900);
+  --solo-card: #FFFFFF;
+  --solo-card-foreground: var(--solo-neutral-800);
+  --solo-popover: #FFFFFF;
+  --solo-popover-foreground: var(--solo-neutral-800);
+  --solo-primary: var(--solo-primary-500);
+  --solo-primary-foreground: #FFFFFF;
+  --solo-muted: var(--solo-neutral-100);
+  --solo-muted-foreground: var(--solo-neutral-500);
+  --solo-border: var(--solo-neutral-200);
+  --solo-input: var(--solo-neutral-200);
+  --solo-ring: var(--solo-primary-400);
+
+  /* Radius */
+  --solo-radius-sm: 8px;
+  --solo-radius-md: 12px;
+  --solo-radius-lg: 16px;
+  --solo-radius-full: 9999px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+@theme inline {
+  --color-primary-50: var(--solo-primary-50);
+  --color-primary-100: var(--solo-primary-100);
+  --color-primary-200: var(--solo-primary-200);
+  --color-primary-300: var(--solo-primary-300);
+  --color-primary-400: var(--solo-primary-400);
+  --color-primary-500: var(--solo-primary-500);
+  --color-primary-600: var(--solo-primary-600);
+  --color-primary-700: var(--solo-primary-700);
+  --color-primary-800: var(--solo-primary-800);
+  --color-primary-900: var(--solo-primary-900);
+  --color-neutral-50: var(--solo-neutral-50);
+  --color-neutral-100: var(--solo-neutral-100);
+  --color-neutral-200: var(--solo-neutral-200);
+  --color-neutral-300: var(--solo-neutral-300);
+  --color-neutral-400: var(--solo-neutral-400);
+  --color-neutral-500: var(--solo-neutral-500);
+  --color-neutral-600: var(--solo-neutral-600);
+  --color-neutral-700: var(--solo-neutral-700);
+  --color-neutral-800: var(--solo-neutral-800);
+  --color-neutral-900: var(--solo-neutral-900);
+  --color-background: var(--solo-background);
+  --color-foreground: var(--solo-foreground);
+  --color-card: var(--solo-card);
+  --color-card-foreground: var(--solo-card-foreground);
+  --color-muted: var(--solo-muted);
+  --color-muted-foreground: var(--solo-muted-foreground);
+  --color-border: var(--solo-border);
+  --color-primary: var(--solo-primary);
+  --color-primary-foreground: var(--solo-primary-foreground);
+  --radius-sm: var(--solo-radius-sm);
+  --radius-md: var(--solo-radius-md);
+  --radius-lg: var(--solo-radius-lg);
+  --radius-full: var(--solo-radius-full);
+  --font-sans: var(--font-sans);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--solo-background);
+    --color-foreground: var(--solo-foreground);
+    --color-card: var(--solo-card);
+    --color-card-foreground: var(--solo-card-foreground);
+    --color-popover: var(--solo-popover);
+    --color-popover-foreground: var(--solo-popover-foreground);
+    --color-primary: var(--solo-primary);
+    --color-primary-foreground: var(--solo-primary-foreground);
+    --color-muted: var(--solo-muted);
+    --color-muted-foreground: var(--solo-muted-foreground);
+    --color-border: var(--solo-border);
+    --color-input: var(--solo-input);
+    --color-ring: var(--solo-ring);
+    --color-primary-50: var(--solo-primary-50);
+    --color-primary-100: var(--solo-primary-100);
+    --color-primary-200: var(--solo-primary-200);
+    --color-primary-300: var(--solo-primary-300);
+    --color-primary-400: var(--solo-primary-400);
+    --color-primary-500: var(--solo-primary-500);
+    --radius-sm: var(--solo-radius-sm);
+    --radius-md: var(--solo-radius-md);
+    --radius-lg: var(--solo-radius-lg);
+    --radius-full: var(--solo-radius-full);
+  }
+  @layer base {
+    body { background: var(--solo-background); color: var(--solo-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--solo-background); }
+      .text-background { color: var(--solo-background); }
+      .border-background { border-color: var(--solo-background); }
+      .ring-background { --tw-ring-color: var(--solo-background); }
+      .bg-foreground { background-color: var(--solo-foreground); }
+      .text-foreground { color: var(--solo-foreground); }
+      .border-foreground { border-color: var(--solo-foreground); }
+      .ring-foreground { --tw-ring-color: var(--solo-foreground); }
+      .bg-card { background-color: var(--solo-card); }
+      .text-card { color: var(--solo-card); }
+      .border-card { border-color: var(--solo-card); }
+      .ring-card { --tw-ring-color: var(--solo-card); }
+      .bg-card-foreground { background-color: var(--solo-card-foreground); }
+      .text-card-foreground { color: var(--solo-card-foreground); }
+      .border-card-foreground { border-color: var(--solo-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--solo-card-foreground); }
+      .bg-popover { background-color: var(--solo-popover); }
+      .text-popover { color: var(--solo-popover); }
+      .border-popover { border-color: var(--solo-popover); }
+      .ring-popover { --tw-ring-color: var(--solo-popover); }
+      .bg-popover-foreground { background-color: var(--solo-popover-foreground); }
+      .text-popover-foreground { color: var(--solo-popover-foreground); }
+      .border-popover-foreground { border-color: var(--solo-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--solo-popover-foreground); }
+      .bg-primary { background-color: var(--solo-primary); }
+      .text-primary { color: var(--solo-primary); }
+      .border-primary { border-color: var(--solo-primary); }
+      .ring-primary { --tw-ring-color: var(--solo-primary); }
+      .bg-primary-foreground { background-color: var(--solo-primary-foreground); }
+      .text-primary-foreground { color: var(--solo-primary-foreground); }
+      .border-primary-foreground { border-color: var(--solo-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--solo-primary-foreground); }
+      .bg-primary-50 { background-color: var(--solo-primary-50); }
+      .text-primary-50 { color: var(--solo-primary-50); }
+      .bg-primary-100 { background-color: var(--solo-primary-100); }
+      .text-primary-100 { color: var(--solo-primary-100); }
+      .bg-muted { background-color: var(--solo-muted); }
+      .text-muted { color: var(--solo-muted); }
+      .border-muted { border-color: var(--solo-muted); }
+      .ring-muted { --tw-ring-color: var(--solo-muted); }
+      .bg-muted-foreground { background-color: var(--solo-muted-foreground); }
+      .text-muted-foreground { color: var(--solo-muted-foreground); }
+      .border-muted-foreground { border-color: var(--solo-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--solo-muted-foreground); }
+      .bg-border { background-color: var(--solo-border); }
+      .text-border { color: var(--solo-border); }
+      .border-border { border-color: var(--solo-border); }
+      .ring-border { --tw-ring-color: var(--solo-border); }
+      .bg-input { background-color: var(--solo-input); }
+      .text-input { color: var(--solo-input); }
+      .border-input { border-color: var(--solo-input); }
+      .ring-input { --tw-ring-color: var(--solo-input); }
+      .bg-ring { background-color: var(--solo-ring); }
+      .text-ring { color: var(--solo-ring); }
+      .border-ring { border-color: var(--solo-ring); }
+      .ring-ring { --tw-ring-color: var(--solo-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased bg-neutral-50">
+    <!-- 侧边栏导航 -->
+    <aside class="fixed left-0 top-0 bottom-0 w-[72px] bg-white border-r border-border flex flex-col items-center py-6 z-50">
+      <!-- Logo区 -->
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white mb-8">
+        <i data-lucide="sun" class="w-5 h-5"></i>
+      </div>
+      <!-- 导航项 -->
+      <nav class="flex flex-col gap-2 flex-1">
+        <a href="today.html" data-dom-id="nav-today" class="w-11 h-11 rounded-xl bg-primary-100 text-primary flex items-center justify-center" data-active="true">
+          <i data-lucide="home" class="w-5 h-5"></i>
+        </a>
+        <a href="explore.html" data-dom-id="nav-explore" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </a>
+        <a href="#" data-dom-id="nav-mood-placeholder" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center">
+          <i data-lucide="smile" class="w-5 h-5"></i>
+        </a>
+        <a href="#" data-dom-id="nav-growth-placeholder" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center">
+          <i data-lucide="trending-up" class="w-5 h-5"></i>
+        </a>
+        <a href="#" data-dom-id="nav-community-placeholder" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center">
+          <i data-lucide="users" class="w-5 h-5"></i>
+        </a>
+        <a href="memory.html" data-dom-id="nav-memory" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center">
+          <i data-lucide="clock-4" class="w-5 h-5"></i>
+        </a>
+      </nav>
+      <!-- 底部用户头像 -->
+      <div class="mt-auto pt-4">
+        <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary font-medium text-sm">
+          S
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[72px] min-h-screen">
+      <div class="max-w-[1000px] mx-auto p-6 lg:p-8">
+        <!-- 双栏网格 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <!-- 左栏：主内容 (占2列) -->
+          <div class="lg:col-span-2 flex flex-col gap-6">
+
+            <!-- 顶部问候区 -->
+            <section data-dom-id="greeting-section">
+              <div class="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                <span>今天 周六</span>
+                <span class="w-1 h-1 rounded-full bg-muted-foreground"></span>
+                <i data-lucide="sun" class="w-4 h-4 text-primary"></i>
+                <span>晴 28°C</span>
+              </div>
+              <h1 class="text-[28px] lg:text-[32px] font-semibold text-foreground leading-tight mb-4">
+                你好，今天想做点什么？
+              </h1>
+              <!-- AI状态 -->
+              <div class="inline-flex items-center gap-2 bg-primary-50 border border-primary-100 rounded-full px-4 py-2">
+                <span class="text-lg">😊</span>
+                <span class="text-sm text-primary-700">今天你的状态不错</span>
+              </div>
+            </section>
+
+            <!-- AI今日推荐主卡片 -->
+            <section data-dom-id="ai-recommend-card">
+              <div class="rounded-2xl p-6 lg:p-8 text-white relative overflow-hidden" style="background: linear-gradient(135deg, #F97316 0%, #FB923C 50%, #FDBA74 100%);">
+                <!-- 装饰光晕 -->
+                <div class="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-white/15 blur-2xl"></div>
+                <div class="absolute -bottom-12 -left-6 w-32 h-32 rounded-full bg-white/10 blur-xl"></div>
+
+                <div class="relative z-10">
+                  <div class="flex items-center gap-2 mb-5">
+                    <div class="w-8 h-8 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center">
+                      <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold">今天推荐</h2>
+                  </div>
+
+                  <!-- 2x2 推荐项网格 -->
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                      <div class="text-2xl mb-2">☀</div>
+                      <div class="text-sm font-medium leading-snug">去喝一家新开的咖啡店</div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                      <div class="text-2xl mb-2">🌿</div>
+                      <div class="text-sm font-medium leading-snug">去植物园散步40分钟</div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                      <div class="text-2xl mb-2">🎬</div>
+                      <div class="text-sm font-medium leading-snug">晚上看一部电影</div>
+                    </div>
+                    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer">
+                      <div class="text-2xl mb-2">📖</div>
+                      <div class="text-sm font-medium leading-snug">睡前读30分钟书</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 今日任务进度 -->
+            <section data-dom-id="daily-goals-card" class="bg-white rounded-2xl border border-border p-6">
+              <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-semibold text-foreground">今日小目标</h2>
+                <span class="text-sm text-muted-foreground">3/4 已完成</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- 喝水 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+                  <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="droplets" class="w-5 h-5 text-blue-500"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="text-sm font-medium text-foreground">喝水</span>
+                      <span class="text-xs text-muted-foreground">6/8 杯</span>
+                    </div>
+                    <div class="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-blue-500 rounded-full" style="width: 75%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 运动 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+                  <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="activity" class="w-5 h-5 text-green-500"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="text-sm font-medium text-foreground">运动</span>
+                      <span class="text-xs text-muted-foreground">30/30 分钟</span>
+                    </div>
+                    <div class="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 阳光 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+                  <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="sun" class="w-5 h-5 text-primary"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="text-sm font-medium text-foreground">晒太阳</span>
+                      <span class="text-xs text-muted-foreground">15/20 分钟</span>
+                    </div>
+                    <div class="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-primary rounded-full" style="width: 75%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 早睡 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+                  <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="moon" class="w-5 h-5 text-purple-500"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="text-sm font-medium text-foreground">早睡</span>
+                      <span class="text-xs text-muted-foreground">待完成</span>
+                    </div>
+                    <div class="w-full h-2 bg-neutral-200 rounded-full overflow-hidden">
+                      <div class="h-full bg-purple-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+
+          <!-- 右栏：辅助内容 (占1列) -->
+          <div class="flex flex-col gap-6">
+
+            <!-- 附近活动卡片 -->
+            <section data-dom-id="nearby-card" class="bg-white rounded-2xl border border-border p-5">
+              <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
+                <h3 class="text-base font-semibold text-foreground">附近</h3>
+              </div>
+
+              <div class="space-y-3">
+                <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-100 hover:bg-primary-50 hover:border-primary-100 transition-colors cursor-pointer">
+                  <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="camera" class="w-4 h-4 text-primary"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="text-sm font-medium text-foreground">今天有摄影展</div>
+                      <div class="text-xs text-muted-foreground mt-0.5">距离 800m</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-neutral-50 border border-neutral-100 hover:bg-primary-50 hover:border-primary-100 transition-colors cursor-pointer">
+                  <div class="flex items-start gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="footprints" class="w-4 h-4 text-green-600"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="text-sm font-medium text-foreground">晚上7点 City Walk</div>
+                      <div class="text-xs text-muted-foreground mt-0.5">4人已加入</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 今日心情快速记录 -->
+            <section data-dom-id="mood-quick-card" class="bg-white rounded-2xl border border-border p-5">
+              <div class="flex items-center gap-2 mb-4">
+                <i data-lucide="heart" class="w-4 h-4 text-primary"></i>
+                <h3 class="text-base font-semibold text-foreground">此刻心情</h3>
+              </div>
+
+              <div class="flex items-center justify-between gap-2">
+                <button class="w-12 h-12 rounded-full bg-neutral-50 border border-neutral-200 flex items-center justify-center text-2xl hover:scale-110 hover:border-primary-200 transition-all cursor-pointer" title="很棒">
+                  😄
+                </button>
+                <button class="w-12 h-12 rounded-full bg-primary-50 border-2 border-primary flex items-center justify-center text-2xl hover:scale-110 transition-all cursor-pointer" title="不错">
+                  😊
+                </button>
+                <button class="w-12 h-12 rounded-full bg-neutral-50 border border-neutral-200 flex items-center justify-center text-2xl hover:scale-110 hover:border-primary-200 transition-all cursor-pointer" title="平静">
+                  😌
+                </button>
+                <button class="w-12 h-12 rounded-full bg-neutral-50 border border-neutral-200 flex items-center justify-center text-2xl hover:scale-110 hover:border-primary-200 transition-all cursor-pointer" title="有点累">
+                  😮‍💨
+                </button>
+              </div>
+              <p class="text-xs text-muted-foreground mt-3 text-center">点击记录此刻的心情</p>
+            </section>
+
+            <!-- 一句AI提示 -->
+            <section data-dom-id="ai-tip-card" class="rounded-2xl p-5 border border-primary-100" style="background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                  <i data-lucide="lightbulb" class="w-4 h-4 text-primary"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-medium text-primary-600 mb-1">AI 小贴士</div>
+                  <p class="text-sm text-primary-900 leading-relaxed">今天天气很好，适合出去走走，晒晒太阳可以让心情更愉悦。</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- 今日一句 -->
+            <section data-dom-id="daily-quote-card" class="bg-white rounded-2xl border border-border p-5">
+              <div class="flex items-center gap-2 mb-3">
+                <i data-lucide="quote" class="w-4 h-4 text-muted-foreground"></i>
+                <h3 class="text-sm font-medium text-muted-foreground">今日一句</h3>
+              </div>
+              <blockquote class="text-base text-foreground leading-relaxed font-medium">
+                "生活不是等待风暴过去，而是学会在雨中起舞。"
+              </blockquote>
+            </section>
+
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

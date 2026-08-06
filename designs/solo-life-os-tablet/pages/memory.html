@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回忆</title>
+    <style id="theme-vars">
+/* Solo - AI Life OS Brand CSS */
+/* Warm sunrise orange - representing sunlight, warmth, and new beginnings */
+
+:root {
+  /* Primary: Warm Sunrise Orange */
+  --solo-primary-50: #FFF7ED;
+  --solo-primary-100: #FFEDD5;
+  --solo-primary-200: #FED7AA;
+  --solo-primary-300: #FDBA74;
+  --solo-primary-400: #FB923C;
+  --solo-primary-500: #F97316;
+  --solo-primary-600: #EA580C;
+  --solo-primary-700: #C2410C;
+  --solo-primary-800: #9A3412;
+  --solo-primary-900: #7C2D12;
+
+  /* Neutral: Warm Stone */
+  --solo-neutral-50: #FAFAF9;
+  --solo-neutral-100: #F5F5F4;
+  --solo-neutral-200: #E7E5E4;
+  --solo-neutral-300: #D6D3D1;
+  --solo-neutral-400: #A8A29E;
+  --solo-neutral-500: #78716C;
+  --solo-neutral-600: #57534E;
+  --solo-neutral-700: #44403C;
+  --solo-neutral-800: #292524;
+  --solo-neutral-900: #1C1917;
+
+  /* Semantic Status Colors */
+  --state-success: #22C55E;
+  --state-warning: #F59E0B;
+  --state-error: #EF4444;
+  --state-info: #3B82F6;
+
+  /* Semantic Aliases */
+  --solo-background: var(--solo-neutral-50);
+  --solo-foreground: var(--solo-neutral-900);
+  --solo-card: #FFFFFF;
+  --solo-card-foreground: var(--solo-neutral-800);
+  --solo-popover: #FFFFFF;
+  --solo-popover-foreground: var(--solo-neutral-800);
+  --solo-primary: var(--solo-primary-500);
+  --solo-primary-foreground: #FFFFFF;
+  --solo-muted: var(--solo-neutral-100);
+  --solo-muted-foreground: var(--solo-neutral-500);
+  --solo-border: var(--solo-neutral-200);
+  --solo-input: var(--solo-neutral-200);
+  --solo-ring: var(--solo-primary-400);
+
+  /* Radius */
+  --solo-radius-sm: 8px;
+  --solo-radius-md: 12px;
+  --solo-radius-lg: 16px;
+  --solo-radius-full: 9999px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+@theme inline {
+  --color-primary-50: var(--solo-primary-50);
+  --color-primary-100: var(--solo-primary-100);
+  --color-primary-200: var(--solo-primary-200);
+  --color-primary-300: var(--solo-primary-300);
+  --color-primary-400: var(--solo-primary-400);
+  --color-primary-500: var(--solo-primary-500);
+  --color-primary-600: var(--solo-primary-600);
+  --color-primary-700: var(--solo-primary-700);
+  --color-primary-800: var(--solo-primary-800);
+  --color-primary-900: var(--solo-primary-900);
+  --color-neutral-50: var(--solo-neutral-50);
+  --color-neutral-100: var(--solo-neutral-100);
+  --color-neutral-200: var(--solo-neutral-200);
+  --color-neutral-300: var(--solo-neutral-300);
+  --color-neutral-400: var(--solo-neutral-400);
+  --color-neutral-500: var(--solo-neutral-500);
+  --color-neutral-600: var(--solo-neutral-600);
+  --color-neutral-700: var(--solo-neutral-700);
+  --color-neutral-800: var(--solo-neutral-800);
+  --color-neutral-900: var(--solo-neutral-900);
+  --color-background: var(--solo-background);
+  --color-foreground: var(--solo-foreground);
+  --color-card: var(--solo-card);
+  --color-card-foreground: var(--solo-card-foreground);
+  --color-muted: var(--solo-muted);
+  --color-muted-foreground: var(--solo-muted-foreground);
+  --color-border: var(--solo-border);
+  --color-primary: var(--solo-primary);
+  --color-primary-foreground: var(--solo-primary-foreground);
+  --radius-sm: var(--solo-radius-sm);
+  --radius-md: var(--solo-radius-md);
+  --radius-lg: var(--solo-radius-lg);
+  --radius-full: var(--solo-radius-full);
+  --font-sans: var(--font-sans);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-primary-50: var(--solo-primary-50);
+    --color-primary-100: var(--solo-primary-100);
+    --color-primary-200: var(--solo-primary-200);
+    --color-primary-300: var(--solo-primary-300);
+    --color-primary-400: var(--solo-primary-400);
+    --color-primary-500: var(--solo-primary-500);
+    --color-primary-600: var(--solo-primary-600);
+    --color-primary-700: var(--solo-primary-700);
+    --color-primary-800: var(--solo-primary-800);
+    --color-primary-900: var(--solo-primary-900);
+    --color-neutral-50: var(--solo-neutral-50);
+    --color-neutral-100: var(--solo-neutral-100);
+    --color-neutral-200: var(--solo-neutral-200);
+    --color-neutral-300: var(--solo-neutral-300);
+    --color-neutral-400: var(--solo-neutral-400);
+    --color-neutral-500: var(--solo-neutral-500);
+    --color-neutral-600: var(--solo-neutral-600);
+    --color-neutral-700: var(--solo-neutral-700);
+    --color-neutral-800: var(--solo-neutral-800);
+    --color-neutral-900: var(--solo-neutral-900);
+    --color-background: var(--solo-background);
+    --color-foreground: var(--solo-foreground);
+    --color-card: var(--solo-card);
+    --color-card-foreground: var(--solo-card-foreground);
+    --color-muted: var(--solo-muted);
+    --color-muted-foreground: var(--solo-muted-foreground);
+    --color-border: var(--solo-border);
+    --color-primary: var(--solo-primary);
+    --color-primary-foreground: var(--solo-primary-foreground);
+    --color-popover: var(--solo-popover);
+    --color-popover-foreground: var(--solo-popover-foreground);
+    --color-input: var(--solo-input);
+    --color-ring: var(--solo-ring);
+    --radius-sm: var(--solo-radius-sm);
+    --radius-md: var(--solo-radius-md);
+    --radius-lg: var(--solo-radius-lg);
+    --radius-full: var(--solo-radius-full);
+  }
+  @layer base {
+    body { background: var(--solo-background); color: var(--solo-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-primary-50 { background-color: var(--solo-primary-50); }
+      .text-primary-50 { color: var(--solo-primary-50); }
+      .border-primary-50 { border-color: var(--solo-primary-50); }
+      .ring-primary-50 { --tw-ring-color: var(--solo-primary-50); }
+      .bg-primary-100 { background-color: var(--solo-primary-100); }
+      .text-primary-100 { color: var(--solo-primary-100); }
+      .border-primary-100 { border-color: var(--solo-primary-100); }
+      .ring-primary-100 { --tw-ring-color: var(--solo-primary-100); }
+      .bg-primary-200 { background-color: var(--solo-primary-200); }
+      .text-primary-200 { color: var(--solo-primary-200); }
+      .border-primary-200 { border-color: var(--solo-primary-200); }
+      .ring-primary-200 { --tw-ring-color: var(--solo-primary-200); }
+      .bg-primary-300 { background-color: var(--solo-primary-300); }
+      .text-primary-300 { color: var(--solo-primary-300); }
+      .border-primary-300 { border-color: var(--solo-primary-300); }
+      .ring-primary-300 { --tw-ring-color: var(--solo-primary-300); }
+      .bg-primary-400 { background-color: var(--solo-primary-400); }
+      .text-primary-400 { color: var(--solo-primary-400); }
+      .border-primary-400 { border-color: var(--solo-primary-400); }
+      .ring-primary-400 { --tw-ring-color: var(--solo-primary-400); }
+      .bg-primary-500 { background-color: var(--solo-primary-500); }
+      .text-primary-500 { color: var(--solo-primary-500); }
+      .border-primary-500 { border-color: var(--solo-primary-500); }
+      .ring-primary-500 { --tw-ring-color: var(--solo-primary-500); }
+      .bg-primary-600 { background-color: var(--solo-primary-600); }
+      .text-primary-600 { color: var(--solo-primary-600); }
+      .border-primary-600 { border-color: var(--solo-primary-600); }
+      .ring-primary-600 { --tw-ring-color: var(--solo-primary-600); }
+      .bg-primary-700 { background-color: var(--solo-primary-700); }
+      .text-primary-700 { color: var(--solo-primary-700); }
+      .border-primary-700 { border-color: var(--solo-primary-700); }
+      .ring-primary-700 { --tw-ring-color: var(--solo-primary-700); }
+      .bg-primary-800 { background-color: var(--solo-primary-800); }
+      .text-primary-800 { color: var(--solo-primary-800); }
+      .border-primary-800 { border-color: var(--solo-primary-800); }
+      .ring-primary-800 { --tw-ring-color: var(--solo-primary-800); }
+      .bg-primary-900 { background-color: var(--solo-primary-900); }
+      .text-primary-900 { color: var(--solo-primary-900); }
+      .border-primary-900 { border-color: var(--solo-primary-900); }
+      .ring-primary-900 { --tw-ring-color: var(--solo-primary-900); }
+      .bg-neutral-50 { background-color: var(--solo-neutral-50); }
+      .text-neutral-50 { color: var(--solo-neutral-50); }
+      .border-neutral-50 { border-color: var(--solo-neutral-50); }
+      .ring-neutral-50 { --tw-ring-color: var(--solo-neutral-50); }
+      .bg-neutral-100 { background-color: var(--solo-neutral-100); }
+      .text-neutral-100 { color: var(--solo-neutral-100); }
+      .border-neutral-100 { border-color: var(--solo-neutral-100); }
+      .ring-neutral-100 { --tw-ring-color: var(--solo-neutral-100); }
+      .bg-neutral-200 { background-color: var(--solo-neutral-200); }
+      .text-neutral-200 { color: var(--solo-neutral-200); }
+      .border-neutral-200 { border-color: var(--solo-neutral-200); }
+      .ring-neutral-200 { --tw-ring-color: var(--solo-neutral-200); }
+      .bg-neutral-300 { background-color: var(--solo-neutral-300); }
+      .text-neutral-300 { color: var(--solo-neutral-300); }
+      .border-neutral-300 { border-color: var(--solo-neutral-300); }
+      .ring-neutral-300 { --tw-ring-color: var(--solo-neutral-300); }
+      .bg-neutral-400 { background-color: var(--solo-neutral-400); }
+      .text-neutral-400 { color: var(--solo-neutral-400); }
+      .border-neutral-400 { border-color: var(--solo-neutral-400); }
+      .ring-neutral-400 { --tw-ring-color: var(--solo-neutral-400); }
+      .bg-neutral-500 { background-color: var(--solo-neutral-500); }
+      .text-neutral-500 { color: var(--solo-neutral-500); }
+      .border-neutral-500 { border-color: var(--solo-neutral-500); }
+      .ring-neutral-500 { --tw-ring-color: var(--solo-neutral-500); }
+      .bg-neutral-600 { background-color: var(--solo-neutral-600); }
+      .text-neutral-600 { color: var(--solo-neutral-600); }
+      .border-neutral-600 { border-color: var(--solo-neutral-600); }
+      .ring-neutral-600 { --tw-ring-color: var(--solo-neutral-600); }
+      .bg-neutral-700 { background-color: var(--solo-neutral-700); }
+      .text-neutral-700 { color: var(--solo-neutral-700); }
+      .border-neutral-700 { border-color: var(--solo-neutral-700); }
+      .ring-neutral-700 { --tw-ring-color: var(--solo-neutral-700); }
+      .bg-neutral-800 { background-color: var(--solo-neutral-800); }
+      .text-neutral-800 { color: var(--solo-neutral-800); }
+      .border-neutral-800 { border-color: var(--solo-neutral-800); }
+      .ring-neutral-800 { --tw-ring-color: var(--solo-neutral-800); }
+      .bg-neutral-900 { background-color: var(--solo-neutral-900); }
+      .text-neutral-900 { color: var(--solo-neutral-900); }
+      .border-neutral-900 { border-color: var(--solo-neutral-900); }
+      .ring-neutral-900 { --tw-ring-color: var(--solo-neutral-900); }
+      .bg-background { background-color: var(--solo-background); }
+      .text-background { color: var(--solo-background); }
+      .border-background { border-color: var(--solo-background); }
+      .ring-background { --tw-ring-color: var(--solo-background); }
+      .bg-foreground { background-color: var(--solo-foreground); }
+      .text-foreground { color: var(--solo-foreground); }
+      .border-foreground { border-color: var(--solo-foreground); }
+      .ring-foreground { --tw-ring-color: var(--solo-foreground); }
+      .bg-card { background-color: var(--solo-card); }
+      .text-card { color: var(--solo-card); }
+      .border-card { border-color: var(--solo-card); }
+      .ring-card { --tw-ring-color: var(--solo-card); }
+      .bg-card-foreground { background-color: var(--solo-card-foreground); }
+      .text-card-foreground { color: var(--solo-card-foreground); }
+      .border-card-foreground { border-color: var(--solo-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--solo-card-foreground); }
+      .bg-muted { background-color: var(--solo-muted); }
+      .text-muted { color: var(--solo-muted); }
+      .border-muted { border-color: var(--solo-muted); }
+      .ring-muted { --tw-ring-color: var(--solo-muted); }
+      .bg-muted-foreground { background-color: var(--solo-muted-foreground); }
+      .text-muted-foreground { color: var(--solo-muted-foreground); }
+      .border-muted-foreground { border-color: var(--solo-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--solo-muted-foreground); }
+      .bg-border { background-color: var(--solo-border); }
+      .text-border { color: var(--solo-border); }
+      .border-border { border-color: var(--solo-border); }
+      .ring-border { --tw-ring-color: var(--solo-border); }
+      .bg-primary { background-color: var(--solo-primary); }
+      .text-primary { color: var(--solo-primary); }
+      .border-primary { border-color: var(--solo-primary); }
+      .ring-primary { --tw-ring-color: var(--solo-primary); }
+      .bg-primary-foreground { background-color: var(--solo-primary-foreground); }
+      .text-primary-foreground { color: var(--solo-primary-foreground); }
+      .border-primary-foreground { border-color: var(--solo-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--solo-primary-foreground); }
+      .bg-popover { background-color: var(--solo-popover); }
+      .text-popover { color: var(--solo-popover); }
+      .border-popover { border-color: var(--solo-popover); }
+      .ring-popover { --tw-ring-color: var(--solo-popover); }
+      .bg-popover-foreground { background-color: var(--solo-popover-foreground); }
+      .text-popover-foreground { color: var(--solo-popover-foreground); }
+      .border-popover-foreground { border-color: var(--solo-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--solo-popover-foreground); }
+      .bg-input { background-color: var(--solo-input); }
+      .text-input { color: var(--solo-input); }
+      .border-input { border-color: var(--solo-input); }
+      .ring-input { --tw-ring-color: var(--solo-input); }
+      .bg-ring { background-color: var(--solo-ring); }
+      .text-ring { color: var(--solo-ring); }
+      .border-ring { border-color: var(--solo-ring); }
+      .ring-ring { --tw-ring-color: var(--solo-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased bg-background text-foreground">
+    <style id="critical-layout">
+      .memory-shell { min-height: 100vh; }
+      .memory-sidebar { width: 72px; position: fixed; left: 0; top: 0; bottom: 0; z-index: 50; }
+      .memory-main { padding-left: 72px; }
+      .memory-content { max-width: 1100px; margin: 0 auto; padding: 32px; }
+      .timeline-line { position: absolute; left: 15px; top: 8px; bottom: 8px; width: 2px; background-color: var(--solo-border); }
+      .timeline-dot { position: absolute; left: 9px; width: 14px; height: 14px; border-radius: 9999px; background-color: var(--solo-primary); border: 3px solid var(--solo-card); z-index: 1; }
+      .year-gradient { background: linear-gradient(135deg, var(--solo-primary-50) 0%, var(--solo-primary-100) 100%); }
+      @media (max-width: 1023px) {
+        .memory-content { padding: 24px 20px; }
+      }
+    </style>
+
+    <aside class="memory-sidebar bg-card border-r border-border flex flex-col items-center py-6">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground mb-8">
+        <i data-lucide="sun" class="w-5 h-5"></i>
+      </div>
+      <nav class="flex flex-col gap-2 flex-1">
+        <a href="today.html" data-dom-id="nav-today" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors">
+          <i data-lucide="home" class="w-5 h-5"></i>
+        </a>
+        <a href="explore.html" data-dom-id="nav-explore" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors">
+          <i data-lucide="compass" class="w-5 h-5"></i>
+        </a>
+        <a href="#" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors">
+          <i data-lucide="smile" class="w-5 h-5"></i>
+        </a>
+        <a href="#" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors">
+          <i data-lucide="trending-up" class="w-5 h-5"></i>
+        </a>
+        <a href="#" class="w-11 h-11 rounded-xl text-muted-foreground hover:bg-muted flex items-center justify-center transition-colors">
+          <i data-lucide="users" class="w-5 h-5"></i>
+        </a>
+        <a href="memory.html" data-dom-id="nav-memory" class="w-11 h-11 rounded-xl bg-primary-100 text-primary flex items-center justify-center" data-active="true">
+          <i data-lucide="clock-4" class="w-5 h-5"></i>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="memory-main">
+      <div class="memory-content">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+          <!-- Left Column (2/3) -->
+          <div class="lg:col-span-2 flex flex-col gap-8">
+
+            <!-- Page Title -->
+            <div>
+              <h1 class="text-3xl font-bold text-foreground tracking-tight">回忆</h1>
+              <p class="text-muted-foreground mt-2 text-base">你的生活，值得被记住</p>
+            </div>
+
+            <!-- AI Annual Summary Card -->
+            <div class="year-gradient rounded-lg border border-primary-200/60 p-8">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center">
+                  <i data-lucide="sparkles" class="w-4 h-4 text-primary"></i>
+                </div>
+                <span class="text-sm font-medium text-primary">AI 年度总结</span>
+              </div>
+              <h2 class="text-2xl font-bold text-foreground mb-6 leading-snug">2026年，你的生活很精彩</h2>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-card/70 rounded-md p-4 border border-primary-200/40">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="smile" class="w-4 h-4 text-primary"></i>
+                    <span class="text-xs text-muted-foreground">笑容</span>
+                  </div>
+                  <p class="text-lg font-semibold text-foreground">多笑了 12 天</p>
+                </div>
+                <div class="bg-card/70 rounded-md p-4 border border-primary-200/40">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
+                    <span class="text-xs text-muted-foreground">探索</span>
+                  </div>
+                  <p class="text-lg font-semibold text-foreground">23 个新地方</p>
+                </div>
+                <div class="bg-card/70 rounded-md p-4 border border-primary-200/40">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="users" class="w-4 h-4 text-primary"></i>
+                    <span class="text-xs text-muted-foreground">相遇</span>
+                  </div>
+                  <p class="text-lg font-semibold text-foreground">8 位有趣的人</p>
+                </div>
+                <div class="bg-card/70 rounded-md p-4 border border-primary-200/40">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="book-open" class="w-4 h-4 text-primary"></i>
+                    <span class="text-xs text-muted-foreground">阅读</span>
+                  </div>
+                  <p class="text-lg font-semibold text-foreground">读完 6 本书</p>
+                </div>
+                <div class="bg-card/70 rounded-md p-4 border border-primary-200/40">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="activity" class="w-4 h-4 text-primary"></i>
+                    <span class="text-xs text-muted-foreground">运动</span>
+                  </div>
+                  <p class="text-lg font-semibold text-foreground">跑步 128km</p>
+                </div>
+                <div class="bg-card/70 rounded-md p-4 border border-primary-200/40">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="heart" class="w-4 h-4 text-primary"></i>
+                    <span class="text-xs text-muted-foreground">心情</span>
+                  </div>
+                  <p class="text-lg font-semibold text-foreground">365 个记录</p>
+                </div>
+              </div>
+
+              <p class="text-sm text-foreground/80 font-medium">继续加油，每一天都值得 <span class="text-primary">&#10084;</span></p>
+            </div>
+
+            <!-- Timeline Section -->
+            <div>
+              <div class="flex items-center gap-2 mb-6">
+                <i data-lucide="clock-4" class="w-5 h-5 text-primary"></i>
+                <h3 class="text-lg font-semibold text-foreground">时光轴</h3>
+              </div>
+
+              <div class="relative pl-10">
+                <div class="timeline-line"></div>
+
+                <!-- Timeline Item 1: 去年今天 -->
+                <div class="relative mb-8">
+                  <div class="timeline-dot top-1"></div>
+                  <div class="bg-card rounded-lg border border-border p-5 hover:border-primary/30 transition-colors">
+                    <div class="flex items-start justify-between gap-4">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="text-xs font-medium text-primary bg-primary-100 px-2 py-0.5 rounded-full">去年今天</span>
+                          <span class="text-xs text-muted-foreground flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            2025.07.28
+                          </span>
+                        </div>
+                        <h4 class="text-base font-semibold text-foreground mb-2">你去了西湖</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">那天阳光很好，你拍了 12 张照片，待了 4 个小时。湖边的风、断桥的人，还有一杯好喝的龙井。</p>
+                        <div class="flex items-center gap-3 mt-3">
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                            12 张照片
+                          </span>
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                            杭州·西湖
+                          </span>
+                        </div>
+                      </div>
+                      <div class="w-24 h-24 rounded-md bg-neutral-200 shrink-0 flex items-center justify-center">
+                        <i data-lucide="image" class="w-8 h-8 text-neutral-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Timeline Item 2: 3个月前 -->
+                <div class="relative mb-8">
+                  <div class="timeline-dot top-1"></div>
+                  <div class="bg-card rounded-lg border border-border p-5 hover:border-primary/30 transition-colors">
+                    <div class="flex items-start gap-4">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="text-xs font-medium text-primary bg-primary-100 px-2 py-0.5 rounded-full">3 个月前</span>
+                          <span class="text-xs text-muted-foreground flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            2026.04
+                          </span>
+                        </div>
+                        <h4 class="text-base font-semibold text-foreground mb-2">第一次跑 10km</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">你说"没想到自己能做到"，那天你奖励了自己一顿火锅。从 3km 到 10km，你用了 47 天。</p>
+                        <div class="flex items-center gap-3 mt-3">
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                            10.2 km
+                          </span>
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="timer" class="w-3.5 h-3.5"></i>
+                            58 分 32 秒
+                          </span>
+                        </div>
+                      </div>
+                      <div class="w-20 h-20 rounded-md bg-neutral-200 shrink-0 flex items-center justify-center">
+                        <i data-lucide="trophy" class="w-7 h-7 text-neutral-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Timeline Item 3: 今年3月 -->
+                <div class="relative mb-8">
+                  <div class="timeline-dot top-1"></div>
+                  <div class="bg-card rounded-lg border border-border p-5 hover:border-primary/30 transition-colors">
+                    <div class="flex items-start gap-4">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="text-xs font-medium text-primary bg-primary-100 px-2 py-0.5 rounded-full">今年 3 月</span>
+                          <span class="text-xs text-muted-foreground flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            2026.03
+                          </span>
+                        </div>
+                        <h4 class="text-base font-semibold text-foreground mb-2">认识了 6 个新朋友</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">都是在 City Walk 时遇到的，你们现在还偶尔一起吃饭。从武康路到愚园路，城市漫步带来了意外的连接。</p>
+                        <div class="flex items-center gap-3 mt-3">
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>
+                            6 位朋友
+                          </span>
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="footprints" class="w-3.5 h-3.5"></i>
+                            4 次 City Walk
+                          </span>
+                        </div>
+                      </div>
+                      <div class="w-20 h-20 rounded-md bg-neutral-200 shrink-0 flex items-center justify-center">
+                        <i data-lucide="users" class="w-7 h-7 text-neutral-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Timeline Item 4: 上周六 -->
+                <div class="relative mb-8">
+                  <div class="timeline-dot top-1"></div>
+                  <div class="bg-card rounded-lg border border-border p-5 hover:border-primary/30 transition-colors">
+                    <div class="flex items-start gap-4">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="text-xs font-medium text-primary bg-primary-100 px-2 py-0.5 rounded-full">上周六</span>
+                          <span class="text-xs text-muted-foreground flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            2026.07.25
+                          </span>
+                        </div>
+                        <h4 class="text-base font-semibold text-foreground mb-2">一个人去看了展览</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">待了整整 3 个小时，买了一本画册。是一个关于光影的摄影展，你在某幅作品前站了很久。</p>
+                        <div class="flex items-center gap-3 mt-3">
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                            摄影展
+                          </span>
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                            3 小时
+                          </span>
+                        </div>
+                      </div>
+                      <div class="w-20 h-20 rounded-md bg-neutral-200 shrink-0 flex items-center justify-center">
+                        <i data-lucide="palette" class="w-7 h-7 text-neutral-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Timeline Item 5: 昨天 -->
+                <div class="relative">
+                  <div class="timeline-dot top-1"></div>
+                  <div class="bg-card rounded-lg border border-border p-5 hover:border-primary/30 transition-colors">
+                    <div class="flex items-start gap-4">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2">
+                          <span class="text-xs font-medium text-primary bg-primary-100 px-2 py-0.5 rounded-full">昨天</span>
+                          <span class="text-xs text-muted-foreground flex items-center gap-1">
+                            <i data-lucide="calendar" class="w-3 h-3"></i>
+                            2026.07.27
+                          </span>
+                        </div>
+                        <h4 class="text-base font-semibold text-foreground mb-2">尝试了新的咖啡店</h4>
+                        <p class="text-sm text-muted-foreground leading-relaxed">你给那家店打了 5 星，说"会再去"。手冲的耶加雪菲有柑橘的香气，窗边的位置正好看到梧桐树。</p>
+                        <div class="flex items-center gap-3 mt-3">
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
+                            手冲咖啡
+                          </span>
+                          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                            <i data-lucide="star" class="w-3.5 h-3.5 text-primary fill-primary"></i>
+                            5 星好评
+                          </span>
+                        </div>
+                      </div>
+                      <div class="w-20 h-20 rounded-md bg-neutral-200 shrink-0 flex items-center justify-center">
+                        <i data-lucide="coffee" class="w-7 h-7 text-neutral-400"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column (1/3) -->
+          <div class="flex flex-col gap-6">
+
+            <!-- Monthly Stats Card -->
+            <div class="bg-card rounded-lg border border-border p-5">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-7 h-7 rounded-sm bg-primary/10 flex items-center justify-center">
+                  <i data-lucide="bar-chart-2" class="w-4 h-4 text-primary"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-foreground">本月记录</h3>
+              </div>
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4 text-muted-foreground"></i>
+                    <span class="text-sm text-muted-foreground">打卡天数</span>
+                  </div>
+                  <span class="text-lg font-bold text-foreground">28<span class="text-xs font-normal text-muted-foreground ml-1">天</span></span>
+                </div>
+                <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                  <div class="h-full bg-primary rounded-full" style="width: 90%"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="camera" class="w-4 h-4 text-muted-foreground"></i>
+                    <span class="text-sm text-muted-foreground">照片</span>
+                  </div>
+                  <span class="text-lg font-bold text-foreground">42<span class="text-xs font-normal text-muted-foreground ml-1">张</span></span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="smile" class="w-4 h-4 text-muted-foreground"></i>
+                    <span class="text-sm text-muted-foreground">平均心情</span>
+                  </div>
+                  <span class="text-lg">😊</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Time Capsule Card -->
+            <div class="bg-gradient-to-br from-primary-50 to-card rounded-lg border border-primary-200/50 p-5">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-7 h-7 rounded-sm bg-primary/15 flex items-center justify-center">
+                  <i data-lucide="infinity" class="w-4 h-4 text-primary"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-foreground">时光胶囊</h3>
+              </div>
+              <p class="text-xs text-muted-foreground mb-3">AI 为你抽取了一段随机回忆</p>
+              <div class="bg-card rounded-md border border-border p-4 mb-4">
+                <div class="flex items-center gap-2 mb-2">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5 text-primary"></i>
+                  <span class="text-xs font-medium text-primary">2 年前的今天</span>
+                </div>
+                <p class="text-sm text-foreground font-medium leading-relaxed">你第一次一个人旅行，去了厦门。在环岛路骑了一下午自行车，看了一场海边日落。</p>
+              </div>
+              <button class="w-full h-10 rounded-md bg-primary text-primary-foreground text-sm font-medium flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+                看看那天
+              </button>
+            </div>
+
+            <!-- Year Tag Cloud -->
+            <div class="bg-card rounded-lg border border-border p-5">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-7 h-7 rounded-sm bg-primary/10 flex items-center justify-center">
+                  <i data-lucide="tags" class="w-4 h-4 text-primary"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-foreground">年度关键词</h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="inline-flex items-center bg-primary-100 text-primary px-3 py-1.5 rounded-full text-sm font-medium">咖啡</span>
+                <span class="inline-flex items-center bg-primary-50 text-primary-700 px-3 py-1.5 rounded-full text-sm font-medium">阅读</span>
+                <span class="inline-flex items-center bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs">电影</span>
+                <span class="inline-flex items-center bg-primary-100 text-primary px-3 py-1.5 rounded-full text-sm font-medium">散步</span>
+                <span class="inline-flex items-center bg-primary-50 text-primary-700 px-3 py-1.5 rounded-full text-sm font-medium">摄影</span>
+                <span class="inline-flex items-center bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs">新地方</span>
+                <span class="inline-flex items-center bg-primary-100 text-primary px-3 py-1.5 rounded-full text-sm font-medium">朋友</span>
+                <span class="inline-flex items-center bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs">跑步</span>
+                <span class="inline-flex items-center bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full text-xs">火锅</span>
+                <span class="inline-flex items-center bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs">展览</span>
+                <span class="inline-flex items-center bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs">写作</span>
+                <span class="inline-flex items-center bg-primary-50 text-primary-700 px-2.5 py-1 rounded-full text-xs">音乐</span>
+                <span class="inline-flex items-center bg-muted text-muted-foreground px-2.5 py-1 rounded-full text-xs">旅行</span>
+              </div>
+              <p class="text-xs text-muted-foreground mt-4">标签大小代表今年出现的频率</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

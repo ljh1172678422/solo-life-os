@@ -1,0 +1,499 @@
+{
+  "success": true,
+  "outcome": "passed",
+  "repairable": true,
+  "terminalViolations": [],
+  "terminalBlockingSummary": null,
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.07.22.00.00.00",
+    "version_source": "skill-release-manifest.json",
+    "runtime_skill_dir": "/data/user/builtin/design/hebe/skills/solo-design",
+    "recorded_at": null,
+    "expected_version": "2026.07.22.00.00.00",
+    "status": "manifest_fallback",
+    "read_status": "ok",
+    "reason": "runtime-orchestration-summary.json missing skillProvenance; used skill-release-manifest.json"
+  },
+  "operatingMode": "free-explore",
+  "renderBlockingErrorCount": 0,
+  "softWarningCount": 65,
+  "renderBlockingErrors": [],
+  "errorSignatures": [],
+  "softWarnings": [
+    "[html-head-style] event-recap.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] goal-detail.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] growth-annual.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] login.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] membership.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] mood-insights.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] notifications.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] onboarding.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] profile-edit.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] search.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] settings.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] today-replan.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] today-summary.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[mobile-bottom-overlay] pages/today.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/explore.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-6 left-8 w-16 h-16 rounded-full\"",
+    "[mobile-bottom-overlay] pages/mood.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/growth.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/community.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-0 top-0 bottom-0 w-1\"",
+    "[mobile-bottom-overlay] pages/me.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/today-replan.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 z-50 px-4 py-3 bg-white/95 backdrop-blur-md border-t border-border\"",
+    "[mobile-bottom-overlay] pages/activity-detail.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-10 left-12 w-28 h-28 rounded-full opacity-25\"",
+    "[mobile-bottom-overlay] pages/route.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-6 bottom-6 bg-white rounded-lg shadow-sm px-2 py-1 flex items-center gap-1\"",
+    "[mobile-bottom-overlay] pages/favorites.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-2 left-2 text-[10px] font-medium text-white bg-black/25 backdrop-blur-sm px-1.5 py-0.5 rounded-md\"",
+    "[mobile-bottom-overlay] pages/goal-detail.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur border-t border-border p-3\"",
+    "[mobile-bottom-overlay] pages/growth-annual.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-2 bottom-1 flex items-center gap-1\"",
+    "[mobile-bottom-overlay] pages/event-detail.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-0 left-0 right-0 h-20\"",
+    "[mobile-bottom-overlay] pages/event-chat.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white border-t border-border p-3 flex items-center gap-2 z-50\"",
+    "[mobile-bottom-overlay] pages/memory.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-[5px] top-2 bottom-2 w-0.5\"",
+    "[mobile-navigation-consistency] 22 mobile page(s) do not expose a 3+ item data-nav-key nav cluster while sibling pages do. This is acceptable for detail/reward/modal pages only when planned explicitly.",
+    "[html-quality] activity-detail.html: Tailwind named color utilities are forbidden (bg-neutral-100, text-neutral-400, text-neutral-500, text-neutral-700). Use brand CSS variables instead.",
+    "[html-quality] community.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] event-chat.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] event-chat.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] event-detail.html: Tailwind named color utilities are forbidden (bg-neutral-100, text-neutral-400, text-neutral-500, text-neutral-700, bg-neutral-200). Use brand CSS variables instead.",
+    "[html-quality] event-detail.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] event-recap.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] event-recap.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] explore.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] favorites.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] goal-detail.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] goal-detail.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] growth-annual.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] growth-stats.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] growth-stats.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] login.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] login.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] me.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] membership.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] membership.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] mood-calendar.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] mood-insights.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] notifications.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] notifications.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] onboarding.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] onboarding.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] profile-edit.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] profile-edit.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] search.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] search.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] settings.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] settings.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] today-plan-detail.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] today-plan-detail.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] today-replan.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] today.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference."
+  ],
+  "repairPlanHints": [
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "community.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "event-chat.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "event-detail.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "event-recap.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "explore.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "goal-detail.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "growth-stats.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "login.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "me.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "membership.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "mood-insights.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "notifications.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "onboarding.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "profile-edit.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "search.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "settings.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "today-plan-detail.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "today-replan.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    },
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "today.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    }
+  ],
+  "repairActionTable": [],
+  "errorCount": 0,
+  "warningCount": 65,
+  "errors": [],
+  "warnings": [
+    "[html-head-style] event-recap.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] goal-detail.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] growth-annual.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] login.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] membership.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] mood-insights.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] notifications.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] onboarding.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] profile-edit.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] search.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] settings.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] today-replan.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] today-summary.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[mobile-bottom-overlay] pages/today.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/explore.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-6 left-8 w-16 h-16 rounded-full\"",
+    "[mobile-bottom-overlay] pages/mood.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/growth.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/community.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-0 top-0 bottom-0 w-1\"",
+    "[mobile-bottom-overlay] pages/me.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50\"",
+    "[mobile-bottom-overlay] pages/today-replan.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 z-50 px-4 py-3 bg-white/95 backdrop-blur-md border-t border-border\"",
+    "[mobile-bottom-overlay] pages/activity-detail.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-10 left-12 w-28 h-28 rounded-full opacity-25\"",
+    "[mobile-bottom-overlay] pages/route.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-6 bottom-6 bg-white rounded-lg shadow-sm px-2 py-1 flex items-center gap-1\"",
+    "[mobile-bottom-overlay] pages/favorites.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-2 left-2 text-[10px] font-medium text-white bg-black/25 backdrop-blur-sm px-1.5 py-0.5 rounded-md\"",
+    "[mobile-bottom-overlay] pages/goal-detail.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur border-t border-border p-3\"",
+    "[mobile-bottom-overlay] pages/growth-annual.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-2 bottom-1 flex items-center gap-1\"",
+    "[mobile-bottom-overlay] pages/event-detail.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute bottom-0 left-0 right-0 h-20\"",
+    "[mobile-bottom-overlay] pages/event-chat.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"fixed bottom-0 left-0 right-0 bg-white border-t border-border p-3 flex items-center gap-2 z-50\"",
+    "[mobile-bottom-overlay] pages/memory.html: bottom fixed/absolute CTA or navigation found. Ensure it has safe-area spacing and does not cover content. Evidence: class=\"absolute left-[5px] top-2 bottom-2 w-0.5\"",
+    "[mobile-navigation-consistency] 22 mobile page(s) do not expose a 3+ item data-nav-key nav cluster while sibling pages do. This is acceptable for detail/reward/modal pages only when planned explicitly.",
+    "[html-quality] activity-detail.html: Tailwind named color utilities are forbidden (bg-neutral-100, text-neutral-400, text-neutral-500, text-neutral-700). Use brand CSS variables instead.",
+    "[html-quality] community.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] event-chat.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] event-chat.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] event-detail.html: Tailwind named color utilities are forbidden (bg-neutral-100, text-neutral-400, text-neutral-500, text-neutral-700, bg-neutral-200). Use brand CSS variables instead.",
+    "[html-quality] event-detail.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] event-recap.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] event-recap.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] explore.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] favorites.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] goal-detail.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] goal-detail.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] growth-annual.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] growth-stats.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] growth-stats.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] login.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] login.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] me.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] membership.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] membership.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] mood-calendar.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] mood-insights.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] notifications.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] notifications.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] onboarding.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] onboarding.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] profile-edit.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] profile-edit.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] search.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] search.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] settings.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] settings.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] today-plan-detail.html: Tailwind named color utilities are forbidden (bg-neutral-50, text-neutral-50, border-neutral-50, ring-neutral-50, bg-neutral-100, text-neutral-100, border-neutral-100, ring-neutral-100). Use brand CSS variables instead.",
+    "[html-quality] today-plan-detail.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] today-replan.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference.",
+    "[html-quality] today.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference."
+  ],
+  "validationRunDisciplineStatus": {
+    "declared": false,
+    "restoreMode": false,
+    "maxFullValidationRuns": null,
+    "validationHistoryCount": 0,
+    "repairLedgerCount": 0,
+    "softWarningsTriggerRepair": null,
+    "terminalState": null,
+    "nextAction": null,
+    "violations": [],
+    "success": true
+  },
+  "terminalState": null,
+  "nextCheck": {
+    "type": "finish-readiness",
+    "command": "node '/data/user/builtin/design/hebe/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs' '/workspace/solo-life-os-mobile' --check=all",
+    "fullValidationAllowed": false,
+    "reason": "workspace validation passed; run complete finish readiness before final delivery"
+  },
+  "repairBatch": [],
+  "repairContextPacket": {
+    "schema_version": "1.0",
+    "purpose": "small-context repair packet; read this before full validation-report.json",
+    "success": true,
+    "terminalState": null,
+    "skillProvenance": {
+      "name": "solo-design",
+      "version": "2026.07.22.00.00.00",
+      "version_source": "skill-release-manifest.json",
+      "runtime_skill_dir": "/data/user/builtin/design/hebe/skills/solo-design",
+      "recorded_at": null,
+      "expected_version": "2026.07.22.00.00.00",
+      "status": "manifest_fallback",
+      "read_status": "ok",
+      "reason": "runtime-orchestration-summary.json missing skillProvenance; used skill-release-manifest.json"
+    },
+    "renderBlockingErrorCount": 0,
+    "softWarningCount": 65,
+    "renderBlockingErrors": [],
+    "repairActionTable": [],
+    "nextCheck": {
+      "type": "finish-readiness",
+      "command": "node '/data/user/builtin/design/hebe/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs' '/workspace/solo-life-os-mobile' --check=all",
+      "fullValidationAllowed": false,
+      "reason": "workspace validation passed; run complete finish readiness before final delivery"
+    },
+    "forbidden": [
+      "do not read validator source",
+      "do not rerun full validation when nextCheck.fullValidationAllowed=false",
+      "do not start preview/browser unless user explicitly asks",
+      "do not hand-edit repair ledger fields"
+    ]
+  },
+  "projectFileHashes": {
+    "solo-life-os.design": "21670d46edbe086ba70de3dd37c1cf03804e361331242ec4ba5d2f202a4a121e",
+    "colors_and_type.css": "124b6a9e1b64a5984aad0ef174a6ce4bf216a7d9160c733c85877d16670c7c61",
+    "pages/activity-detail.html": "5c7c82b724e29c5e07258e0b4477c545f9d3c97072f53c2bcad3c3f0d69b667a",
+    "pages/community.html": "2534c7ce8b4257017724524d97c2a6b73f668a3974c1e4b17a3207dfb9758e72",
+    "pages/event-chat.html": "fbc557261d991d86c536b215a8b3c7f7aa0c39d05fd9e9c609e291231bc1b2cb",
+    "pages/event-detail.html": "cd2be99097b24ddb947b22986114c5ef855cd5bfbc1f0348258ee88a0940765b",
+    "pages/event-recap.html": "5ea3032de994e85fd64658bef421af4d8ab2fac9f721fa5975eee98d96457488",
+    "pages/explore.html": "e35a76250afde5278f8dd869fc6c5217fba1ccf4ebce17443b821493a152bee8",
+    "pages/favorites.html": "eb3f3741a7cc4a800f454c83d485778027600e3ef7034ee2b2a8097e4890d54e",
+    "pages/goal-detail.html": "2dccceff81cb576850978b3dba7051e24490ba9a7e9a3fc804a848a33052b939",
+    "pages/growth-annual.html": "a96255703ea80ebdb9ae1cbdf9bcae42ddefee0192f126c1281b03a714b6c954",
+    "pages/growth-stats.html": "790c907827d9777ceb544f3e88dcdb687bda337432702428e855ff5cec6b2fa5",
+    "pages/growth.html": "77a792a75a3455644d44a1c512eaefa5764a5fc5f7c4df7a460539d2128d8e4c",
+    "pages/login.html": "765ed0a66535f5a74ca07f7fb3d1915b495812c39212922f35d424b32dbf56e1",
+    "pages/me.html": "bbcfd0f4db738b3c39270c7fb7e972320d4259cae446a35eb27a1c8b1ab8384b",
+    "pages/membership.html": "d7e97484b58bdd8c77825d09bdf1ed8c36ad5bbf8fc2a12fdd727b270451a736",
+    "pages/memory.html": "38d36eee92566485a046559089b55afca1215b850461239da8cc9b8fe2ccca39",
+    "pages/mood-calendar.html": "801de9eb1b7acee98727454be5cf7a60fde992529fe5c31f499c6f12809b15ef",
+    "pages/mood-insights.html": "6b7fbea497bd2e36055553b10c19e2c7827d4849ae3f1748ecc4e97df8f64c3d",
+    "pages/mood.html": "49d86a107385078992342f8579665fcb5c7d79be35d9a6563ff3a5c90a0bba19",
+    "pages/notifications.html": "b15a2984816634f0d152c36b02222b43c820c4521c104744baf0a565dd0c5fdb",
+    "pages/onboarding.html": "8fc1793309d757d647678b66a375344473de5f51adaaa5919aef11ecc0cc5db9",
+    "pages/profile-edit.html": "5116d64e3b258e909b3cfac7ec5ad55b4ee3b026ddb1820550f9515e755d7176",
+    "pages/route.html": "48ee7c4a21692e843aa9bc3ac2b153cd03e0bc57219b07f1a2a9f73b0a47a579",
+    "pages/search.html": "774f0e536d51d08d7d717ee1b40c19717418bb1b3dd00ac9164e8f67d98147f0",
+    "pages/settings.html": "88f13a9c1fbaf14273929e05cc0bbd68bada0aed3445bff7902581f4c9e16b4b",
+    "pages/today-plan-detail.html": "3d528d012afd2a3dd63dc0776245c30306d861b46a9980cbddd882943dbb045e",
+    "pages/today-replan.html": "5440f1df4cf41c3472235b4c015ee6d3f6621f9b3b24bf4bd0c600a9f2ce5de2",
+    "pages/today-summary.html": "7ea42986dd6cde22d753027caf2db50a33287bab33d4afe3406f240eb107cc71",
+    "pages/today.html": "6be5f8d1a771fdadfb97847e426dce0a4f0ed7db46983f228d2a1ba46be553c9"
+  },
+  "designDir": "/workspace/solo-life-os-mobile",
+  "expectedPages": null,
+  "requireInteractions": null,
+  "checkedAt": "2026-07-28T05:59:03.606Z"
+}

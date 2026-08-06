@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日总结</title>
+    <style id="theme-vars">
+:root{--solo-primary-50:#FFF7ED;--solo-primary-100:#FFEDD5;--solo-primary-200:#FED7AA;--solo-primary-300:#FDBA74;--solo-primary-400:#FB923C;--solo-primary-500:#F97316;--solo-primary-600:#EA580C;--solo-primary-700:#C2410C;--solo-primary-800:#9A3412;--solo-primary-900:#7C2D12;--solo-neutral-50:#FAFAF9;--solo-neutral-100:#F5F5F4;--solo-neutral-200:#E7E5E4;--solo-neutral-300:#D6D3D1;--solo-neutral-400:#A8A29E;--solo-neutral-500:#78716C;--solo-neutral-600:#57534E;--solo-neutral-700:#44403C;--solo-neutral-800:#292524;--solo-neutral-900:#1C1917;--state-success:#22C55E;--state-warning:#F59E0B;--state-error:#EF4444;--state-info:#3B82F6;--solo-background:var(--solo-neutral-50);--solo-foreground:var(--solo-neutral-900);--solo-card:#FFFFFF;--solo-card-foreground:var(--solo-neutral-800);--solo-popover:#FFFFFF;--solo-popover-foreground:var(--solo-neutral-800);--solo-primary:var(--solo-primary-500);--solo-primary-foreground:#FFFFFF;--solo-muted:var(--solo-neutral-100);--solo-muted-foreground:var(--solo-neutral-500);--solo-border:var(--solo-neutral-200);--solo-input:var(--solo-neutral-200);--solo-ring:var(--solo-primary-400);--solo-radius-sm:8px;--solo-radius-md:12px;--solo-radius-lg:16px;--solo-radius-full:9999px;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px;--font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+@theme inline{--color-primary-50:var(--solo-primary-50);--color-primary-100:var(--solo-primary-100);--color-primary-200:var(--solo-primary-200);--color-primary-300:var(--solo-primary-300);--color-primary-400:var(--solo-primary-400);--color-primary-500:var(--solo-primary-500);--color-primary-600:var(--solo-primary-600);--color-primary-700:var(--solo-primary-700);--color-primary-800:var(--solo-primary-800);--color-primary-90:var(--solo-primary-900);--color-neutral-50:var(--solo-neutral-50);--color-neutral-100:var(--solo-neutral-100);--color-neutral-200:var(--solo-neutral-200);--color-neutral-300:var(--solo-neutral-300);--color-neutral-400:var(--solo-neutral-400);--color-neutral-500:var(--solo-neutral-500);--color-neutral-600:var(--solo-neutral-600);--color-neutral-700:var(--solo-neutral-700);--color-neutral-800:var(--solo-neutral-800);--color-neutral-900:var(--solo-neutral-900);--color-background:var(--solo-background);--color-foreground:var(--solo-foreground);--color-card:var(--solo-card);--color-card-foreground:var(--solo-card-foreground);--color-muted:var(--solo-muted);--color-muted-foreground:var(--solo-muted-foreground);--color-border:var(--solo-border);--color-primary:var(--solo-primary);--color-primary-foreground:var(--solo-primary-foreground);--radius-sm:var(--solo-radius-sm);--radius-md:var(--solo-radius-md);--radius-lg:var(--solo-radius-lg);--radius-full:var(--solo-radius-full);--font-sans:var(--font-sans)}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">@theme inline{--color-background:var(--solo-background);--color-foreground:var(--solo-foreground);--color-card:var(--solo-card);--color-card-foreground:var(--solo-card-foreground);--color-popover:var(--solo-popover);--color-popover-foreground:var(--solo-popover-foreground);--color-primary:var(--solo-primary);--color-primary-foreground:var(--solo-primary-foreground);--color-muted:var(--solo-muted);--color-muted-foreground:var(--solo-muted-foreground);--color-border:var(--solo-border);--color-input:var(--solo-input);--color-ring:var(--solo-ring);--radius-sm:var(--solo-radius-sm);--radius-md:var(--solo-radius-md);--radius-lg:var(--solo-radius-lg)}@layer base{body{background:var(--solo-background);color:var(--solo-foreground)}td,th{@apply break-words;word-break:break-all;word-break:auto-phrase}th{@apply whitespace-nowrap}}</style>
+    <style id="semantic-token-fallback">.bg-background{background-color:var(--solo-background)}.text-background{color:var(--solo-background)}.border-background{border-color:var(--solo-background)}.bg-foreground{background-color:var(--solo-foreground)}.text-foreground{color:var(--solo-foreground)}.border-foreground{border-color:var(--solo-foreground)}.bg-card{background-color:var(--solo-card)}.text-card{color:var(--solo-card)}.border-card{border-color:var(--solo-card)}.bg-primary{background-color:var(--solo-primary)}.text-primary{color:var(--solo-primary)}.border-primary{border-color:var(--solo-primary)}.bg-primary-foreground{background-color:var(--solo-primary-foreground)}.text-primary-foreground{color:var(--solo-primary-foreground)}.bg-muted{background-color:var(--solo-muted)}.text-muted{color:var(--solo-muted)}.bg-muted-foreground{background-color:var(--solo-muted-foreground)}.text-muted-foreground{color:var(--solo-muted-foreground)}.bg-border{background-color:var(--solo-border)}.text-border{color:var(--solo-border)}.border-border{border-color:var(--solo-border)}</style>
+    <style>.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}[data-icon]{display:inline-flex;align-items:center;justify-content:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;background-color:currentColor}.mood-btn{transition:all 0.2s ease}.mood-btn.selected{transform:scale(1.15);}.progress-ring__circle{transition:stroke-dashoffset 0.5s ease;transform:rotate(-90deg);transform-origin:50% 50%;}</style>
+</head>
+<body class="min-h-screen font-sans antialiased" style="background:linear-gradient(180deg,#FFF7ED 0%,#FFEDD5 30%,#FAFAF9 70%);">
+    <main class="w-full max-w-md mx-auto px-4 pb-8 min-h-screen space-y-5">
+
+        <!-- Close Nav -->
+        <nav class="sticky top-0 z-50 -mx-4 px-4 h-12 flex items-center justify-end" style="background-color:rgba(255,247,237,0.85);backdrop-filter:blur(12px);">
+            <a href="today.html" data-dom-id="btn-close" class="inline-flex items-center justify-center w-9 h-9 -mr-2 rounded-full active:bg-white/60 transition-colors">
+                <i data-lucide="x" class="w-5 h-5 text-foreground"></i>
+            </a>
+        </nav>
+
+        <!-- Greeting -->
+        <div class="text-center pt-2">
+            <div class="text-3xl mb-2">🌙</div>
+            <h2 class="text-2xl font-bold text-foreground">今天过得怎么样？</h2>
+            <p class="text-sm text-muted-foreground mt-1.5">7月28日 · 周二</p>
+        </div>
+
+        <!-- Completion Stats Card -->
+        <div class="bg-card rounded-2xl border border-border p-5 shadow-sm">
+            <div class="flex items-center gap-4">
+                <!-- Circular Progress -->
+                <div class="relative w-20 h-20 flex-shrink-0">
+                    <svg class="w-20 h-20" viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="34" fill="none" stroke="var(--solo-neutral-100)" stroke-width="6"/>
+                        <circle class="progress-ring__circle" cx="40" cy="40" r="34" fill="none" stroke="var(--solo-primary-500)" stroke-width="6" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="53.4"/>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-lg font-bold text-foreground">3/4</span>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <p class="text-base font-semibold text-foreground">今天完成了 3/4 项安排</p>
+                    <p class="text-sm text-muted-foreground mt-1">完成度 75%，很棒！</p>
+                    <div class="flex gap-1 mt-2">
+                        <div class="h-1.5 flex-1 rounded-full bg-primary"></div>
+                        <div class="h-1.5 flex-1 rounded-full bg-primary"></div>
+                        <div class="h-1.5 flex-1 rounded-full bg-primary"></div>
+                        <div class="h-1.5 flex-1 rounded-full bg-muted"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Items List -->
+        <div class="bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
+            <!-- Completed Item 1 -->
+            <div class="flex items-center gap-3 p-4 border-b border-border last:border-b-0">
+                <div class="w-6 h-6 rounded-full bg-state-success/15 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-state-success"></i>
+                </div>
+                <span class="flex-1 text-sm text-foreground line-through decoration-muted-foreground/40">去了隐山咖啡</span>
+                <span class="text-xs text-state-success">已完成</span>
+            </div>
+            <!-- Completed Item 2 -->
+            <div class="flex items-center gap-3 p-4 border-b border-border last:border-b-0">
+                <div class="w-6 h-6 rounded-full bg-state-success/15 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-state-success"></i>
+                </div>
+                <span class="flex-1 text-sm text-foreground line-through decoration-muted-foreground/40">植物园散步</span>
+                <span class="text-xs text-state-success">已完成</span>
+            </div>
+            <!-- Completed Item 3 -->
+            <div class="flex items-center gap-3 p-4 border-b border-border last:border-b-0">
+                <div class="w-6 h-6 rounded-full bg-state-success/15 flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="check" class="w-3.5 h-3.5 text-state-success"></i>
+                </div>
+                <span class="flex-1 text-sm text-foreground line-through decoration-muted-foreground/40">看了《死亡诗社》</span>
+                <span class="text-xs text-state-success">已完成</span>
+            </div>
+            <!-- Uncompleted Item -->
+            <div class="flex items-center gap-3 p-4">
+                <div class="w-6 h-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <div class="w-2 h-2 rounded-full bg-muted-foreground/40"></div>
+                </div>
+                <div class="flex-1">
+                    <span class="text-sm text-muted-foreground">阅读30分钟</span>
+                    <p class="text-xs text-muted-foreground mt-0.5" style="color:var(--solo-neutral-400);">没关系，明天继续</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mood Selection -->
+        <div class="space-y-3">
+            <p class="text-sm font-semibold text-foreground px-1">此刻的心情是？</p>
+            <div class="flex justify-between gap-2">
+                <button class="mood-btn flex-1 bg-card border border-border rounded-xl py-3 flex flex-col items-center gap-1 active:bg-muted/50">
+                    <span class="text-2xl">🙂</span>
+                    <span class="text-xs text-muted-foreground">很棒</span>
+                </button>
+                <button class="mood-btn flex-1 bg-card border border-border rounded-xl py-3 flex flex-col items-center gap-1 active:bg-muted/50">
+                    <span class="text-2xl">😊</span>
+                    <span class="text-xs text-muted-foreground">不错</span>
+                </button>
+                <button class="mood-btn flex-1 bg-card border border-border rounded-xl py-3 flex flex-col items-center gap-1 active:bg-muted/50">
+                    <span class="text-2xl">😐</span>
+                    <span class="text-xs text-muted-foreground">一般</span>
+                </button>
+                <button class="mood-btn flex-1 bg-card border border-border rounded-xl py-3 flex flex-col items-center gap-1 active:bg-muted/50">
+                    <span class="text-2xl">😔</span>
+                    <span class="text-xs text-muted-foreground">有点累</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- AI Message Card -->
+        <div class="rounded-2xl p-5 relative overflow-hidden" style="background:linear-gradient(135deg,#FFF7ED 0%,#FFEDD5 50%,#FED7AA 100%);border:1px solid var(--solo-primary-100);">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:rgba(249,115,22,0.15);">
+                    <i data-lucide="sparkles" class="w-4 h-4" style="color:var(--solo-primary-600);"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm leading-relaxed" style="color:var(--solo-primary-900);">今天也辛苦了。去了新的咖啡店，走了很多路。不管完成多少，你今天都好好生活了。早点休息，明天又是新的一天。</p>
+                    <p class="text-lg mt-2">💛</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Full-Width Primary Button -->
+        <div class="pt-2">
+            <button data-dom-id="btn-goodnight" class="w-full h-12 rounded-xl bg-primary text-primary-foreground text-base font-semibold active:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-lg" style="box-shadow:0 4px 14px rgba(249,115,22,0.3);">
+                <i data-lucide="moon" class="w-4 h-4"></i>
+                晚安，明天见
+            </button>
+        </div>
+
+    </main>
+    <script>
+        document.querySelectorAll('.mood-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(function(b) {
+                    b.classList.remove('selected');
+                    b.style.borderColor = '';
+                    b.style.backgroundColor = '';
+                });
+                this.classList.add('selected');
+                this.style.borderColor = 'var(--solo-primary-400)';
+                this.style.backgroundColor = 'var(--solo-primary-50)';
+            });
+        });
+        lucide.createIcons();
+    </script>
+</body>
+</html>

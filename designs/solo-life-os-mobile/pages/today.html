@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今天</title>
+    <style id="theme-vars">
+:root {
+  --solo-primary-50: #FFF7ED; --solo-primary-100: #FFEDD5; --solo-primary-200: #FED7AA; --solo-primary-300: #FDBA74;
+  --solo-primary-400: #FB923C; --solo-primary-500: #F97316; --solo-primary-600: #EA580C; --solo-primary-700: #C2410C;
+  --solo-primary-800: #9A3412; --solo-primary-900: #7C2D12;
+  --solo-neutral-50: #FAFAF9; --solo-neutral-100: #F5F5F4; --solo-neutral-200: #E7E5E4; --solo-neutral-300: #D6D3D1;
+  --solo-neutral-400: #A8A29E; --solo-neutral-500: #78716C; --solo-neutral-600: #57534E; --solo-neutral-700: #44403C;
+  --solo-neutral-800: #292524; --solo-neutral-900: #1C1917;
+  --state-success: #22C55E; --state-warning: #F59E0B; --state-error: #EF4444; --state-info: #3B82F6;
+  --solo-background: var(--solo-neutral-50); --solo-foreground: var(--solo-neutral-900); --solo-card: #FFFFFF;
+  --solo-card-foreground: var(--solo-neutral-800); --solo-popover: #FFFFFF; --solo-popover-foreground: var(--solo-neutral-800);
+  --solo-primary: var(--solo-primary-500); --solo-primary-foreground: #FFFFFF;
+  --solo-muted: var(--solo-neutral-100); --solo-muted-foreground: var(--solo-neutral-500);
+  --solo-border: var(--solo-neutral-200); --solo-input: var(--solo-neutral-200); --solo-ring: var(--solo-primary-400);
+  --solo-radius-sm: 8px; --solo-radius-md: 12px; --solo-radius-lg: 16px; --solo-radius-full: 9999px;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-full: 9999px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+@theme inline {
+  --color-primary-50: var(--solo-primary-50); --color-primary-100: var(--solo-primary-100); --color-primary-200: var(--solo-primary-200);
+  --color-primary-300: var(--solo-primary-300); --color-primary-400: var(--solo-primary-400); --color-primary-500: var(--solo-primary-500);
+  --color-primary-600: var(--solo-primary-600); --color-primary-700: var(--solo-primary-700); --color-primary-800: var(--solo-primary-800);
+  --color-primary-900: var(--solo-primary-900);
+  --color-neutral-50: var(--solo-neutral-50); --color-neutral-100: var(--solo-neutral-100); --color-neutral-200: var(--solo-neutral-200);
+  --color-neutral-300: var(--solo-neutral-300); --color-neutral-400: var(--solo-neutral-400); --color-neutral-500: var(--solo-neutral-500);
+  --color-neutral-600: var(--solo-neutral-600); --color-neutral-700: var(--solo-neutral-700); --color-neutral-800: var(--solo-neutral-800);
+  --color-neutral-900: var(--solo-neutral-900);
+  --color-background: var(--solo-background); --color-foreground: var(--solo-foreground); --color-card: var(--solo-card);
+  --color-card-foreground: var(--solo-card-foreground); --color-muted: var(--solo-muted); --color-muted-foreground: var(--solo-muted-foreground);
+  --color-border: var(--solo-border); --color-primary: var(--solo-primary); --color-primary-foreground: var(--solo-primary-foreground);
+  --radius-sm: var(--solo-radius-sm); --radius-md: var(--solo-radius-md); --radius-lg: var(--solo-radius-lg); --radius-full: var(--solo-radius-full);
+  --font-sans: var(--font-sans);
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--solo-background); --color-foreground: var(--solo-foreground); --color-card: var(--solo-card);
+    --color-card-foreground: var(--solo-card-foreground); --color-popover: var(--solo-popover); --color-popover-foreground: var(--solo-popover-foreground);
+    --color-primary: var(--solo-primary); --color-primary-foreground: var(--solo-primary-foreground); --color-muted: var(--solo-muted);
+    --color-muted-foreground: var(--solo-muted-foreground); --color-border: var(--solo-border); --color-input: var(--solo-input); --color-ring: var(--solo-ring);
+    --radius-sm: var(--solo-radius-sm); --radius-md: var(--solo-radius-md); --radius-lg: var(--solo-radius-lg);
+  }
+  @layer base {
+    body { background: var(--solo-background); color: var(--solo-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background{background-color:var(--solo-background)}.text-background{color:var(--solo-background)}.border-background{border-color:var(--solo-background)}.ring-background{--tw-ring-color:var(--solo-background)}
+      .bg-foreground{background-color:var(--solo-foreground)}.text-foreground{color:var(--solo-foreground)}.border-foreground{border-color:var(--solo-foreground)}.ring-foreground{--tw-ring-color:var(--solo-foreground)}
+      .bg-card{background-color:var(--solo-card)}.text-card{color:var(--solo-card)}.border-card{border-color:var(--solo-card)}.ring-card{--tw-ring-color:var(--solo-card)}
+      .bg-card-foreground{background-color:var(--solo-card-foreground)}.text-card-foreground{color:var(--solo-card-foreground)}.border-card-foreground{border-color:var(--solo-card-foreground)}.ring-card-foreground{--tw-ring-color:var(--solo-card-foreground)}
+      .bg-primary{background-color:var(--solo-primary)}.text-primary{color:var(--solo-primary)}.border-primary{border-color:var(--solo-primary)}.ring-primary{--tw-ring-color:var(--solo-primary)}
+      .bg-primary-foreground{background-color:var(--solo-primary-foreground)}.text-primary-foreground{color:var(--solo-primary-foreground)}.border-primary-foreground{border-color:var(--solo-primary-foreground)}.ring-primary-foreground{--tw-ring-color:var(--solo-primary-foreground)}
+      .bg-muted{background-color:var(--solo-muted)}.text-muted{color:var(--solo-muted)}.border-muted{border-color:var(--solo-muted)}.ring-muted{--tw-ring-color:var(--solo-muted)}
+      .bg-muted-foreground{background-color:var(--solo-muted-foreground)}.text-muted-foreground{color:var(--solo-muted-foreground)}.border-muted-foreground{border-color:var(--solo-muted-foreground)}.ring-muted-foreground{--tw-ring-color:var(--solo-muted-foreground)}
+      .bg-border{background-color:var(--solo-border)}.text-border{color:var(--solo-border)}.border-border{border-color:var(--solo-border)}.ring-border{--tw-ring-color:var(--solo-border)}
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+      [data-icon]{display:inline-flex;align-items:center;justify-content:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;background-color:currentColor}
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen" style="font-family: var(--font-sans);">
+  <div class="max-w-md mx-auto px-4 pb-20">
+
+    <!-- 顶部状态栏占位 & 问候区 -->
+    <div class="pt-12 pb-5">
+      <p class="text-[26px] font-bold leading-tight text-foreground">下午好 ☀️</p>
+      <p class="text-sm mt-1" style="color: var(--solo-neutral-500);">今天，过得值得一点</p>
+    </div>
+
+    <!-- AI 今日规划 Hero 卡片 -->
+    <div class="rounded-[20px] p-5 mb-6 relative overflow-hidden" style="background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 40%, #FED7AA 100%); border: 1px solid var(--solo-primary-200);">
+      <!-- 装饰圆形 -->
+      <div class="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-40" style="background: var(--solo-primary-200);"></div>
+      <div class="absolute top-8 right-12 w-16 h-16 rounded-full opacity-30" style="background: var(--solo-primary-300);"></div>
+
+      <div class="relative z-10">
+        <!-- 卡片头部：标签 + 天气 -->
+        <div class="flex items-center justify-between mb-3">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium" style="background: rgba(249,115,22,0.12); color: var(--solo-primary-700);">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>AI 今日规划</span>
+          </div>
+          <div class="inline-flex items-center gap-1 text-xs" style="color: var(--solo-neutral-600);">
+            <i data-lucide="sun" class="w-4 h-4" style="color: var(--state-warning);"></i>
+            <span>26°C · 晴</span>
+          </div>
+        </div>
+
+        <!-- 主标题 -->
+        <h2 class="text-lg font-semibold mb-1" style="color: var(--solo-neutral-900);">为你准备的今天</h2>
+        <p class="text-xs mb-4 leading-relaxed" style="color: var(--solo-neutral-600);">根据你的心情和节奏，推荐了 4 件小而美好的事</p>
+
+        <!-- 活动预览 pills -->
+        <div class="flex flex-wrap gap-2 mb-5">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white/70" style="color: var(--solo-neutral-700); border: 1px solid rgba(249,115,22,0.15);">
+            <i data-lucide="coffee" class="w-3.5 h-3.5" style="color: var(--solo-primary-500);"></i>
+            <span>晨间咖啡</span>
+          </div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white/70" style="color: var(--solo-neutral-700); border: 1px solid rgba(249,115,22,0.15);">
+            <i data-lucide="book-open" class="w-3.5 h-3.5" style="color: var(--solo-primary-500);"></i>
+            <span>书店阅读</span>
+          </div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white/70" style="color: var(--solo-neutral-700); border: 1px solid rgba(249,115,22,0.15);">
+            <i data-lucide="tree-pine" class="w-3.5 h-3.5" style="color: var(--state-success);"></i>
+            <span>公园散步</span>
+          </div>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-white/70" style="color: var(--solo-neutral-700); border: 1px solid rgba(249,115,22,0.15);">
+            <i data-lucide="film" class="w-3.5 h-3.5" style="color: var(--state-info);"></i>
+            <span>晚间电影</span>
+          </div>
+        </div>
+
+        <!-- 查看完整规划按钮 -->
+        <button data-dom-id="btn-view-plan" class="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full text-sm font-semibold text-white shadow-sm transition active:scale-[0.98]" style="background: var(--solo-primary-500); box-shadow: 0 4px 14px rgba(249,115,22,0.35);">
+          <span>查看完整规划</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- AI 为你推荐 -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-foreground flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4" style="color: var(--solo-primary-500);"></i>
+          AI 为你推荐
+        </h3>
+        <a href="explore.html" class="text-xs inline-flex items-center gap-0.5" style="color: var(--solo-neutral-500);">
+          <span>更多</span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <div class="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4 pb-1">
+        <!-- 咖啡馆 -->
+        <div data-dom-id="rec-cafe" class="shrink-0 w-[150px] rounded-xl overflow-hidden bg-card border border-border cursor-pointer active:scale-[0.98] transition">
+          <div class="h-[90px] flex items-center justify-center" style="background: linear-gradient(135deg, #FFF7ED, #FED7AA);">
+            <i data-lucide="coffee" class="w-9 h-9" style="color: var(--solo-primary-600);"></i>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-medium text-foreground truncate">安静咖啡馆</p>
+            <div class="flex items-center gap-1 mt-1 text-[11px]" style="color: var(--solo-neutral-500);">
+              <i data-lucide="map-pin" class="w-3 h-3"></i>
+              <span>0.8km</span>
+            </div>
+            <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px]" style="background: var(--solo-primary-50); color: var(--solo-primary-700);">
+              <i data-lucide="brain" class="w-3 h-3"></i>
+              <span>适合独处</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 公园 -->
+        <div data-dom-id="rec-park" class="shrink-0 w-[150px] rounded-xl overflow-hidden bg-card border border-border cursor-pointer active:scale-[0.98] transition">
+          <div class="h-[90px] flex items-center justify-center" style="background: linear-gradient(135deg, #F0FDF4, #BBF7D0);">
+            <i data-lucide="tree-pine" class="w-9 h-9" style="color: var(--state-success);"></i>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-medium text-foreground truncate">城市公园</p>
+            <div class="flex items-center gap-1 mt-1 text-[11px]" style="color: var(--solo-neutral-500);">
+              <i data-lucide="map-pin" class="w-3 h-3"></i>
+              <span>1.2km</span>
+            </div>
+            <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px]" style="background: #F0FDF4; color: #15803D;">
+              <i data-lucide="sun" class="w-3 h-3"></i>
+              <span>天气正好</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 电影 -->
+        <div data-dom-id="rec-movie" class="shrink-0 w-[150px] rounded-xl overflow-hidden bg-card border border-border cursor-pointer active:scale-[0.98] transition">
+          <div class="h-[90px] flex items-center justify-center" style="background: linear-gradient(135deg, #EFF6FF, #BFDBFE);">
+            <i data-lucide="film" class="w-9 h-9" style="color: var(--state-info);"></i>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-medium text-foreground truncate">一个人看电影</p>
+            <div class="flex items-center gap-1 mt-1 text-[11px]" style="color: var(--solo-neutral-500);">
+              <i data-lucide="map-pin" class="w-3 h-3"></i>
+              <span>2.1km</span>
+            </div>
+            <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px]" style="background: #EFF6FF; color: #1D4ED8;">
+              <i data-lucide="star" class="w-3 h-3"></i>
+              <span>高分治愈</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 阅读 -->
+        <div data-dom-id="rec-book" class="shrink-0 w-[150px] rounded-xl overflow-hidden bg-card border border-border cursor-pointer active:scale-[0.98] transition">
+          <div class="h-[90px] flex items-center justify-center" style="background: linear-gradient(135deg, #FEF3C7, #FDE68A);">
+            <i data-lucide="book-open" class="w-9 h-9" style="color: #B45309;"></i>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-medium text-foreground truncate">书店阅读</p>
+            <div class="flex items-center gap-1 mt-1 text-[11px]" style="color: var(--solo-neutral-500);">
+              <i data-lucide="map-pin" class="w-3 h-3"></i>
+              <span>0.5km</span>
+            </div>
+            <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px]" style="background: #FEF3C7; color: #92400E;">
+              <i data-lucide="heart" class="w-3 h-3"></i>
+              <span>你常去</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 附近正在发生 -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-semibold text-foreground flex items-center gap-1.5">
+          <i data-lucide="map-pin" class="w-4 h-4" style="color: var(--solo-primary-500);"></i>
+          附近正在发生
+        </h3>
+      </div>
+
+      <div class="space-y-3">
+        <!-- 卡片 1: 一个人看展 -->
+        <div data-dom-id="card-nearby-1" class="bg-card border border-border rounded-xl p-4 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style="background: var(--solo-primary-50);">
+            <i data-lucide="palette" class="w-6 h-6" style="color: var(--solo-primary-500);"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-foreground truncate">一个人看展 · 城市光影摄影展</p>
+            <p class="text-xs mt-1 flex items-center gap-2" style="color: var(--solo-neutral-500);">
+              <span class="inline-flex items-center gap-0.5"><i data-lucide="map-pin" class="w-3 h-3"></i> 1.5km</span>
+              <span class="inline-flex items-center gap-0.5"><i data-lucide="users" class="w-3 h-3"></i> 8人正在看</span>
+            </p>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 shrink-0" style="color: var(--solo-neutral-400);"></i>
+        </div>
+
+        <!-- 卡片 2: City Walk -->
+        <div data-dom-id="card-nearby-2" class="bg-card border border-border rounded-xl p-4 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition relative overflow-hidden">
+          <div class="absolute top-0 right-0 px-2 py-0.5 rounded-bl-lg text-[10px] font-medium text-white" style="background: var(--state-error);">3缺2</div>
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center shrink-0" style="background: #EFF6FF;">
+            <i data-lucide="footprints" class="w-6 h-6" style="color: var(--state-info);"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-foreground truncate">今晚 City Walk · 西湖夜游</p>
+            <p class="text-xs mt-1 flex items-center gap-2" style="color: var(--solo-neutral-500);">
+              <span class="inline-flex items-center gap-0.5"><i data-lucide="clock" class="w-3 h-3"></i> 19:30 出发</span>
+              <span class="inline-flex items-center gap-0.5"><i data-lucide="users" class="w-3 h-3"></i> 3/5人</span>
+            </p>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 shrink-0" style="color: var(--solo-neutral-400);"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部操作区 -->
+    <div class="pt-4 pb-2">
+      <button data-dom-id="btn-summary" class="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-full text-sm font-semibold text-white shadow-sm transition active:scale-[0.98]" style="background: var(--solo-primary-500); box-shadow: 0 4px 14px rgba(249,115,22,0.35);">
+        <i data-lucide="moon-star" class="w-4 h-4"></i>
+        <span>今晚记录一下</span>
+      </button>
+      <div class="flex justify-center mt-3">
+        <button data-dom-id="btn-replan" class="inline-flex items-center gap-1 text-xs py-1 px-2" style="color: var(--solo-neutral-500);">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>重新规划</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 底部导航 -->
+  <nav data-mobile-nav="global" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50">
+    <div class="w-full max-w-md mx-auto grid grid-cols-6 h-full">
+      <a href="today.html" data-nav-key="today" data-dom-id="nav-today" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-primary" data-active="true">
+        <i data-lucide="home" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate font-medium">今日</span>
+      </a>
+      <a href="explore.html" data-nav-key="explore" data-dom-id="nav-explore" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+        <i data-lucide="compass" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">探索</span>
+      </a>
+      <a href="mood.html" data-nav-key="mood" data-dom-id="nav-mood" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+        <i data-lucide="smile" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">情绪</span>
+      </a>
+      <a href="growth.html" data-nav-key="growth" data-dom-id="nav-growth" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+        <i data-lucide="trending-up" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">成长</span>
+      </a>
+      <a href="community.html" data-nav-key="community" data-dom-id="nav-community" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+        <i data-lucide="users" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">同行</span>
+      </a>
+      <a href="me.html" data-nav-key="me" data-dom-id="nav-me" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+        <i data-lucide="user" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">我的</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI重新规划</title>
+    <style id="theme-vars">
+:root{--solo-primary-50:#FFF7ED;--solo-primary-100:#FFEDD5;--solo-primary-200:#FED7AA;--solo-primary-300:#FDBA74;--solo-primary-400:#FB923C;--solo-primary-500:#F97316;--solo-primary-600:#EA580C;--solo-primary-700:#C2410C;--solo-primary-800:#9A3412;--solo-primary-900:#7C2D12;--solo-neutral-50:#FAFAF9;--solo-neutral-100:#F5F5F4;--solo-neutral-200:#E7E5E4;--solo-neutral-300:#D6D3D1;--solo-neutral-400:#A8A29E;--solo-neutral-500:#78716C;--solo-neutral-600:#57534E;--solo-neutral-700:#44403C;--solo-neutral-800:#292524;--solo-neutral-900:#1C1917;--state-success:#22C55E;--state-warning:#F59E0B;--state-error:#EF4444;--state-info:#3B82F6;--solo-background:var(--solo-neutral-50);--solo-foreground:var(--solo-neutral-900);--solo-card:#FFFFFF;--solo-card-foreground:var(--solo-neutral-800);--solo-popover:#FFFFFF;--solo-popover-foreground:var(--solo-neutral-800);--solo-primary:var(--solo-primary-500);--solo-primary-foreground:#FFFFFF;--solo-muted:var(--solo-neutral-100);--solo-muted-foreground:var(--solo-neutral-500);--solo-border:var(--solo-neutral-200);--solo-input:var(--solo-neutral-200);--solo-ring:var(--solo-primary-400);--solo-radius-sm:8px;--solo-radius-md:12px;--solo-radius-lg:16px;--solo-radius-full:9999px;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px;--font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+@theme inline{--color-primary-50:var(--solo-primary-50);--color-primary-100:var(--solo-primary-100);--color-primary-200:var(--solo-primary-200);--color-primary-300:var(--solo-primary-300);--color-primary-400:var(--solo-primary-400);--color-primary-500:var(--solo-primary-500);--color-primary-600:var(--solo-primary-600);--color-primary-700:var(--solo-primary-700);--color-primary-800:var(--solo-primary-800);--color-primary-90:var(--solo-primary-900);--color-neutral-50:var(--solo-neutral-50);--color-neutral-100:var(--solo-neutral-100);--color-neutral-200:var(--solo-neutral-200);--color-neutral-300:var(--solo-neutral-300);--color-neutral-400:var(--solo-neutral-400);--color-neutral-500:var(--solo-neutral-500);--color-neutral-600:var(--solo-neutral-600);--color-neutral-700:var(--solo-neutral-700);--color-neutral-800:var(--solo-neutral-800);--color-neutral-900:var(--solo-neutral-900);--color-background:var(--solo-background);--color-foreground:var(--solo-foreground);--color-card:var(--solo-card);--color-card-foreground:var(--solo-card-foreground);--color-muted:var(--solo-muted);--color-muted-foreground:var(--solo-muted-foreground);--color-border:var(--solo-border);--color-primary:var(--solo-primary);--color-primary-foreground:var(--solo-primary-foreground);--radius-sm:var(--solo-radius-sm);--radius-md:var(--solo-radius-md);--radius-lg:var(--solo-radius-lg);--radius-full:var(--solo-radius-full);--font-sans:var(--font-sans)}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">@theme inline{--color-background:var(--solo-background);--color-foreground:var(--solo-foreground);--color-card:var(--solo-card);--color-card-foreground:var(--solo-card-foreground);--color-popover:var(--solo-popover);--color-popover-foreground:var(--solo-popover-foreground);--color-primary:var(--solo-primary);--color-primary-foreground:var(--solo-primary-foreground);--color-muted:var(--solo-muted);--color-muted-foreground:var(--solo-muted-foreground);--color-border:var(--solo-border);--color-input:var(--solo-input);--color-ring:var(--solo-ring);--radius-sm:var(--solo-radius-sm);--radius-md:var(--solo-radius-md);--radius-lg:var(--solo-radius-lg)}@layer base{body{background:var(--solo-background);color:var(--solo-foreground)}td,th{@apply break-words;word-break:break-all;word-break:auto-phrase}th{@apply whitespace-nowrap}}</style>
+    <style id="semantic-token-fallback">.bg-background{background-color:var(--solo-background)}.text-background{color:var(--solo-background)}.border-background{border-color:var(--solo-background)}.bg-foreground{background-color:var(--solo-foreground)}.text-foreground{color:var(--solo-foreground)}.border-foreground{border-color:var(--solo-foreground)}.bg-card{background-color:var(--solo-card)}.text-card{color:var(--solo-card)}.border-card{border-color:var(--solo-card)}.bg-primary{background-color:var(--solo-primary)}.text-primary{color:var(--solo-primary)}.border-primary{border-color:var(--solo-primary)}.bg-primary-foreground{background-color:var(--solo-primary-foreground)}.text-primary-foreground{color:var(--solo-primary-foreground)}.bg-muted{background-color:var(--solo-muted)}.text-muted{color:var(--solo-muted)}.bg-muted-foreground{background-color:var(--solo-muted-foreground)}.text-muted-foreground{color:var(--solo-muted-foreground)}.bg-border{background-color:var(--solo-border)}.text-border{color:var(--solo-border)}.border-border{border-color:var(--solo-border)}</style>
+    <style>.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}[data-icon]{display:inline-flex;align-items:center;justify-content:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;background-color:currentColor}.reason-card{transition:all 0.2s ease}.reason-card.selected{border-color:var(--solo-primary-500);background-color:var(--solo-primary-50);}.toggle-switch{width:44px;height:24px;border-radius:9999px;background-color:var(--solo-neutral-300);position:relative;transition:background-color 0.2s;flex-shrink:0;}.toggle-switch.on{background-color:var(--solo-primary-500);}.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:9999px;background-color:#FFFFFF;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}.toggle-switch.on::after{transform:translateX(20px);}</style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main class="w-full max-w-md mx-auto px-4 pb-20 min-h-screen space-y-4">
+
+        <!-- Back Nav -->
+        <nav class="sticky top-0 z-50 -mx-4 px-4 bg-white/95 backdrop-blur-md border-b border-border h-12 flex items-center">
+            <a href="today-plan-detail.html" data-dom-id="btn-back" class="inline-flex items-center justify-center w-9 h-9 -ml-2 rounded-full active:bg-muted transition-colors">
+                <i data-lucide="chevron-left" class="w-5 h-5 text-foreground"></i>
+            </a>
+            <h1 class="flex-1 text-center text-base font-semibold text-foreground -ml-9">重新规划</h1>
+        </nav>
+
+        <!-- Header -->
+        <div class="pt-2 pb-1">
+            <h2 class="text-xl font-bold text-foreground">计划变了？</h2>
+            <p class="text-sm text-muted-foreground mt-1">告诉AI怎么了，它帮你调整</p>
+        </div>
+
+        <!-- Reason Selection Cards -->
+        <div class="space-y-2.5">
+            <p class="text-xs font-medium text-muted-foreground px-1 uppercase tracking-wider">为什么要调整</p>
+
+            <!-- Reason 1 -->
+            <button class="reason-card w-full bg-card border border-border rounded-xl p-4 flex items-center gap-3 text-left active:bg-muted/50">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:var(--solo-primary-50);">
+                    <i data-lucide="cloud-rain" class="w-5 h-5" style="color:var(--solo-primary-600);"></i>
+                </div>
+                <span class="flex-1 text-sm font-medium text-foreground">下雨了不想出门</span>
+                <div class="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0 radio-circle">
+                </div>
+            </button>
+
+            <!-- Reason 2 -->
+            <button class="reason-card w-full bg-card border border-border rounded-xl p-4 flex items-center gap-3 text-left active:bg-muted/50">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:var(--solo-primary-50);">
+                    <i data-lucide="moon" class="w-5 h-5" style="color:var(--solo-primary-600);"></i>
+                </div>
+                <span class="flex-1 text-sm font-medium text-foreground">今天有点累想休息</span>
+                <div class="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0 radio-circle">
+                </div>
+            </button>
+
+            <!-- Reason 3 -->
+            <button class="reason-card w-full bg-card border border-border rounded-xl p-4 flex items-center gap-3 text-left active:bg-muted/50">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:var(--solo-primary-50);">
+                    <i data-lucide="wallet" class="w-5 h-5" style="color:var(--solo-primary-600);"></i>
+                </div>
+                <span class="flex-1 text-sm font-medium text-foreground">预算有限想省钱</span>
+                <div class="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0 radio-circle">
+                </div>
+            </button>
+
+            <!-- Reason 4 -->
+            <button class="reason-card w-full bg-card border border-border rounded-xl p-4 flex items-center gap-3 text-left active:bg-muted/50">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:var(--solo-primary-50);">
+                    <i data-lucide="clock" class="w-5 h-5" style="color:var(--solo-primary-600);"></i>
+                </div>
+                <span class="flex-1 text-sm font-medium text-foreground">临时有事时间变少</span>
+                <div class="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0 radio-circle">
+                </div>
+            </button>
+
+            <!-- Reason 5 -->
+            <button class="reason-card w-full bg-card border border-border rounded-xl p-4 flex items-center gap-3 text-left active:bg-muted/50">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:var(--solo-primary-50);">
+                    <i data-lucide="shuffle" class="w-5 h-5" style="color:var(--solo-primary-600);"></i>
+                </div>
+                <span class="flex-1 text-sm font-medium text-foreground">就是想换个心情</span>
+                <div class="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0 radio-circle">
+                </div>
+            </button>
+        </div>
+
+        <!-- Additional Options Toggle Section -->
+        <div class="bg-card border border-border rounded-xl overflow-hidden">
+            <div class="p-4 flex items-center gap-3" onclick="this.nextElementSibling.classList.toggle('hidden');this.querySelector('.chevron').classList.toggle('rotate-180');">
+                <i data-lucide="sliders-horizontal" class="w-4 h-4 text-muted-foreground"></i>
+                <span class="flex-1 text-sm font-medium text-foreground">调整偏好</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-muted-foreground chevron transition-transform duration-200"></i>
+            </div>
+            <div class="border-t border-border hidden">
+                <!-- Toggle 1 -->
+                <div class="p-4 flex items-center justify-between border-b border-border last:border-b-0">
+                    <div>
+                        <p class="text-sm text-foreground">不想走路（想就近）</p>
+                        <p class="text-xs text-muted-foreground mt-0.5">推荐1公里范围内的活动</p>
+                    </div>
+                    <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <!-- Toggle 2 -->
+                <div class="p-4 flex items-center justify-between border-b border-border last:border-b-0">
+                    <div>
+                        <p class="text-sm text-foreground">想独处</p>
+                        <p class="text-xs text-muted-foreground mt-0.5">避开社交和人群活动</p>
+                    </div>
+                    <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <!-- Toggle 3 -->
+                <div class="p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-foreground">室内优先</p>
+                        <p class="text-xs text-muted-foreground mt-0.5">适合天气不好的时候</p>
+                    </div>
+                    <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Placeholder Card -->
+        <div class="bg-card border border-dashed border-border rounded-xl p-6 flex flex-col items-center text-center">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center mb-2" style="background-color:var(--solo-primary-50);">
+                <i data-lucide="sparkles" class="w-5 h-5" style="color:var(--solo-primary-500);"></i>
+            </div>
+            <p class="text-sm text-muted-foreground">AI 会根据你的选择重新安排今天</p>
+        </div>
+
+        <!-- Bottom Fixed Primary Button -->
+        <div class="fixed bottom-0 left-0 right-0 z-50 px-4 py-3 bg-white/95 backdrop-blur-md border-t border-border">
+            <div class="max-w-md mx-auto">
+                <button data-dom-id="btn-generate" class="w-full h-11 rounded-xl bg-primary text-primary-foreground text-sm font-semibold active:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    生成新计划
+                </button>
+            </div>
+        </div>
+
+    </main>
+    <script>
+        // Reason card selection logic
+        document.querySelectorAll('.reason-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.reason-card').forEach(function(c) {
+                    c.classList.remove('selected');
+                    var circle = c.querySelector('.radio-circle');
+                    circle.style.borderColor = '';
+                    circle.style.backgroundColor = '';
+                    circle.innerHTML = '';
+                });
+                this.classList.add('selected');
+                var circle = this.querySelector('.radio-circle');
+                circle.style.borderColor = 'var(--solo-primary-500)';
+                circle.style.backgroundColor = 'var(--solo-primary-500)';
+                circle.innerHTML = '<div style="width:8px;height:8px;border-radius:9999px;background:#FFFFFF;"></div>';
+            });
+        });
+        lucide.createIcons();
+    </script>
+</body>
+</html>

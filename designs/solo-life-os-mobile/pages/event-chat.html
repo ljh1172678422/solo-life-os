@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天室</title>
+    <style id="theme-vars">
+/* Solo - AI Life OS Brand CSS */
+/* Warm sunrise orange - representing sunlight, warmth, and new beginnings */
+
+:root {
+  /* Primary: Warm Sunrise Orange */
+  --solo-primary-50: #FFF7ED;
+  --solo-primary-100: #FFEDD5;
+  --solo-primary-200: #FED7AA;
+  --solo-primary-300: #FDBA74;
+  --solo-primary-400: #FB923C;
+  --solo-primary-500: #F97316;
+  --solo-primary-600: #EA580C;
+  --solo-primary-700: #C2410C;
+  --solo-primary-800: #9A3412;
+  --solo-primary-900: #7C2D12;
+
+  /* Neutral: Warm Stone */
+  --solo-neutral-50: #FAFAF9;
+  --solo-neutral-100: #F5F5F4;
+  --solo-neutral-200: #E7E5E4;
+  --solo-neutral-300: #D6D3D1;
+  --solo-neutral-400: #A8A29E;
+  --solo-neutral-500: #78716C;
+  --solo-neutral-600: #57534E;
+  --solo-neutral-700: #44403C;
+  --solo-neutral-800: #292524;
+  --solo-neutral-900: #1C1917;
+
+  /* Semantic Status Colors */
+  --state-success: #22C55E;
+  --state-warning: #F59E0B;
+  --state-error: #EF4444;
+  --state-info: #3B82F6;
+
+  /* Semantic Aliases */
+  --solo-background: var(--solo-neutral-50);
+  --solo-foreground: var(--solo-neutral-900);
+  --solo-card: #FFFFFF;
+  --solo-card-foreground: var(--solo-neutral-800);
+  --solo-popover: #FFFFFF;
+  --solo-popover-foreground: var(--solo-neutral-800);
+  --solo-primary: var(--solo-primary-500);
+  --solo-primary-foreground: #FFFFFF;
+  --solo-muted: var(--solo-neutral-100);
+  --solo-muted-foreground: var(--solo-neutral-500);
+  --solo-border: var(--solo-neutral-200);
+  --solo-input: var(--solo-neutral-200);
+  --solo-ring: var(--solo-primary-400);
+
+  /* Radius */
+  --solo-radius-sm: 8px;
+  --solo-radius-md: 12px;
+  --solo-radius-lg: 16px;
+  --solo-radius-full: 9999px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+@theme inline {
+  --color-primary-50: var(--solo-primary-50);
+  --color-primary-100: var(--solo-primary-100);
+  --color-primary-200: var(--solo-primary-200);
+  --color-primary-300: var(--solo-primary-300);
+  --color-primary-400: var(--solo-primary-400);
+  --color-primary-500: var(--solo-primary-500);
+  --color-primary-600: var(--solo-primary-600);
+  --color-primary-700: var(--solo-primary-700);
+  --color-primary-800: var(--solo-primary-800);
+  --color-primary-900: var(--solo-primary-900);
+  --color-neutral-50: var(--solo-neutral-50);
+  --color-neutral-100: var(--solo-neutral-100);
+  --color-neutral-200: var(--solo-neutral-200);
+  --color-neutral-300: var(--solo-neutral-300);
+  --color-neutral-400: var(--solo-neutral-400);
+  --color-neutral-500: var(--solo-neutral-500);
+  --color-neutral-600: var(--solo-neutral-600);
+  --color-neutral-700: var(--solo-neutral-700);
+  --color-neutral-800: var(--solo-neutral-800);
+  --color-neutral-900: var(--solo-neutral-900);
+  --color-background: var(--solo-background);
+  --color-foreground: var(--solo-foreground);
+  --color-card: var(--solo-card);
+  --color-card-foreground: var(--solo-card-foreground);
+  --color-muted: var(--solo-muted);
+  --color-muted-foreground: var(--solo-muted-foreground);
+  --color-border: var(--solo-border);
+  --color-primary: var(--solo-primary);
+  --color-primary-foreground: var(--solo-primary-foreground);
+  --radius-sm: var(--solo-radius-sm);
+  --radius-md: var(--solo-radius-md);
+  --radius-lg: var(--solo-radius-lg);
+  --radius-full: var(--solo-radius-full);
+  --font-sans: var(--font-sans);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-primary-50: var(--solo-primary-50);
+    --color-primary-100: var(--solo-primary-100);
+    --color-primary-200: var(--solo-primary-200);
+    --color-primary-300: var(--solo-primary-300);
+    --color-primary-400: var(--solo-primary-400);
+    --color-primary-500: var(--solo-primary-500);
+    --color-primary-600: var(--solo-primary-600);
+    --color-primary-700: var(--solo-primary-700);
+    --color-primary-800: var(--solo-primary-800);
+    --color-primary-900: var(--solo-primary-900);
+    --color-neutral-50: var(--solo-neutral-50);
+    --color-neutral-100: var(--solo-neutral-100);
+    --color-neutral-200: var(--solo-neutral-200);
+    --color-neutral-300: var(--solo-neutral-300);
+    --color-neutral-400: var(--solo-neutral-400);
+    --color-neutral-500: var(--solo-neutral-500);
+    --color-neutral-600: var(--solo-neutral-600);
+    --color-neutral-700: var(--solo-neutral-700);
+    --color-neutral-800: var(--solo-neutral-800);
+    --color-neutral-900: var(--solo-neutral-900);
+    --color-background: var(--solo-background);
+    --color-foreground: var(--solo-foreground);
+    --color-card: var(--solo-card);
+    --color-card-foreground: var(--solo-card-foreground);
+    --color-muted: var(--solo-muted);
+    --color-muted-foreground: var(--solo-muted-foreground);
+    --color-border: var(--solo-border);
+    --color-primary: var(--solo-primary);
+    --color-primary-foreground: var(--solo-primary-foreground);
+    --color-popover: var(--solo-popover);
+    --color-popover-foreground: var(--solo-popover-foreground);
+    --color-input: var(--solo-input);
+    --color-ring: var(--solo-ring);
+    --radius-sm: var(--solo-radius-sm);
+    --radius-md: var(--solo-radius-md);
+    --radius-lg: var(--solo-radius-lg);
+    --radius-full: var(--solo-radius-full);
+  }
+  @layer base {
+    body { background: var(--solo-background); color: var(--solo-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-primary-50 { background-color: var(--solo-primary-50); }
+      .text-primary-50 { color: var(--solo-primary-50); }
+      .border-primary-50 { border-color: var(--solo-primary-50); }
+      .ring-primary-50 { --tw-ring-color: var(--solo-primary-50); }
+      .bg-primary-100 { background-color: var(--solo-primary-100); }
+      .text-primary-100 { color: var(--solo-primary-100); }
+      .border-primary-100 { border-color: var(--solo-primary-100); }
+      .ring-primary-100 { --tw-ring-color: var(--solo-primary-100); }
+      .bg-primary-200 { background-color: var(--solo-primary-200); }
+      .text-primary-200 { color: var(--solo-primary-200); }
+      .border-primary-200 { border-color: var(--solo-primary-200); }
+      .ring-primary-200 { --tw-ring-color: var(--solo-primary-200); }
+      .bg-primary-300 { background-color: var(--solo-primary-300); }
+      .text-primary-300 { color: var(--solo-primary-300); }
+      .border-primary-300 { border-color: var(--solo-primary-300); }
+      .ring-primary-300 { --tw-ring-color: var(--solo-primary-300); }
+      .bg-primary-400 { background-color: var(--solo-primary-400); }
+      .text-primary-400 { color: var(--solo-primary-400); }
+      .border-primary-400 { border-color: var(--solo-primary-400); }
+      .ring-primary-400 { --tw-ring-color: var(--solo-primary-400); }
+      .bg-primary-500 { background-color: var(--solo-primary-500); }
+      .text-primary-500 { color: var(--solo-primary-500); }
+      .border-primary-500 { border-color: var(--solo-primary-500); }
+      .ring-primary-500 { --tw-ring-color: var(--solo-primary-500); }
+      .bg-primary-600 { background-color: var(--solo-primary-600); }
+      .text-primary-600 { color: var(--solo-primary-600); }
+      .border-primary-600 { border-color: var(--solo-primary-600); }
+      .ring-primary-600 { --tw-ring-color: var(--solo-primary-600); }
+      .bg-primary-700 { background-color: var(--solo-primary-700); }
+      .text-primary-700 { color: var(--solo-primary-700); }
+      .border-primary-700 { border-color: var(--solo-primary-700); }
+      .ring-primary-700 { --tw-ring-color: var(--solo-primary-700); }
+      .bg-primary-800 { background-color: var(--solo-primary-800); }
+      .text-primary-800 { color: var(--solo-primary-800); }
+      .border-primary-800 { border-color: var(--solo-primary-800); }
+      .ring-primary-800 { --tw-ring-color: var(--solo-primary-800); }
+      .bg-primary-900 { background-color: var(--solo-primary-900); }
+      .text-primary-900 { color: var(--solo-primary-900); }
+      .border-primary-900 { border-color: var(--solo-primary-900); }
+      .ring-primary-900 { --tw-ring-color: var(--solo-primary-900); }
+      .bg-neutral-50 { background-color: var(--solo-neutral-50); }
+      .text-neutral-50 { color: var(--solo-neutral-50); }
+      .border-neutral-50 { border-color: var(--solo-neutral-50); }
+      .ring-neutral-50 { --tw-ring-color: var(--solo-neutral-50); }
+      .bg-neutral-100 { background-color: var(--solo-neutral-100); }
+      .text-neutral-100 { color: var(--solo-neutral-100); }
+      .border-neutral-100 { border-color: var(--solo-neutral-100); }
+      .ring-neutral-100 { --tw-ring-color: var(--solo-neutral-100); }
+      .bg-neutral-200 { background-color: var(--solo-neutral-200); }
+      .text-neutral-200 { color: var(--solo-neutral-200); }
+      .border-neutral-200 { border-color: var(--solo-neutral-200); }
+      .ring-neutral-200 { --tw-ring-color: var(--solo-neutral-200); }
+      .bg-neutral-300 { background-color: var(--solo-neutral-300); }
+      .text-neutral-300 { color: var(--solo-neutral-300); }
+      .border-neutral-300 { border-color: var(--solo-neutral-300); }
+      .ring-neutral-300 { --tw-ring-color: var(--solo-neutral-300); }
+      .bg-neutral-400 { background-color: var(--solo-neutral-400); }
+      .text-neutral-400 { color: var(--solo-neutral-400); }
+      .border-neutral-400 { border-color: var(--solo-neutral-400); }
+      .ring-neutral-400 { --tw-ring-color: var(--solo-neutral-400); }
+      .bg-neutral-500 { background-color: var(--solo-neutral-500); }
+      .text-neutral-500 { color: var(--solo-neutral-500); }
+      .border-neutral-500 { border-color: var(--solo-neutral-500); }
+      .ring-neutral-500 { --tw-ring-color: var(--solo-neutral-500); }
+      .bg-neutral-600 { background-color: var(--solo-neutral-600); }
+      .text-neutral-600 { color: var(--solo-neutral-600); }
+      .border-neutral-600 { border-color: var(--solo-neutral-600); }
+      .ring-neutral-600 { --tw-ring-color: var(--solo-neutral-600); }
+      .bg-neutral-700 { background-color: var(--solo-neutral-700); }
+      .text-neutral-700 { color: var(--solo-neutral-700); }
+      .border-neutral-700 { border-color: var(--solo-neutral-700); }
+      .ring-neutral-700 { --tw-ring-color: var(--solo-neutral-700); }
+      .bg-neutral-800 { background-color: var(--solo-neutral-800); }
+      .text-neutral-800 { color: var(--solo-neutral-800); }
+      .border-neutral-800 { border-color: var(--solo-neutral-800); }
+      .ring-neutral-800 { --tw-ring-color: var(--solo-neutral-800); }
+      .bg-neutral-900 { background-color: var(--solo-neutral-900); }
+      .text-neutral-900 { color: var(--solo-neutral-900); }
+      .border-neutral-900 { border-color: var(--solo-neutral-900); }
+      .ring-neutral-900 { --tw-ring-color: var(--solo-neutral-900); }
+      .bg-background { background-color: var(--solo-background); }
+      .text-background { color: var(--solo-background); }
+      .border-background { border-color: var(--solo-background); }
+      .ring-background { --tw-ring-color: var(--solo-background); }
+      .bg-foreground { background-color: var(--solo-foreground); }
+      .text-foreground { color: var(--solo-foreground); }
+      .border-foreground { border-color: var(--solo-foreground); }
+      .ring-foreground { --tw-ring-color: var(--solo-foreground); }
+      .bg-card { background-color: var(--solo-card); }
+      .text-card { color: var(--solo-card); }
+      .border-card { border-color: var(--solo-card); }
+      .ring-card { --tw-ring-color: var(--solo-card); }
+      .bg-card-foreground { background-color: var(--solo-card-foreground); }
+      .text-card-foreground { color: var(--solo-card-foreground); }
+      .border-card-foreground { border-color: var(--solo-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--solo-card-foreground); }
+      .bg-muted { background-color: var(--solo-muted); }
+      .text-muted { color: var(--solo-muted); }
+      .border-muted { border-color: var(--solo-muted); }
+      .ring-muted { --tw-ring-color: var(--solo-muted); }
+      .bg-muted-foreground { background-color: var(--solo-muted-foreground); }
+      .text-muted-foreground { color: var(--solo-muted-foreground); }
+      .border-muted-foreground { border-color: var(--solo-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--solo-muted-foreground); }
+      .bg-border { background-color: var(--solo-border); }
+      .text-border { color: var(--solo-border); }
+      .border-border { border-color: var(--solo-border); }
+      .ring-border { --tw-ring-color: var(--solo-border); }
+      .bg-primary { background-color: var(--solo-primary); }
+      .text-primary { color: var(--solo-primary); }
+      .border-primary { border-color: var(--solo-primary); }
+      .ring-primary { --tw-ring-color: var(--solo-primary); }
+      .bg-primary-foreground { background-color: var(--solo-primary-foreground); }
+      .text-primary-foreground { color: var(--solo-primary-foreground); }
+      .border-primary-foreground { border-color: var(--solo-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--solo-primary-foreground); }
+      .bg-popover { background-color: var(--solo-popover); }
+      .text-popover { color: var(--solo-popover); }
+      .border-popover { border-color: var(--solo-popover); }
+      .ring-popover { --tw-ring-color: var(--solo-popover); }
+      .bg-popover-foreground { background-color: var(--solo-popover-foreground); }
+      .text-popover-foreground { color: var(--solo-popover-foreground); }
+      .border-popover-foreground { border-color: var(--solo-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--solo-popover-foreground); }
+      .bg-input { background-color: var(--solo-input); }
+      .text-input { color: var(--solo-input); }
+      .border-input { border-color: var(--solo-input); }
+      .ring-input { --tw-ring-color: var(--solo-input); }
+      .bg-ring { background-color: var(--solo-ring); }
+      .text-ring { color: var(--solo-ring); }
+      .border-ring { border-color: var(--solo-ring); }
+      .ring-ring { --tw-ring-color: var(--solo-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased bg-neutral-50">
+    <!-- 顶部导航 (sticky) -->
+    <header class="sticky top-0 z-40 bg-white border-b border-border h-14 flex items-center px-4 justify-between">
+      <button data-dom-id="btn-back" class="w-9 h-9 -ml-2 flex items-center justify-center rounded-full active:bg-muted transition-colors">
+        <i data-lucide="chevron-left" class="w-5 h-5 text-foreground"></i>
+      </button>
+      <div class="flex flex-col items-center">
+        <span class="font-medium text-sm text-foreground">周末羽毛球</span>
+        <span class="text-xs text-muted-foreground flex items-center gap-1">
+          <i data-lucide="users" class="w-3 h-3"></i>
+          4人
+        </span>
+      </div>
+      <button class="w-9 h-9 -mr-2 flex items-center justify-center rounded-full active:bg-muted transition-colors">
+        <i data-lucide="more-vertical" class="w-5 h-5 text-foreground"></i>
+      </button>
+    </header>
+
+    <!-- 聊天室状态提示条 -->
+    <div class="bg-primary-50 text-primary text-xs text-center py-2 flex items-center justify-center gap-1">
+      <i data-lucide="info" class="w-3.5 h-3.5"></i>
+      <span>活动将在明天下午3点开始</span>
+    </div>
+
+    <!-- 消息列表 -->
+    <main class="space-y-4 p-4 pb-24">
+
+      <!-- 系统消息 -->
+      <div class="text-center text-xs text-muted-foreground py-2">
+        小A 创建了这个聊天室
+      </div>
+
+      <!-- 对方消息：小B -->
+      <div class="flex items-start gap-2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background-color:#DBEAFE">
+          <span class="text-xs font-medium" style="color:#1D4ED8">B</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%]">
+          <span class="text-xs text-muted-foreground px-1">小B</span>
+          <div class="bg-white border border-border rounded-2xl rounded-tl-sm px-3 py-2 text-sm text-foreground">
+            大家好，这周六几点到比较合适？
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的消息 -->
+      <div class="flex items-start gap-2 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-primary-200 flex items-center justify-center shrink-0">
+          <span class="text-xs font-medium" style="color:var(--solo-primary-700)">我</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%] items-end">
+          <div class="bg-primary text-white rounded-2xl rounded-tr-sm px-3 py-2 text-sm">
+            我2:45到吧，先热个身
+          </div>
+        </div>
+      </div>
+
+      <!-- 对方消息：小B -->
+      <div class="flex items-start gap-2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background-color:#DBEAFE">
+          <span class="text-xs font-medium" style="color:#1D4ED8">B</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%]">
+          <div class="bg-white border border-border rounded-2xl rounded-tl-sm px-3 py-2 text-sm text-foreground">
+            好的！那我也2:45到
+          </div>
+        </div>
+      </div>
+
+      <!-- 对方消息：小B 问拍子 -->
+      <div class="flex items-start gap-2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background-color:#DBEAFE">
+          <span class="text-xs font-medium" style="color:#1D4ED8">B</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%]">
+          <span class="text-xs text-muted-foreground px-1">小B</span>
+          <div class="bg-white border border-border rounded-2xl rounded-tl-sm px-3 py-2 text-sm text-foreground">
+            你们有多余的拍子吗？我只有一个
+          </div>
+        </div>
+      </div>
+
+      <!-- 我的消息 -->
+      <div class="flex items-start gap-2 flex-row-reverse">
+        <div class="w-8 h-8 rounded-full bg-primary-200 flex items-center justify-center shrink-0">
+          <span class="text-xs font-medium" style="color:var(--solo-primary-700)">我</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%] items-end">
+          <div class="bg-primary text-white rounded-2xl rounded-tr-sm px-3 py-2 text-sm">
+            我带两个，可以借你一个
+          </div>
+        </div>
+      </div>
+
+      <!-- 对方消息：表情 -->
+      <div class="flex items-start gap-2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background-color:#DBEAFE">
+          <span class="text-xs font-medium" style="color:#1D4ED8">B</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%]">
+          <div class="bg-white border border-border rounded-2xl rounded-tl-sm px-3 py-2 text-2xl leading-none">
+            🙏
+          </div>
+        </div>
+      </div>
+
+      <!-- 照片分享：小B 发照片 -->
+      <div class="flex items-start gap-2">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background-color:#DBEAFE">
+          <span class="text-xs font-medium" style="color:#1D4ED8">B</span>
+        </div>
+        <div class="flex flex-col gap-1 max-w-[75%]">
+          <span class="text-xs text-muted-foreground px-1">小B</span>
+          <div class="bg-white border border-border rounded-2xl rounded-tl-sm p-2 space-y-2">
+            <div class="w-32 h-32 rounded-lg flex items-center justify-center" style="background:linear-gradient(to bottom right, #A7F3D0, #BFDBFE)">
+              <i data-lucide="camera" class="w-8 h-8 text-white/80"></i>
+            </div>
+            <p class="text-sm text-foreground px-1">这是场馆的照片</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 底部输入栏 (fixed) -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-3 flex items-center gap-2 z-50">
+      <div class="w-full max-w-md mx-auto flex items-center gap-2">
+        <button class="w-9 h-9 rounded-full bg-muted flex items-center justify-center shrink-0 active:opacity-70 transition-opacity">
+          <i data-lucide="image" class="w-5 h-5 text-muted-foreground"></i>
+        </button>
+        <div class="flex-1 bg-muted rounded-full px-4 py-2 flex items-center">
+          <input type="text" placeholder="说点什么..." class="bg-transparent outline-none text-sm text-foreground w-full placeholder:text-muted-foreground">
+        </div>
+        <button data-dom-id="btn-send" class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center shrink-0 active:opacity-80 transition-opacity">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </footer>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

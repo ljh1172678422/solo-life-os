@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路线规划</title>
+    <style id="theme-vars">
+:root{--solo-primary-50:#FFF7ED;--solo-primary-100:#FFEDD5;--solo-primary-200:#FED7AA;--solo-primary-300:#FDBA74;--solo-primary-400:#FB923C;--solo-primary-500:#F97316;--solo-primary-600:#EA580C;--solo-primary-700:#C2410C;--solo-primary-800:#9A3412;--solo-primary-900:#7C2D12;--solo-neutral-50:#FAFAF9;--solo-neutral-100:#F5F5F4;--solo-neutral-200:#E7E5E4;--solo-neutral-300:#D6D3D1;--solo-neutral-400:#A8A29E;--solo-neutral-500:#78716C;--solo-neutral-600:#57534E;--solo-neutral-700:#44403C;--solo-neutral-800:#292524;--solo-neutral-900:#1C1917;--state-success:#22C55E;--state-warning:#F59E0B;--state-error:#EF4444;--state-info:#3B82F6;--solo-background:var(--solo-neutral-50);--solo-foreground:var(--solo-neutral-900);--solo-card:#FFFFFF;--solo-card-foreground:var(--solo-neutral-800);--solo-popover:#FFFFFF;--solo-popover-foreground:var(--solo-neutral-800);--solo-primary:var(--solo-primary-500);--solo-primary-foreground:#FFFFFF;--solo-muted:var(--solo-neutral-100);--solo-muted-foreground:var(--solo-neutral-500);--solo-border:var(--solo-neutral-200);--solo-input:var(--solo-neutral-200);--solo-ring:var(--solo-primary-400);--solo-radius-sm:8px;--solo-radius-md:12px;--solo-radius-lg:16px;--solo-radius-full:9999px;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-full:9999px;--font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
+@theme inline{--color-primary-50:var(--solo-primary-50);--color-primary-100:var(--solo-primary-100);--color-primary-200:var(--solo-primary-200);--color-primary-300:var(--solo-primary-300);--color-primary-400:var(--solo-primary-400);--color-primary-500:var(--solo-primary-500);--color-primary-600:var(--solo-primary-600);--color-primary-700:var(--solo-primary-700);--color-primary-800:var(--solo-primary-800);--color-primary-90:var(--solo-primary-900);--color-neutral-50:var(--solo-neutral-50);--color-neutral-100:var(--solo-neutral-100);--color-neutral-200:var(--solo-neutral-200);--color-neutral-300:var(--solo-neutral-300);--color-neutral-400:var(--solo-neutral-400);--color-neutral-500:var(--solo-neutral-500);--color-neutral-600:var(--solo-neutral-600);--color-neutral-700:var(--solo-neutral-700);--color-neutral-800:var(--solo-neutral-800);--color-neutral-900:var(--solo-neutral-900);--color-background:var(--solo-background);--color-foreground:var(--solo-foreground);--color-card:var(--solo-card);--color-card-foreground:var(--solo-card-foreground);--color-muted:var(--solo-muted);--color-muted-foreground:var(--solo-muted-foreground);--color-border:var(--solo-border);--color-primary:var(--solo-primary);--color-primary-foreground:var(--solo-primary-foreground);--radius-sm:var(--solo-radius-sm);--radius-md:var(--solo-radius-md);--radius-lg:var(--solo-radius-lg);--radius-full:var(--solo-radius-full);--font-sans:var(--font-sans)}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">@theme inline{--color-background:var(--solo-background);--color-foreground:var(--solo-foreground);--color-card:var(--solo-card);--color-card-foreground:var(--solo-card-foreground);--color-popover:var(--solo-popover);--color-popover-foreground:var(--solo-popover-foreground);--color-primary:var(--solo-primary);--color-primary-foreground:var(--solo-primary-foreground);--color-muted:var(--solo-muted);--color-muted-foreground:var(--solo-muted-foreground);--color-border:var(--solo-border);--color-input:var(--solo-input);--color-ring:var(--solo-ring);--radius-sm:var(--solo-radius-sm);--radius-md:var(--solo-radius-md);--radius-lg:var(--solo-radius-lg)}@layer base{body{background:var(--solo-background);color:var(--solo-foreground)}td,th{@apply break-words;word-break:break-all;word-break:auto-phrase}th{@apply whitespace-nowrap}}</style>
+    <style id="semantic-token-fallback">.bg-background{background-color:var(--solo-background)}.text-background{color:var(--solo-background)}.border-background{border-color:var(--solo-background)}.bg-foreground{background-color:var(--solo-foreground)}.text-foreground{color:var(--solo-foreground)}.border-foreground{border-color:var(--solo-foreground)}.bg-card{background-color:var(--solo-card)}.text-card{color:var(--solo-card)}.border-card{border-color:var(--solo-card)}.bg-primary{background-color:var(--solo-primary)}.text-primary{color:var(--solo-primary)}.border-primary{border-color:var(--solo-primary)}.bg-primary-foreground{background-color:var(--solo-primary-foreground)}.text-primary-foreground{color:var(--solo-primary-foreground)}.bg-muted{background-color:var(--solo-muted)}.text-muted{color:var(--solo-muted)}.bg-muted-foreground{background-color:var(--solo-muted-foreground)}.text-muted-foreground{color:var(--solo-muted-foreground)}.bg-border{background-color:var(--solo-border)}.text-border{color:var(--solo-border)}.border-border{border-color:var(--solo-border)}</style>
+    <style>.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}[data-icon]{display:inline-flex;align-items:center;justify-content:center;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;background-color:currentColor}</style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main class="w-full max-w-md mx-auto px-4 pb-24 min-h-screen space-y-4">
+
+        <!-- Top Nav -->
+        <nav class="sticky top-0 z-50 -mx-4 px-4 bg-white/95 backdrop-blur-md border-b border-border h-12 flex items-center">
+            <a href="explore.html" data-dom-id="btn-back" class="inline-flex items-center justify-center w-9 h-9 -ml-2 rounded-full active:bg-muted transition-colors">
+                <i data-lucide="chevron-left" class="w-5 h-5 text-foreground"></i>
+            </a>
+            <h1 class="flex-1 text-center text-base font-semibold text-foreground -ml-9">路线规划</h1>
+            <button data-dom-id="btn-favorite" class="inline-flex items-center justify-center w-9 h-9 -mr-2 rounded-full active:bg-muted transition-colors">
+                <i data-lucide="heart" class="w-5 h-5 text-muted-foreground"></i>
+            </button>
+        </nav>
+
+        <!-- Route Summary Card -->
+        <div class="bg-card rounded-xl border border-border p-4 space-y-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                    <span class="text-sm font-medium text-foreground">隐山咖啡</span>
+                </div>
+                <div class="flex-1 mx-3 flex items-center">
+                    <div class="flex-1 h-px bg-border relative">
+                        <div class="absolute inset-0 h-px bg-primary" style="width:100%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-foreground">植物园</span>
+                    <div class="w-2.5 h-2.5 rounded-full bg-state-success"></div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <i data-lucide="footprints" class="w-3.5 h-3.5"></i>
+                <span>2.3km</span>
+                <span class="text-border">·</span>
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                <span>约30分钟步行</span>
+            </div>
+        </div>
+
+        <!-- Map Placeholder -->
+        <div class="relative h-64 rounded-lg overflow-hidden" style="background:linear-gradient(135deg,#F5F5F4 0%,#E7E5E4 100%);">
+            <!-- Subtle grid pattern -->
+            <svg class="absolute inset-0 w-full h-full opacity-30" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+                        <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#D6D3D1" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)"/>
+            </svg>
+            <!-- Route path -->
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 320 256" preserveAspectRatio="none">
+                <path d="M 40 200 Q 80 180, 100 150 T 160 120 Q 200 90, 240 70 T 280 50"
+                      fill="none" stroke="#F97316" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4" opacity="0.8"/>
+                <!-- Start pin -->
+                <circle cx="40" cy="200" r="8" fill="#F97316"/>
+                <circle cx="40" cy="200" r="4" fill="#FFFFFF"/>
+                <!-- End pin -->
+                <circle cx="280" cy="50" r="8" fill="#22C55E"/>
+                <circle cx="280" cy="50" r="4" fill="#FFFFFF"/>
+            </svg>
+            <!-- Start label -->
+            <div class="absolute left-6 bottom-6 bg-white rounded-lg shadow-sm px-2 py-1 flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-primary"></div>
+                <span class="text-xs font-medium text-foreground">起点</span>
+            </div>
+            <!-- End label -->
+            <div class="absolute right-6 top-6 bg-white rounded-lg shadow-sm px-2 py-1 flex items-center gap-1">
+                <div class="w-2 h-2 rounded-full bg-state-success"></div>
+                <span class="text-xs font-medium text-foreground">终点</span>
+            </div>
+        </div>
+
+        <!-- AI Suggestion Card -->
+        <div class="rounded-xl p-4 flex gap-3 items-start" style="background-color:var(--solo-primary-50);border:1px solid var(--solo-primary-100);">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:var(--solo-primary-100);">
+                <i data-lucide="sparkles" class="w-4 h-4" style="color:var(--solo-primary-600);"></i>
+            </div>
+            <p class="text-sm leading-relaxed" style="color:var(--solo-primary-900);">这条路线会经过一条梧桐小道，树荫很密，现在走正好不晒。</p>
+        </div>
+
+        <!-- Route Steps -->
+        <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-foreground px-1">步行路线</h3>
+
+            <!-- Step 1 -->
+            <div class="bg-card rounded-xl border border-border p-4 flex gap-3">
+                <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold flex-shrink-0">1</div>
+                    <div class="w-px flex-1 bg-border mt-1"></div>
+                </div>
+                <div class="flex-1 pb-2">
+                    <p class="text-sm font-medium text-foreground">从当前位置出发</p>
+                    <p class="text-xs text-muted-foreground mt-1">面向中山北路方向</p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-card rounded-xl border border-border p-4 flex gap-3">
+                <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold flex-shrink-0">2</div>
+                    <div class="w-px flex-1 bg-border mt-1"></div>
+                </div>
+                <div class="flex-1 pb-2">
+                    <p class="text-sm font-medium text-foreground">沿中山北路走800米</p>
+                    <p class="text-xs text-muted-foreground mt-1">约10分钟，经过梧桐小道</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-card rounded-xl border border-border p-4 flex gap-3">
+                <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold flex-shrink-0">3</div>
+                    <div class="w-px flex-1 bg-border mt-1"></div>
+                </div>
+                <div class="flex-1 pb-2">
+                    <p class="text-sm font-medium text-foreground">左转进入曙光路</p>
+                    <p class="text-xs text-muted-foreground mt-1">继续步行约600米</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="bg-card rounded-xl border border-border p-4 flex gap-3">
+                <div class="flex flex-col items-center">
+                    <div class="w-7 h-7 rounded-full bg-state-success text-white flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-foreground">到达目的地</p>
+                    <p class="text-xs text-muted-foreground mt-1">植物园南门</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Fixed Action Bar -->
+        <div class="fixed bottom-0 left-0 right-0 z-50 px-4 py-3 bg-white/95 backdrop-blur-md border-t border-border">
+            <div class="max-w-md mx-auto flex gap-3">
+                <button data-dom-id="btn-add-today" class="flex-1 h-11 rounded-xl border border-border text-sm font-medium text-foreground active:bg-muted transition-colors">
+                    加入今天
+                </button>
+                <button data-dom-id="btn-start" class="flex-1 h-11 rounded-xl bg-primary text-primary-foreground text-sm font-semibold active:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
+                    <i data-lucide="navigation" class="w-4 h-4"></i>
+                    开始行走
+                </button>
+            </div>
+        </div>
+
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{
+  "data": [
+    {
+      "id": "page-today",
+      "title": "今日生活（平板）",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1753689600100,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/today.html",
+        "interactions": [
+          {
+            "domId": "nav-explore",
+            "targetPageId": "page-explore",
+            "hideEdge": true,
+            "transitionLabel": "探索"
+          },
+          {
+            "domId": "nav-memory",
+            "targetPageId": "page-memory",
+            "hideEdge": true,
+            "transitionLabel": "回忆"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-explore",
+      "title": "探索（平板）",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1753689600101,
+      "canvasData": {
+        "x": 499,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/explore.html",
+        "interactions": [
+          {
+            "domId": "nav-today",
+            "targetPageId": "page-today",
+            "hideEdge": true,
+            "transitionLabel": "今日"
+          },
+          {
+            "domId": "nav-memory",
+            "targetPageId": "page-memory",
+            "hideEdge": true,
+            "transitionLabel": "回忆"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-memory",
+      "title": "回忆时间轴（平板）",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1753689600102,
+      "canvasData": {
+        "x": 998,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/memory.html",
+        "interactions": [
+          {
+            "domId": "nav-today",
+            "targetPageId": "page-today",
+            "hideEdge": true,
+            "transitionLabel": "今日"
+          },
+          {
+            "domId": "nav-explore",
+            "targetPageId": "page-explore",
+            "hideEdge": true,
+            "transitionLabel": "探索"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "tablet",
+    "projectName": "Solo - AI生活操作系统（平板端）"
+  }
+}

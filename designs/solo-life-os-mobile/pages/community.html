@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同行</title>
+    <style id="theme-vars">
+/* Solo - AI Life OS Brand CSS */
+/* Warm sunrise orange - representing sunlight, warmth, and new beginnings */
+
+:root {
+  /* Primary: Warm Sunrise Orange */
+  --solo-primary-50: #FFF7ED;
+  --solo-primary-100: #FFEDD5;
+  --solo-primary-200: #FED7AA;
+  --solo-primary-300: #FDBA74;
+  --solo-primary-400: #FB923C;
+  --solo-primary-500: #F97316;
+  --solo-primary-600: #EA580C;
+  --solo-primary-700: #C2410C;
+  --solo-primary-800: #9A3412;
+  --solo-primary-900: #7C2D12;
+
+  /* Neutral: Warm Stone */
+  --solo-neutral-50: #FAFAF9;
+  --solo-neutral-100: #F5F5F4;
+  --solo-neutral-200: #E7E5E4;
+  --solo-neutral-300: #D6D3D1;
+  --solo-neutral-400: #A8A29E;
+  --solo-neutral-500: #78716C;
+  --solo-neutral-600: #57534E;
+  --solo-neutral-700: #44403C;
+  --solo-neutral-800: #292524;
+  --solo-neutral-900: #1C1917;
+
+  /* Semantic Status Colors */
+  --state-success: #22C55E;
+  --state-warning: #F59E0B;
+  --state-error: #EF4444;
+  --state-info: #3B82F6;
+
+  /* Semantic Aliases */
+  --solo-background: var(--solo-neutral-50);
+  --solo-foreground: var(--solo-neutral-900);
+  --solo-card: #FFFFFF;
+  --solo-card-foreground: var(--solo-neutral-800);
+  --solo-popover: #FFFFFF;
+  --solo-popover-foreground: var(--solo-neutral-800);
+  --solo-primary: var(--solo-primary-500);
+  --solo-primary-foreground: #FFFFFF;
+  --solo-muted: var(--solo-neutral-100);
+  --solo-muted-foreground: var(--solo-neutral-500);
+  --solo-border: var(--solo-neutral-200);
+  --solo-input: var(--solo-neutral-200);
+  --solo-ring: var(--solo-primary-400);
+
+  /* Radius */
+  --solo-radius-sm: 8px;
+  --solo-radius-md: 12px;
+  --solo-radius-lg: 16px;
+  --solo-radius-full: 9999px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+@theme inline {
+  --color-primary-50: var(--solo-primary-50);
+  --color-primary-100: var(--solo-primary-100);
+  --color-primary-200: var(--solo-primary-200);
+  --color-primary-300: var(--solo-primary-300);
+  --color-primary-400: var(--solo-primary-400);
+  --color-primary-500: var(--solo-primary-500);
+  --color-primary-600: var(--solo-primary-600);
+  --color-primary-700: var(--solo-primary-700);
+  --color-primary-800: var(--solo-primary-800);
+  --color-primary-900: var(--solo-primary-900);
+  --color-neutral-50: var(--solo-neutral-50);
+  --color-neutral-100: var(--solo-neutral-100);
+  --color-neutral-200: var(--solo-neutral-200);
+  --color-neutral-300: var(--solo-neutral-300);
+  --color-neutral-400: var(--solo-neutral-400);
+  --color-neutral-500: var(--solo-neutral-500);
+  --color-neutral-600: var(--solo-neutral-600);
+  --color-neutral-700: var(--solo-neutral-700);
+  --color-neutral-800: var(--solo-neutral-800);
+  --color-neutral-900: var(--solo-neutral-900);
+  --color-background: var(--solo-background);
+  --color-foreground: var(--solo-foreground);
+  --color-card: var(--solo-card);
+  --color-card-foreground: var(--solo-card-foreground);
+  --color-muted: var(--solo-muted);
+  --color-muted-foreground: var(--solo-muted-foreground);
+  --color-border: var(--solo-border);
+  --color-primary: var(--solo-primary);
+  --color-primary-foreground: var(--solo-primary-foreground);
+  --radius-sm: var(--solo-radius-sm);
+  --radius-md: var(--solo-radius-md);
+  --radius-lg: var(--solo-radius-lg);
+  --radius-full: var(--solo-radius-full);
+  --font-sans: var(--font-sans);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--solo-background);
+    --color-foreground: var(--solo-foreground);
+    --color-card: var(--solo-card);
+    --color-card-foreground: var(--solo-card-foreground);
+    --color-popover: var(--solo-popover);
+    --color-popover-foreground: var(--solo-popover-foreground);
+    --color-primary: var(--solo-primary);
+    --color-primary-foreground: var(--solo-primary-foreground);
+    --color-muted: var(--solo-muted);
+    --color-muted-foreground: var(--solo-muted-foreground);
+    --color-border: var(--solo-border);
+    --color-input: var(--solo-input);
+    --color-ring: var(--solo-ring);
+    --radius-sm: var(--solo-radius-sm);
+    --radius-md: var(--solo-radius-md);
+    --radius-lg: var(--solo-radius-lg);
+  }
+  @layer base {
+    body { background: var(--solo-background); color: var(--solo-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--solo-background); }
+      .text-background { color: var(--solo-background); }
+      .border-background { border-color: var(--solo-background); }
+      .ring-background { --tw-ring-color: var(--solo-background); }
+      .bg-foreground { background-color: var(--solo-foreground); }
+      .text-foreground { color: var(--solo-foreground); }
+      .border-foreground { border-color: var(--solo-foreground); }
+      .ring-foreground { --tw-ring-color: var(--solo-foreground); }
+      .bg-card { background-color: var(--solo-card); }
+      .text-card { color: var(--solo-card); }
+      .border-card { border-color: var(--solo-card); }
+      .ring-card { --tw-ring-color: var(--solo-card); }
+      .bg-card-foreground { background-color: var(--solo-card-foreground); }
+      .text-card-foreground { color: var(--solo-card-foreground); }
+      .border-card-foreground { border-color: var(--solo-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--solo-card-foreground); }
+      .bg-popover { background-color: var(--solo-popover); }
+      .text-popover { color: var(--solo-popover); }
+      .border-popover { border-color: var(--solo-popover); }
+      .ring-popover { --tw-ring-color: var(--solo-popover); }
+      .bg-popover-foreground { background-color: var(--solo-popover-foreground); }
+      .text-popover-foreground { color: var(--solo-popover-foreground); }
+      .border-popover-foreground { border-color: var(--solo-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--solo-popover-foreground); }
+      .bg-primary { background-color: var(--solo-primary); }
+      .text-primary { color: var(--solo-primary); }
+      .border-primary { border-color: var(--solo-primary); }
+      .ring-primary { --tw-ring-color: var(--solo-primary); }
+      .bg-primary-foreground { background-color: var(--solo-primary-foreground); }
+      .text-primary-foreground { color: var(--solo-primary-foreground); }
+      .border-primary-foreground { border-color: var(--solo-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--solo-primary-foreground); }
+      .bg-muted { background-color: var(--solo-muted); }
+      .text-muted { color: var(--solo-muted); }
+      .border-muted { border-color: var(--solo-muted); }
+      .ring-muted { --tw-ring-color: var(--solo-muted); }
+      .bg-muted-foreground { background-color: var(--solo-muted-foreground); }
+      .text-muted-foreground { color: var(--solo-muted-foreground); }
+      .border-muted-foreground { border-color: var(--solo-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--solo-muted-foreground); }
+      .bg-border { background-color: var(--solo-border); }
+      .text-border { color: var(--solo-border); }
+      .border-border { border-color: var(--solo-border); }
+      .ring-border { --tw-ring-color: var(--solo-border); }
+      .bg-input { background-color: var(--solo-input); }
+      .text-input { color: var(--solo-input); }
+      .border-input { border-color: var(--solo-input); }
+      .ring-input { --tw-ring-color: var(--solo-input); }
+      .bg-ring { background-color: var(--solo-ring); }
+      .text-ring { color: var(--solo-ring); }
+      .border-ring { border-color: var(--solo-ring); }
+      .ring-ring { --tw-ring-color: var(--solo-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main class="w-full max-w-md mx-auto px-4 pt-4 pb-20 space-y-4">
+
+      <!-- 顶部标题区域 -->
+      <div class="flex flex-col gap-1 pt-2">
+        <h1 class="text-2xl font-bold text-foreground leading-tight">同行</h1>
+        <p class="text-sm text-muted-foreground">找到一起做事的人</p>
+      </div>
+
+      <!-- 分类标签 (横向滚动 pills) -->
+      <div class="flex flex-nowrap overflow-x-auto no-scrollbar gap-2 -mx-1 px-1">
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm font-medium whitespace-nowrap bg-primary text-primary-foreground">全部</button>
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm whitespace-nowrap bg-card border border-border text-muted-foreground">运动</button>
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm whitespace-nowrap bg-card border border-border text-muted-foreground">自习</button>
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm whitespace-nowrap bg-card border border-border text-muted-foreground">City Walk</button>
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm whitespace-nowrap bg-card border border-border text-muted-foreground">看电影</button>
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm whitespace-nowrap bg-card border border-border text-muted-foreground">咖啡</button>
+        <button class="shrink-0 h-8 px-4 rounded-full text-sm whitespace-nowrap bg-card border border-border text-muted-foreground">其他</button>
+      </div>
+
+      <!-- 附近活动列表 -->
+      <div class="flex flex-col gap-3">
+
+        <!-- 卡片1：今晚活动（突出） -->
+        <div class="bg-card rounded-lg border border-border p-4 space-y-3 relative overflow-hidden">
+          <!-- 左侧高亮条 -->
+          <div class="absolute left-0 top-0 bottom-0 w-1" style="background-color:var(--solo-primary)"></div>
+          <div class="pl-2">
+            <!-- 时间标签 + 加入按钮 -->
+            <div class="flex items-center justify-between">
+              <span class="inline-flex items-center h-6 px-2 rounded text-xs font-medium whitespace-nowrap" style="background-color:var(--solo-primary-100);color:var(--solo-primary-700)">今晚 19:00</span>
+              <button class="inline-flex items-center h-7 px-3 rounded-full text-xs font-medium whitespace-nowrap border text-primary active:opacity-70 transition-opacity" style="border-color:var(--solo-primary)">加入</button>
+            </div>
+            <!-- 标题 -->
+            <h3 class="text-base font-semibold text-card-foreground mt-2.5 truncate">羽毛球 2缺2</h3>
+            <!-- 地点 -->
+            <p class="text-xs text-muted-foreground mt-1 flex items-center gap-1 truncate">
+              <i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i>
+              <span>体育中心 · 距离1.2km</span>
+            </p>
+            <!-- 人数显示 -->
+            <div class="flex items-center gap-2 mt-3">
+              <div class="flex -space-x-1.5">
+                <div class="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center text-[10px] font-medium" style="background-color:var(--solo-primary-200);color:var(--solo-primary-700)">
+                  <i data-lucide="user" class="w-3 h-3"></i>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center text-[10px] font-medium" style="background-color:#DBEAFE;color:#1D4ED8">
+                  <i data-lucide="user" class="w-3 h-3"></i>
+                </div>
+              </div>
+              <span class="text-xs text-muted-foreground">+2 人在等</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片2 -->
+        <div class="bg-card rounded-lg border border-border p-4 space-y-3">
+          <!-- 时间标签 -->
+          <span class="inline-flex items-center h-6 px-2 rounded text-xs font-medium whitespace-nowrap" style="background-color:var(--solo-primary-100);color:var(--solo-primary-700)">下午 14:00</span>
+          <!-- 标题 -->
+          <h3 class="text-base font-semibold text-card-foreground truncate">一起自习</h3>
+          <!-- 地点 -->
+          <p class="text-xs text-muted-foreground flex items-center gap-1 truncate">
+            <i data-lucide="book-open" class="w-3 h-3 shrink-0"></i>
+            <span>图书馆 · 安静区</span>
+          </p>
+          <!-- 人数显示 3缺3 -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex -space-x-1.5">
+                <div class="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center" style="background-color:#D1FAE5;color:#065F46">
+                  <i data-lucide="user" class="w-3 h-3"></i>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center" style="background-color:#FEF3C7;color:#92400E">
+                  <i data-lucide="user" class="w-3 h-3"></i>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center" style="background-color:#EDE9FE;color:#5B21B6">
+                  <i data-lucide="user" class="w-3 h-3"></i>
+                </div>
+              </div>
+              <span class="text-xs text-muted-foreground">3缺3</span>
+            </div>
+            <button class="inline-flex items-center h-7 px-3 rounded-full text-xs font-medium whitespace-nowrap border text-primary active:opacity-70 transition-opacity" style="border-color:var(--solo-primary)">加入</button>
+          </div>
+        </div>
+
+        <!-- 卡片3 -->
+        <div class="bg-card rounded-lg border border-border p-4 space-y-3">
+          <!-- 时间标签 -->
+          <span class="inline-flex items-center h-6 px-2 rounded text-xs font-medium whitespace-nowrap" style="background-color:var(--solo-primary-100);color:var(--solo-primary-700)">周六 全天</span>
+          <!-- 标题 + 路线图标 -->
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="text-base font-semibold text-card-foreground truncate flex-1 min-w-0">City Walk 城市漫步</h3>
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background-color:var(--solo-primary-50)">
+              <i data-lucide="route" class="w-4 h-4 text-primary"></i>
+            </div>
+          </div>
+          <!-- 地点 -->
+          <p class="text-xs text-muted-foreground flex items-center gap-1 truncate">
+            <i data-lucide="map-pin" class="w-3 h-3 shrink-0"></i>
+            <span>西湖边 · 5人已报名</span>
+          </p>
+          <!-- 人数 + 加入 -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex -space-x-1.5">
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:var(--solo-primary-200)"></div>
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:#DBEAFE"></div>
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:#D1FAE5"></div>
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:#FEF3C7"></div>
+                <div class="w-6 h-6 rounded-full border-2 border-card flex items-center justify-center text-[9px] font-medium text-muted-foreground" style="background-color:var(--solo-neutral-100)">+2</div>
+              </div>
+            </div>
+            <button class="inline-flex items-center h-7 px-3 rounded-full text-xs font-medium whitespace-nowrap border text-primary active:opacity-70 transition-opacity" style="border-color:var(--solo-primary)">加入</button>
+          </div>
+        </div>
+
+        <!-- 卡片4 -->
+        <div class="bg-card rounded-lg border border-border p-4 space-y-3">
+          <!-- 时间标签 -->
+          <span class="inline-flex items-center h-6 px-2 rounded text-xs font-medium whitespace-nowrap" style="background-color:var(--solo-primary-100);color:var(--solo-primary-700)">周日 下午</span>
+          <!-- 标题 -->
+          <h3 class="text-base font-semibold text-card-foreground truncate">一起看《奥本海默》</h3>
+          <!-- 地点 -->
+          <p class="text-xs text-muted-foreground flex items-center gap-1 truncate">
+            <i data-lucide="clapperboard" class="w-3 h-3 shrink-0"></i>
+            <span>百老汇影城 · 3缺1</span>
+          </p>
+          <!-- 人数 + 加入 -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="flex -space-x-1.5">
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:#FCE7F3"></div>
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:#E0E7FF"></div>
+                <div class="w-6 h-6 rounded-full border-2 border-card" style="background-color:var(--solo-primary-200)"></div>
+              </div>
+              <span class="text-xs text-muted-foreground">还差1人</span>
+            </div>
+            <button class="inline-flex items-center h-7 px-3 rounded-full text-xs font-medium whitespace-nowrap border text-primary active:opacity-70 transition-opacity" style="border-color:var(--solo-primary)">加入</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部提示文字 -->
+      <p class="text-xs text-center text-muted-foreground pt-2 pb-2">
+        活动结束后，临时聊天自动关闭
+      </p>
+
+      <!-- 底部导航 (MANDATORY) -->
+      <nav data-mobile-nav="global" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-border h-[56px] z-50">
+        <div class="w-full max-w-md mx-auto grid grid-cols-6 h-full">
+          <a href="today.html" data-nav-key="today" data-dom-id="nav-today" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+            <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+            <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">今日</span>
+          </a>
+          <a href="explore.html" data-nav-key="explore" data-dom-id="nav-explore" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+            <i data-lucide="compass" class="w-5 h-5 shrink-0"></i>
+            <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">探索</span>
+          </a>
+          <a href="mood.html" data-nav-key="mood" data-dom-id="nav-mood" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+            <i data-lucide="smile" class="w-5 h-5 shrink-0"></i>
+            <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">情绪</span>
+          </a>
+          <a href="growth.html" data-nav-key="growth" data-dom-id="nav-growth" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+            <i data-lucide="trending-up" class="w-5 h-5 shrink-0"></i>
+            <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">成长</span>
+          </a>
+          <a href="community.html" data-nav-key="community" data-dom-id="nav-community" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-primary" data-active="true">
+            <i data-lucide="users" class="w-5 h-5 shrink-0"></i>
+            <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate font-medium">同行</span>
+          </a>
+          <a href="me.html" data-nav-key="me" data-dom-id="nav-me" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-muted-foreground">
+            <i data-lucide="user" class="w-5 h-5 shrink-0"></i>
+            <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">我的</span>
+          </a>
+        </div>
+      </nav>
+
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
