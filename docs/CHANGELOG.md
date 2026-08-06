@@ -16,6 +16,35 @@
 
 ### Added
 
+- Sprint 2 Close：Today Module 全部 7 个任务交付（TASK-0201~0207），Sprint 2 关闭（2026-08-06）
+  - Sprint Goal（Today Module MVP + AI 生成每日计划，Planner Agent 用 Mock Memory）达成
+  - 后端：Migration（daily_plan / activity + 增量索引 CHECK 约束）+ Domain（Entity 不变式校验 + isClosed + 软删除）+ Application（事务协调 + DataIntegrityViolationException 业务化）+ Controller（13 REST 端点 + 5 DTO + Assembler）
+  - 测试：Today Module 7 测试类 60+ 用例 + Planner Agent 2 测试类 26 用例
+  - 前端：4 Today 页面（index / plan-detail / replan / summary）+ 13 端点 API client + Warm Sunrise Orange + Warm Stone 品牌 token
+  - AI：PlannerAgent（规则模板）+ MockMemoryService（ConcurrentHashMap Mock）+ PlannerContext + AiConfig Bean 注册
+  - 文档对齐承诺（Sprint Review 执行）：DATABASE_DESIGN §6.4 补 daily_plan_id、§8 补 uk_daily_plan_user_date、§9 补两个 CHECK 约束
+- TASK-0207 Planner Agent 骨架（Mock Memory）：新增 AI 层 Planner Agent 首个实现（ARCHITECTURE §7 / §8 / §21）
+  - MockMemoryService（ai/memory）：进程内 ConcurrentHashMap 长期记忆，store 递增 id / retrieve 关键词匹配+用户隔离 / deleteByUser / clear，Sprint 5 替换 ai_memory 表 + Vector DB 正式实现
+  - PlannerContext（ai/agents）：Planner Agent 结构化输入 record（userId / date / location / weather / mood / preferences），避免 Context.attributes Map 取值不安全
+  - PlannerAgent（ai/agents/planner）：Agent 接口实现，execute 从 Context 提取 PlannerContext → 检索 Memory → 规则模板（时段+天气+心情+偏好）生成 Mock 活动建议 → JSON 序列化返回 AgentResult
+  - AiConfig（ai）：Spring @Configuration 注册 MockMemoryService 与 PlannerAgent Bean，Sprint 5 改为正式 @Service 注入
+  - 单元测试：MockMemoryServiceTest 13 用例 + PlannerAgentTest 13 用例
+- TASK-0206 Today Test Suite：新增 Today Module 单元测试套件（CODE_RULES §10 Testing，镜像 User Module TASK-0106）
+  - 7 测试文件 60+ 用例（Domain Model 2 + Domain Service 1 + Application 2 + Controller 2）
+  - 测试栈：JUnit 5 + Mockito + AssertJ + MockMvc（standaloneSetup，绕开 SecurityAutoConfiguration 干扰）
+  - DailyPlanTest/ActivityTest：工厂校验、状态机、实体不变式
+  - TodayDomainServiceTest：当日唯一性、isClosed 关闭校验、已持久化判断
+  - DailyPlanApplicationServiceTest：createPlan 并发冲突兜底（DataIntegrityViolationException→BusinessException），查询与状态变更委托
+  - ActivityApplicationServiceTest：归属校验防跨计划修改，DB CHECK 约束冲突业务化
+  - DailyPlanControllerTest：ISO 日期 ConversionService + JavaTimeModule 适配，覆盖全部 7 端点
+  - ActivityControllerTest：覆盖全部 6 端点（含 planId 归属校验 BusinessException 转 400）
+- TASK-0205 Today Frontend：新增 Today Module 前端闭环（4 页面 + API + 品牌色）
+  - 4 页面：pages/today/index（AI Hero 卡片+空状态引导）/ plan-detail（时间线视图+完成标记）/ replan（原因选择+偏好开关+重新生成）/ summary（进度环+心情+AI 晚安卡片）
+  - api/today.ts：13 端点封装（7 DailyPlan + 6 Activity），对齐 user.ts 模式
+  - api/types.ts：Today Module 实体 + 请求 DTO TypeScript 接口（8 ActivityType 枚举值）
+  - uni.scss：新增 Solo 品牌 token（Warm Sunrise Orange $solo-primary-* + Warm Stone $solo-neutral-*，对齐 designs/solo-life-os-mobile/colors_and_type.css），radius / state token
+  - pages.json 注册 4 个 today 页面；login / index / profile 路由跳转调整为 today（Sprint 2 登录后第一眼 Today）
+  - 验证：vue-tsc --noEmit 通过（TS strict mode），npm install --legacy-peer-deps 通过
 - TASK-0204 Today Controller + DTO：新增 Today Module REST API 层（CODE_RULES §3.1 Controller）
   - DailyPlanController（7 端点）：POST /api/users/{userId}/plans（创建）/ GET /api/users/{userId}/plans/today?date=（今日计划）/ GET /api/users/{userId}/plans（列表，支持日期范围+状态筛选）/ GET /api/plans/{planId} / POST /api/plans/{planId}/start|complete|cancel（状态变更）
   - ActivityController（6 端点）：POST /api/plans/{planId}/activities（添加）/ GET /api/plans/{planId}/activities（列表）/ GET /api/activities/{id} / PUT /api/plans/{planId}/activities/{id}（修改）/ POST /api/activities/{id}/end / POST /api/activities/{id}/locate（Sprint 3）
