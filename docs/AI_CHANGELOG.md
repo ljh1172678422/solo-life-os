@@ -1561,15 +1561,18 @@ Pending
 
 Agent:
 
+
 Backend Agent
 
 
 Task:
 
+
 TASK-0206 Today Test Suite
 
 
 Action:
+
 
 建立 Today Module 单元测试套件（CODE_RULES §10 Testing），镜像 Sprint 1 User Module 测试模式（TASK-0106），覆盖 Domain / Application / Controller 三层，共 7 个测试文件 60+ 测试用例：
 - Domain Model 层（2 文件）：
@@ -1587,12 +1590,65 @@ Action:
 
 Reason:
 
+
 SPRINT_PLAN Sprint 2 DoD 要求"测试通过"。TASK-0201~0204 已完成 Today Module 后端 MVP（Migration + Domain + Application + Controller），TASK-0205 完成前端，测试套件是 Sprint 2 闭环最后一环。采用与 User Module（TASK-0106）一致的测试栈（JUnit 5 + Mockito + AssertJ + MockMvc），standaloneSetup 不加载 Spring context 避免 SecurityAutoConfiguration 干扰。Controller 测试配置 JavaTimeModule 与 ISO 日期 ConversionService 是 Today Module 特有需求（DailyPlanController 的 @DateTimeFormat 查询参数 + LocalDateTime 字段序列化），User Module 测试无此需求因 Auth/Login 不涉及日期查询参数。
 
 
 Impact:
 
+
 新增 backend/solo-server/src/test/java/com/sololifeos/today/ 下 7 个测试文件（domain/model/DailyPlanTest + ActivityTest、domain/service/TodayDomainServiceTest、application/DailyPlanApplicationServiceTest + ActivityApplicationServiceTest、controller/DailyPlanControllerTest + ActivityControllerTest）；更新 docs/AI_CHANGELOG.md。无生产代码变更，无数据库 Migration 变更，无架构边界变更。编译与测试验证待 CI（沙箱网络不可达，Maven 依赖未缓存，无法本地 mvn test）。
+
+
+Reviewer:
+
+
+Pending
+
+
+---
+
+
+## 2026-08-06 (第 37 次变更)
+
+
+Agent:
+
+
+AI Agent
+
+
+Task:
+
+
+TASK-0207 Planner Agent 骨架（Mock Memory）
+
+
+Action:
+
+
+建立 Planner Agent 骨架，完成 Sprint 2 DoD「Planner Agent 接口定义完成（实现可 Mock）」（ARCHITECTURE §7 / §8 / §21）：
+- MockMemoryService（ai/memory）：MemoryService 的进程内 Mock 实现，用 ConcurrentHashMap 模拟长期记忆存储，支持 store（递增 id）/ retrieve（关键词匹配 + 按 id 倒序 + 用户隔离 + limit）/ deleteByUser / clear。Sprint 5 替换为基于 ai_memory 表 + Vector DB 的真实实现（ARCHITECTURE §7 Risk: Planner Agent 依赖 Memory，Sprint 5 才实现 → 本 Sprint 用 Mock Memory）
+- PlannerContext（ai/agents）：Planner Agent 专用输入 record，结构化 ARCHITECTURE §8 Planner Agent 输入（userId / date / location / weather / mood / preferences），通过 Context.attributes 的 KEY 传入，避免 Map 取值类型不安全。提供 minimal(userId, date) 工厂
+- PlannerAgent（ai/agents/planner）：实现 Agent 接口，getAgentType 返回 "PLANNER"
+  - execute：从 Context 提取 PlannerContext → 检索 Memory（query 由 mood + preferences 构造）→ 规则模板生成 Mock 活动建议 → 序列化为 JSON 返回 AgentResult
+  - 规则模板：按时段（早 / 午 / 晚）+ 天气（晴→户外 EXPLORE / 雨→室内 SPORT）+ 心情（tired→REST）+ 偏好（quiet→STUDY / social→SOCIAL）组合选模板，最多 5 个活动
+  - 骨架阶段不调用真实 LLM（Provider 未决策，Sprint 5 ADR-0008），用规则模板保证产出可演示
+  - 产出为 JSON 字符串活动建议列表，调用方解析后通过 Today Domain API 落库（ARCHITECTURE §21: Agent 不直接持久化，不持有 Repository）
+- AiConfig（ai）：Spring @Configuration 注册 MockMemoryService 与 PlannerAgent 为 Bean，使 PlannerAgent 可被未来 Application Service 注入。Sprint 5 删除 Mock Bean 定义改为正式 @Service 实现
+- 单元测试（2 文件）：MockMemoryServiceTest（store 递增 id / retrieve 关键词匹配 + 倒序 + 用户隔离 + limit / deleteByUser / clear，13 用例）+ PlannerAgentTest（getAgentType / execute 正常生成 + 天气 / 心情 / 偏好分支覆盖 + 异常输入 + Memory 集成，13 用例）
+
+
+Reason:
+
+
+SPRINT_PLAN Sprint 2 DoD 要求「Planner Agent 接口定义完成（实现可 Mock）」+「用户可看到 AI 生成的今日计划」。TASK-0201~0205 已完成 Today Module 后端 MVP + 前端，Planner Agent 是 AI 生成计划的核心骨架。Sprint 0 已定义 Agent / Context / AgentResult / MemoryService / LLMProvider / AgentRouter 接口（Sprint 0 仅定义接口不实现），本任务实现首个具体 Agent（PlannerAgent）+ Memory Mock，验证 AI 层接口契约可用。骨架用规则模板而非 LLM：①LLM Provider 选型归 Sprint 5 ADR-0008，提前引入会锁定未决策依赖；②规则模板可演示完整数据流（Context → Memory 检索 → 生成 → AgentResult），Sprint 5 替换 LLM 时生成逻辑是唯一变更点。产出 JSON 而非直接调用 TodayApplicationService：保持 Agent 与业务模块解耦（ARCHITECTURE §21 Agent 只产出，调用方通过 Domain API 落库），未来 PlannerApplicationService 解析 JSON 后调用 TodayApplicationService.createPlan + addActivity。
+
+
+Impact:
+
+
+新增 backend/solo-server/src/main/java/com/sololifeos/ai/ 下 4 个 Java 源文件（memory/MockMemoryService、agents/PlannerContext、agents/planner/PlannerAgent、AiConfig）；新增 backend/solo-server/src/test/java/com/sololifeos/ai/ 下 2 个测试文件（memory/MockMemoryServiceTest、agents/planner/PlannerAgentTest）；更新 docs/AI_CHANGELOG.md。无数据库 Migration 变更，无架构边界变更（仅实现 Sprint 0 已定义的接口，不新增跨模块契约）。Sprint 5 替换策略明确：删除 AiConfig Mock Bean → 改为正式 MemoryService / LLMProvider @Service，PlannerAgent 注入点与 execute 契约不变。编译与测试验证待 CI（沙箱网络不可达，Maven 依赖未缓存）。
 
 
 Reviewer:
