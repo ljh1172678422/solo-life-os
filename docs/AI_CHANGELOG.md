@@ -1551,3 +1551,50 @@ Impact:
 Reviewer:
 
 Pending
+
+
+---
+
+
+## 2026-08-06 (第 36 次变更)
+
+
+Agent:
+
+Backend Agent
+
+
+Task:
+
+TASK-0206 Today Test Suite
+
+
+Action:
+
+建立 Today Module 单元测试套件（CODE_RULES §10 Testing），镜像 Sprint 1 User Module 测试模式（TASK-0106），覆盖 Domain / Application / Controller 三层，共 7 个测试文件 60+ 测试用例：
+- Domain Model 层（2 文件）：
+  - DailyPlanTest：create 工厂构造校验（userId/date 非空）+ 状态机流转（PLANNING→ONGOING→COMPLETED/CANCELLED，含非法流转抛 IllegalStateException）+ isClosed 关闭判定（4 状态全覆盖）
+  - ActivityTest：create 工厂构造校验（dailyPlanId/title/startTime 非空，title≤200，type null→OTHER 回退）+ end（合法/清除/null 早于 start 抛异常）+ locate（绑定/清除）+ update（整体替换 + 4 项参数校验）
+- Domain Service 层（1 文件）：
+  - TodayDomainServiceTest：createPlan（当日唯一性 + 参数校验）+ addActivityToPlan（计划未关闭/已持久化校验 + type 回退）+ startPlan/completePlan/cancelPlan（含 null 校验）+ updateActivity/endActivity/locateActivity（计划关闭校验 + null 校验）。Mock DailyPlanRepository，反射设置 Entity id 模拟持久化
+- Application 层（2 文件）：
+  - DailyPlanApplicationServiceTest：createPlan（含 DataIntegrityViolationException→BusinessException 并发冲突兜底 + Domain 异常透传）+ 查询用例（getPlanById 存在/不存在/id 为空 + getPlanByUserAndDate Optional 语义 + 3 个 list 委托）+ 状态变更（start/complete/cancel 加载+委托+持久化）
+  - ActivityApplicationServiceTest：addActivity（含 DB CHECK 约束冲突转 BusinessException）+ 查询用例（getActivity 存在/不存在/id 为空 + 4 个 list 委托）+ updateActivity（归属校验防跨计划修改 + DB 约束冲突）+ endActivity/locateActivity（通过 planId 加载计划委托 Domain Service）
+- Controller 层（2 文件）：
+  - DailyPlanControllerTest：standaloneSetup MockMvc + GlobalExceptionHandler + ISO 日期 ConversionService（支持 @DateTimeFormat(iso=DATE) 查询参数绑定）+ JavaTimeModule（LocalDateTime 序列化）。覆盖 POST 创建（合法/缺 date 400/BusinessException 400）+ GET today（存在/不存在 data=null 非 404）+ GET list（无筛选/日期范围/状态筛选）+ 单计划操作（get/start/complete/cancel，不存在转 400）
+  - ActivityControllerTest：standaloneSetup MockMvc + JavaTimeModule ObjectMapper。覆盖 POST 添加（合法/缺 title 400/缺 startTime 400/title 超长 400/type 为空合法/计划关闭 BusinessException 400）+ GET 查询（listByPlan/getById 不存在转 400）+ PUT 修改（合法/缺 type 400/跨计划归属 BusinessException 400）+ POST end（设置/空 body 清除）+ POST locate
+
+
+Reason:
+
+SPRINT_PLAN Sprint 2 DoD 要求"测试通过"。TASK-0201~0204 已完成 Today Module 后端 MVP（Migration + Domain + Application + Controller），TASK-0205 完成前端，测试套件是 Sprint 2 闭环最后一环。采用与 User Module（TASK-0106）一致的测试栈（JUnit 5 + Mockito + AssertJ + MockMvc），standaloneSetup 不加载 Spring context 避免 SecurityAutoConfiguration 干扰。Controller 测试配置 JavaTimeModule 与 ISO 日期 ConversionService 是 Today Module 特有需求（DailyPlanController 的 @DateTimeFormat 查询参数 + LocalDateTime 字段序列化），User Module 测试无此需求因 Auth/Login 不涉及日期查询参数。
+
+
+Impact:
+
+新增 backend/solo-server/src/test/java/com/sololifeos/today/ 下 7 个测试文件（domain/model/DailyPlanTest + ActivityTest、domain/service/TodayDomainServiceTest、application/DailyPlanApplicationServiceTest + ActivityApplicationServiceTest、controller/DailyPlanControllerTest + ActivityControllerTest）；更新 docs/AI_CHANGELOG.md。无生产代码变更，无数据库 Migration 变更，无架构边界变更。编译与测试验证待 CI（沙箱网络不可达，Maven 依赖未缓存，无法本地 mvn test）。
+
+
+Reviewer:
+
+Pending
