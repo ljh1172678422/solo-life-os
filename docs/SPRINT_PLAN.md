@@ -194,11 +194,11 @@ Sprint 1（User / Preference）
 ## DoD
 
 
-- [ ] Migration 已执行
-- [ ] 用户可看到 AI 生成的今日计划
-- [ ] 计划可动态调整
-- [ ] Planner Agent 接口定义完成（实现可 Mock）
-- [ ] 测试通过
+- [x] Migration 已执行（TASK-0201：daily_plan + activity 表 + Migration V20260730_004 增量索引/CHECK 约束）
+- [x] 用户可看到 AI 生成的今日计划（TASK-0205 today/index AI Hero 卡片 + plan-detail 时间线，对接 Planner Agent 产出）
+- [x] 计划可动态调整（TASK-0205 replan 页：原因选择 + 偏好开关 + 重新生成；TASK-0204 POST /plans/{id}/cancel|complete|start + ActivityController PUT + end）
+- [x] Planner Agent 接口定义完成（实现可 Mock）（TASK-0207：PlannerAgent + PlannerContext + MockMemoryService + AiConfig，Agent.execute 契约验证）
+- [x] 测试通过（TASK-0206：7 测试文件 60+ 用例，Domain/App/Controller 三层全覆盖；TASK-0207 2 测试文件 26 用例；TASK-0205 vue-tsc --noEmit 通过）
 
 
 ---

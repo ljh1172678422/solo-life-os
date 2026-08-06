@@ -1653,4 +1653,66 @@ Impact:
 
 Reviewer:
 
+
 Pending
+
+
+---
+
+
+## 2026-08-06 (第 38 次变更)
+
+
+Agent:
+
+
+Architecture Agent
+
+
+Task:
+
+
+非任务（Sprint 2 关闭收尾）
+
+
+Action:
+
+
+执行 Sprint 2 关闭对账，将 PR #23 / #24 / #25 合并后的任务状态同步到 Sprint 计划与看板，并勾选 Sprint 2 DoD：
+- TASK-0205 Today Frontend：⬜ 待启动 → ✅ Done（PR #23 squash merged develop，4 页面 + API client + 品牌 token）
+- TASK-0206 Today Test Suite：⬜ 待启动 → ✅ Done（PR #24 squash merged develop，7 测试文件 60+ 用例，Domain/App/Controller 三层全覆盖）
+- TASK-0207 Planner Agent 骨架（Mock Memory）：⬜ 待启动 → ✅ Done（PR #25 squash merged develop，解决 AI_CHANGELOG 冲突后 rebase 合并，MockMemoryService + PlannerAgent + 26 测试用例）
+- Sprint 2 Status：In Progress（启动 2026-07-30）→ Done (Closed 2026-08-06)
+- `docs/TASK_BOARD.md` v3.3 → v3.4：
+  - 新增 Sprint 2 Close Gate 段（7 个任务 Owner / Status / PR 全量登记 + Sprint Goal 交付摘要）
+  - Sprint 2 Task Plan 三条 ⬜ 任务全部勾选为 ✅ Done，标注 PR 号与交付要点
+  - Current Sprint 段提示从「启动中」切换为「正式关闭，见下方 Close Gate」
+  - Version History 新增 v3.4 条目（三任务对账详情 + Sprint 关闭 + Close Gate 新增）
+- `docs/CHANGELOG.md` [Unreleased]/Added 段顶部追加：
+  - Sprint 2 Close（完整交付摘要 + 文档对齐承诺）
+  - TASK-0207 / TASK-0206 / TASK-0205 三条条目（最新最前，与 Sprint 0/1 Close 格式对齐）
+- `docs/SPRINT_PLAN.md` Sprint 2 DoD 5 项 [ ] → [x] 全部勾选：
+  1. Migration 已执行（TASK-0201 + V20260730_004 索引/CHECK 约束）
+  2. 用户可看到 AI 生成的今日计划（TASK-0205 today/index Hero + plan-detail）
+  3. 计划可动态调整（TASK-0205 replan 页 + TASK-0204 状态变更/修改端点）
+  4. Planner Agent 接口定义完成实现可 Mock（TASK-0207 PlannerAgent + MockMemory）
+  5. 测试通过（TASK-0206 60+ + TASK-0207 26 + TASK-0205 vue-tsc）
+- 中间过程：PR #25 因 develop 上 AI_CHANGELOG.md 追加（第 36 次 TASK-0206 条目）与 feature 分支（第 37 次 TASK-0207 条目）冲突，通过 rebase origin/develop + 合并两段（第 36 + --- + 第 37）解决，force-push feature/planner-agent 后 squash merge
+
+
+Reason:
+
+
+三个 PR（#23/24/25）全部合并 develop 后，TASK_BOARD 仍停留在「待启动 ⬜」状态，SPRINT_PLAN Sprint 2 DoD 五项仍为未勾选，Sprint 2 无法正式关闭。按 AGENTS §15.4 Branch Status 字段规则与 Sprint 0/1 Close 先例（第 24 次 Sprint 0 Close / 第 34 次 Sprint 1 Close），PR 合并后必须立即更新任务卡为 Done / Merged、Sprint 状态切换为 Closed、DoD 全勾选，并在 Close Gate 段归档全量任务表供审计。本次仅做文档对账，未修改任何已冻结架构文档（DATABASE_DESIGN 文档对齐承诺保留到 Sprint Review，不在本收尾修改）。
+
+
+Impact:
+
+
+仅影响 docs/TASK_BOARD.md（v3.3→v3.4）、docs/CHANGELOG.md（追加 4 条目）、docs/SPRINT_PLAN.md（Sprint 2 DoD 5 项勾选）、docs/AI_CHANGELOG.md（本第 38 次条目），无代码与数据库变更。本文档生效后，Sprint 2（Today Module MVP）正式闭环，Current Sprint 区不再有激活的 Sprint，可启动 Sprint 3（Explore Module）预拆分或 Sprint Review。
+
+
+Reviewer:
+
+
+Human（用户指令直接合并收尾，无需 Reviewer）

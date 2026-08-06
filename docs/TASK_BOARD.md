@@ -1,8 +1,8 @@
 # Solo Life OS Task Board
 
-Version: 3.3
+Version: 3.4
 
-Last Update: 2026-07-30
+Last Update: 2026-08-06
 
 
 > 本看板是 Sprint 执行层入口，所有 AI Agent 领取任务、更新状态、提交 PR 必须先查阅本文档。
@@ -19,7 +19,7 @@ Sprint 2：Today Module
 
 Status:
 
-In Progress（启动 2026-07-30）
+Done（Closed 2026-08-06，启动 2026-07-30）
 
 
 Sprint Goal:
@@ -37,7 +37,7 @@ Reviewer Gate:
 Architecture Agent
 
 
-> Sprint 2 启动。首个任务 TASK-0201 Today Migration 开发中。Planner Agent 依赖 Sprint 5 Memory，本 Sprint 用 Mock Memory。
+> Sprint 2 全部 7 个任务达成，正式关闭（见下方 Sprint 2 Close Gate）。Planner Agent 骨架已交付（Mock Memory，Sprint 5 替换正式实现）。
 
 
 ---
@@ -1650,9 +1650,9 @@ Sprint 1（Done 2026-07-30）
 - ✅ TASK-0202 Today Domain Layer（DailyPlan / Activity Entity + Repository + TodayDomainService）（Done，PR #20 merged，含 PR #19 Review 改进：Migration V20260730_004 唯一索引 + CHECK 约束 + updated_time 策略明确 + PR #20 Review 改进：isClosed 抽取 + 实体不变式校验 + deletedTime 注解）
 - ✅ TASK-0203 Today Application Layer（DailyPlanApplicationService + ActivityApplicationService）（Done，PR #21 merged，含 PR #21 Review 改进：requirePlan/requireActivity 抽取 + endActivity/locateActivity 下沉 Domain Service + DataIntegrityViolationException 转 BusinessException）
 - ✅ TASK-0204 Today Controller + DTO（DailyPlanController + ActivityController + TodayAssembler + 5 DTO）（Done，PR #22 merged，含 PR #22 Review 改进：getToday 注释修正 + requirePlan 复用去重 + cancel 收敛 isClosed）
-- ⬜ TASK-0205 Today Frontend（今日页 Page01/02/03/05）
-- ⬜ TASK-0206 Today Test Suite
-- ⬜ TASK-0207 Planner Agent 骨架（Mock Memory）
+- ✅ TASK-0205 Today Frontend（今日页 Page01/02/03/05）（Done，PR #23 merged，4 个页面 + API client + 品牌色 token，对齐 designs/ colors_and_type.css）
+- ✅ TASK-0206 Today Test Suite（Done，PR #24 merged，7 测试文件 60+ 用例，Domain/App/Controller 三层全覆盖）
+- ✅ TASK-0207 Planner Agent 骨架（Mock Memory）（Done，PR #25 merged，MockMemoryService + PlannerContext + PlannerAgent 规则模板 + AiConfig，2 测试文件 26 用例）
 
 
 Sprint 2 设计决策（TASK-0201）：
@@ -1661,6 +1661,35 @@ Sprint 2 设计决策（TASK-0201）：
 - 原因：DATABASE_DESIGN §6.4 activity 表未含此字段，但 1:N 关系是 Sprint 2 业务必需
 - Decision Level: L1 Tech Choice（表内 schema 完善，不改模块边界，不跨模块契约）
 - 处理：Migration 直接补字段，AI_CHANGELOG 记录，PR 描述标注，不修改冻结的 DATABASE_DESIGN（Sprint 内）
+
+
+---
+
+
+# Sprint 2 Close Gate
+
+Sprint 2 全部 7 个任务达成，正式关闭：
+
+| Task | Owner | Status | PR |
+|------|-------|--------|-----|
+| TASK-0201 Today Migration | Backend Agent | ✅ Done | PR #19 |
+| TASK-0202 Today Domain Layer | Backend Agent | ✅ Done | PR #20 |
+| TASK-0203 Today Application Layer | Backend Agent | ✅ Done | PR #21 |
+| TASK-0204 Today Controller + DTO | Backend Agent | ✅ Done | PR #22 |
+| TASK-0205 Today Frontend | Frontend Agent | ✅ Done | PR #23 |
+| TASK-0206 Today Test Suite | Backend Agent | ✅ Done | PR #24 |
+| TASK-0207 Planner Agent 骨架（Mock Memory） | AI Agent | ✅ Done | PR #25 |
+
+Sprint Goal（Today Module MVP + AI 生成每日计划，Planner Agent 用 Mock Memory）全部交付：
+
+- 后端：Migration（daily_plan / activity + 增量索引 CHECK 约束 Migration）+ Domain（Entity / Repository / Domain Service，实体不变式校验 + isClosed 语义）+ Application（2 服务事务协调 + DataIntegrityViolationException 业务化）+ Controller（13 REST 端点 + 5 DTO + Assembler）
+- 测试：7 测试类 60+ 用例（Entity 状态机 / Domain Service 业务规则 / Application 事务与并发兜底 / Controller MockMvc）
+- 前端：4 个 Today 页面（index / plan-detail / replan / summary）+ api/today.ts 13 端点封装 + 品牌色 Warm Sunrise Orange + Warm Stone token
+- AI：PlannerAgent（规则模板产出活动建议 JSON）+ MockMemoryService（进程内 Mock 长期记忆）+ PlannerContext 结构化输入 + AiConfig Bean 注册，2 测试类 26 用例
+
+文档对齐承诺（Sprint Review 执行）：DATABASE_DESIGN §6.4 补 daily_plan_id、§8 补 uk_daily_plan_user_date、§9 补两个 CHECK 约束。
+
+进入 Sprint 3 阶段（Explore Module）。
 
 
 ---
@@ -1685,6 +1714,21 @@ Sprint 2 设计决策（TASK-0201）：
 
 # Version History
 
+
+## v3.4 - 2026-08-06
+
+- TASK-0205 状态 ⬜ → ✅ Done（PR #23 squash merged to develop，TASK_BOARD 首次标注 Today Frontend 交付）
+  - 交付：4 个 Today 页面（pages/today/index + plan-detail + replan + summary）+ api/today.ts 13 端点封装 + api/types.ts Today Module 类型 + uni.scss 品牌色 token（Warm Sunrise Orange + Warm Stone，对齐 designs/solo-life-os-mobile/colors_and_type.css）
+  - pages.json 注册 4 today 页面；login / index / profile 路由跳转调整为 today（登录后第一眼是 Today 页）
+- TASK-0206 状态 ⬜ → ✅ Done（PR #24 squash merged to develop）
+  - 交付：7 测试文件 60+ 用例（Domain Model 2 + Domain Service 1 + Application 2 + Controller 2），JUnit 5 + Mockito + AssertJ + MockMvc standaloneSetup
+  - 覆盖：DailyPlan/Activity 工厂校验+状态机 / TodayDomainService 业务规则 / Application createPlan 并发冲突兜底（DataIntegrityViolationException→BusinessException）/ Controller ISO 日期 ConversionService + JavaTimeModule 适配
+- TASK-0207 状态 ⬜ → ✅ Done（PR #25 squash merged to develop，解决 AI_CHANGELOG 冲突后 rebase 合并）
+  - 交付：MockMemoryService（进程内 ConcurrentHashMap 长期记忆，store/retrieve/deleteByUser/clear）+ PlannerContext（结构化输入 record）+ PlannerAgent（规则模板生成 Mock 活动建议，Agent.execute 契约）+ AiConfig（Spring Bean 注册）
+  - 2 测试文件 26 用例：MockMemoryServiceTest 13 + PlannerAgentTest 13
+- Sprint 2 Status：In Progress → Done (Closed 2026-08-06)，全部 7 个 Today Module 任务达成（TASK-0201~0207）
+- 新增 Sprint 2 Close Gate 段（7 个任务 Owner / Status / PR 全量登记 + Sprint Goal 交付摘要）
+- Current Sprint 段提示信息从「启动中」切换为「正式关闭，见下方 Close Gate」
 
 ## v3.3 - 2026-07-30
 
