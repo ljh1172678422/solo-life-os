@@ -7,6 +7,30 @@
       }
     },
     {
+      "path": "pages/today/index",
+      "style": {
+        "navigationBarTitleText": "今天"
+      }
+    },
+    {
+      "path": "pages/today/plan-detail",
+      "style": {
+        "navigationBarTitleText": "今日规划"
+      }
+    },
+    {
+      "path": "pages/today/replan",
+      "style": {
+        "navigationBarTitleText": "重新规划"
+      }
+    },
+    {
+      "path": "pages/today/summary",
+      "style": {
+        "navigationBarTitleText": "今日总结"
+      }
+    },
+    {
       "path": "pages/login/index",
       "style": {
         "navigationBarTitleText": "登录"
