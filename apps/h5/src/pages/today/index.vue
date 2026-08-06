@@ -5,295 +5,353 @@
  * 设计稿：designs/solo-life-os-mobile/pages/today.html
  * 文档：designs/solo-life-os-mobile/docs/01-today-module-review.md §Page 01
  *
- * 信息架构（按设计稿）：
- * - 顶部：问候 + 副标题
- * - AI 今日规划 Hero 卡（时间块概览 pills + 查看完整规划 CTA）
- * - AI 为你推荐（横滑卡片）
- * - 附近正在发生（列表卡片）
- * - 底部：今晚记录 / 重新规划入口
+ * 当前实现：按设计稿 1:1 还原布局，纯静态 mock 展示（暂不接后端接口，Sprint 5 接入 Planner Agent 后再联调）。
  *
- * 数据来源：getTodayPlan / listActivities（PLAN 已存在时展示活动 pills；无 PLAN 时显示空态温柔引导）
- * 设计原则（01-today-module-review.md §关键设计原则）：信息折叠 / 零摩擦 / 温柔兜底 / Agent 而非 Chatbot
+ * 信息架构：
+ * - 顶部问候区（时间感知问候 + slogan）
+ * - AI 今日规划 Hero 卡（渐变背景 + 装饰圆形 + 活动 pills + CTA）
+ * - AI 为你推荐（横滑 4 张推荐卡，隐藏滚动条）
+ * - 附近正在发生（2 张列表卡，第二张带 3缺2 红色角标）
+ * - 底部 2 CTA：主按钮"今晚记录一下" + 次级"重新规划"链接
  */
-import { computed, onMounted, ref } from 'vue'
-import { onShow } from '@dcloudio/uni-app'
-import { ApiError } from '@/api/request'
-import { useUserStore } from '@/stores/user'
+import { computed } from 'vue'
 import {
-  createDailyPlan,
-  getTodayPlan,
-  listActivities,
-  startDailyPlan,
-} from '@/api/today'
-import type { Activity, ActivityType, DailyPlan } from '@/api/types'
+  Sparkles,
+  Sun,
+  Coffee,
+  BookOpen,
+  TreePine,
+  Film,
+  ArrowRight,
+  MapPin,
+  Brain,
+  Star,
+  Heart,
+  Palette,
+  Users,
+  Footprints,
+  Clock,
+  ChevronRight,
+  MoonStar,
+  RefreshCw,
+} from 'lucide-vue-next'
 
-const userStore = useUserStore()
+/* ---------- 静态 Mock 数据（与设计稿 today.html 一致） ---------- */
 
-const loading = ref(true)
-const errorMsg = ref('')
-const plan = ref<DailyPlan | null>(null)
-const activities = ref<Activity[]>([])
+interface HeroPill {
+  label: string
+  iconColor: string
+}
 
-const todayIso = new Date().toISOString().slice(0, 10)
+const heroPills: HeroPill[] = [
+  { label: '晨间咖啡', iconColor: '#F97316' },
+  { label: '书店阅读', iconColor: '#F97316' },
+  { label: '公园散步', iconColor: '#22C55E' },
+  { label: '晚间电影', iconColor: '#3B82F6' },
+]
 
-/** 按时段分组活动（上午/下午/晚上/睡前）。 */
-const groupedActivities = computed<{ label: string; emoji: string; items: Activity[] }[]>(() => {
-  const buckets: Record<string, Activity[]> = { morning: [], afternoon: [], evening: [], night: [] }
-  for (const a of activities.value) {
-    const hour = parseInt(a.startTime.slice(11, 13), 10)
-    if (hour < 12) buckets.morning.push(a)
-    else if (hour < 18) buckets.afternoon.push(a)
-    else if (hour < 22) buckets.evening.push(a)
-    else buckets.night.push(a)
-  }
-  return [
-    { label: '上午', emoji: '☀️', items: buckets.morning },
-    { label: '下午', emoji: '🌿', items: buckets.afternoon },
-    { label: '晚上', emoji: '🎬', items: buckets.evening },
-    { label: '睡前', emoji: '🌙', items: buckets.night },
-  ].filter((g) => g.items.length > 0)
-})
+interface RecommendCard {
+  title: string
+  distance: string
+  tagLabel: string
+  tagBg: string
+  tagColor: string
+  gradientFrom: string
+  gradientTo: string
+  iconColor: string
+}
 
-const hasPlan = computed(() => !!plan.value)
-const planStatusText = computed(() => {
-  switch (plan.value?.status) {
-    case 'PLANNING':
-      return '规划中'
-    case 'ONGOING':
-      return '进行中'
-    case 'COMPLETED':
-      return '已完成'
-    case 'CANCELLED':
-      return '已取消'
-    default:
-      return ''
-  }
-})
+const recommendCards: RecommendCard[] = [
+  {
+    title: '安静咖啡馆',
+    distance: '0.8km',
+    tagLabel: '适合独处',
+    tagBg: '#FFF7ED',
+    tagColor: '#C2410C',
+    gradientFrom: '#FFF7ED',
+    gradientTo: '#FED7AA',
+    iconColor: '#EA580C',
+  },
+  {
+    title: '城市公园',
+    distance: '1.2km',
+    tagLabel: '天气正好',
+    tagBg: '#F0FDF4',
+    tagColor: '#15803D',
+    gradientFrom: '#F0FDF4',
+    gradientTo: '#BBF7D0',
+    iconColor: '#22C55E',
+  },
+  {
+    title: '一个人看电影',
+    distance: '2.1km',
+    tagLabel: '高分治愈',
+    tagBg: '#EFF6FF',
+    tagColor: '#1D4ED8',
+    gradientFrom: '#EFF6FF',
+    gradientTo: '#BFDBFE',
+    iconColor: '#3B82F6',
+  },
+  {
+    title: '书店阅读',
+    distance: '0.5km',
+    tagLabel: '你常去',
+    tagBg: '#FEF3C7',
+    tagColor: '#92400E',
+    gradientFrom: '#FEF3C7',
+    gradientTo: '#FDE68A',
+    iconColor: '#B45309',
+  },
+]
+
+interface NearbyCard {
+  title: string
+  subDistance: string
+  subMeta: string
+  badge?: string
+  bgColor: string
+  iconColor: string
+}
+
+const nearbyCards: NearbyCard[] = [
+  {
+    title: '一个人看展 · 城市光影摄影展',
+    subDistance: '1.5km',
+    subMeta: '8人正在看',
+    bgColor: '#FFF7ED',
+    iconColor: '#F97316',
+  },
+  {
+    title: '今晚 City Walk · 西湖夜游',
+    subDistance: '19:30 出发',
+    subMeta: '3/5人',
+    badge: '3缺2',
+    bgColor: '#EFF6FF',
+    iconColor: '#3B82F6',
+  },
+]
+
+/* ---------- 状态 ---------- */
 
 const greeting = computed(() => {
   const hour = new Date().getHours()
-  if (hour < 6) return '夜深了 🌙'
-  if (hour < 11) return '早上好 ☀️'
-  if (hour < 14) return '中午好 🌤️'
-  if (hour < 18) return '下午好 ☕'
-  if (hour < 22) return '晚上好 🌆'
-  return '夜深了 🌙'
+  if (hour < 6) return { text: '夜深了', emoji: '🌙' }
+  if (hour < 11) return { text: '早上好', emoji: '☀️' }
+  if (hour < 14) return { text: '中午好', emoji: '🌤️' }
+  if (hour < 18) return { text: '下午好', emoji: '☀️' }
+  if (hour < 22) return { text: '晚上好', emoji: '🌆' }
+  return { text: '夜深了', emoji: '🌙' }
 })
 
-onMounted(loadToday)
-
-// reLaunch 回到首页时刷新（活动状态可能变化）
-onShow(() => {
-  if (userStore.isLoggedIn) loadToday()
-})
-
-async function loadToday(): Promise<void> {
-  if (!userStore.userId) {
-    uni.reLaunch({ url: '/pages/login/index' })
-    return
-  }
-  loading.value = true
-  errorMsg.value = ''
-  try {
-    const today = await getTodayPlan(userStore.userId, todayIso)
-    plan.value = today
-    if (today) {
-      activities.value = await listActivities(today.id)
-    }
-  } catch (e) {
-    errorMsg.value = e instanceof ApiError ? e.message : '加载今日计划失败，稍后再试'
-  } finally {
-    loading.value = false
-  }
-}
-
-/** 一键生成今日计划（PLAN 不存在时的懒人入口）。 */
-async function createTodayPlan(): Promise<void> {
-  if (!userStore.userId) return
-  loading.value = true
-  errorMsg.value = ''
-  try {
-    const created = await createDailyPlan(userStore.userId, { date: todayIso })
-    plan.value = created
-    activities.value = []
-    uni.showToast({ title: '今日计划已创建', icon: 'success' })
-  } catch (e) {
-    errorMsg.value = e instanceof ApiError ? e.message : '创建计划失败'
-  } finally {
-    loading.value = false
-  }
-}
-
-/** 开始执行今日计划：PLANNING → ONGOING。 */
-async function startPlan(): Promise<void> {
-  if (!plan.value) return
-  try {
-    plan.value = await startDailyPlan(plan.value.id)
-    uni.showToast({ title: '今天开始啦', icon: 'success' })
-  } catch (e) {
-    uni.showToast({
-      title: e instanceof ApiError ? e.message : '操作失败',
-      icon: 'none',
-    })
-  }
-}
+/* ---------- 导航 ---------- */
 
 function goPlanDetail(): void {
-  if (!plan.value) return
-  uni.navigateTo({ url: `/pages/today/plan-detail?planId=${plan.value.id}` })
+  uni.navigateTo({ url: '/pages/today/plan-detail?planId=1' })
 }
 
 function goReplan(): void {
-  if (!plan.value) return
-  uni.navigateTo({ url: `/pages/today/replan?planId=${plan.value.id}` })
+  uni.navigateTo({ url: '/pages/today/replan?planId=1' })
 }
 
 function goSummary(): void {
-  if (!plan.value) return
-  uni.navigateTo({ url: `/pages/today/summary?planId=${plan.value.id}` })
+  uni.navigateTo({ url: '/pages/today/summary?planId=1' })
 }
 
-function goProfile(): void {
-  uni.reLaunch({ url: '/pages/profile/index' })
+/* 按索引返回 pill 对应图标（与设计稿一致） */
+function getPillIcon(idx: number): typeof Coffee {
+  return [Coffee, BookOpen, TreePine, Film][idx] ?? Coffee
 }
 
-/** 活动类型 → 展示 emoji（与设计稿活动 pill 一致）。 */
-function activityEmoji(type: ActivityType): string {
-  switch (type) {
-    case 'WORK':
-      return '💼'
-    case 'LEISURE':
-      return '☕'
-    case 'SPORT':
-      return '🏃'
-    case 'STUDY':
-      return '📖'
-    case 'SOCIAL':
-      return '👥'
-    case 'EXPLORE':
-      return '🧭'
-    case 'REST':
-      return '🌙'
-    default:
-      return '✨'
-  }
+/* 按索引返回推荐卡对应图标 */
+function getRecIcon(idx: number): typeof Coffee {
+  return [Coffee, TreePine, Film, BookOpen][idx] ?? Coffee
 }
 
-/** 格式化活动开始时间 HH:MM。 */
-function formatTime(startTime: string): string {
-  return startTime.slice(11, 16)
+/* 按索引返回推荐卡 tag 图标（brain / sun / star / heart） */
+function getRecTagIcon(idx: number): typeof Brain {
+  return [Brain, Sun, Star, Heart][idx] ?? Brain
+}
+
+/* 按索引返回附近卡图标 */
+function getNearbyIcon(idx: number): typeof Palette {
+  return [Palette, Footprints][idx] ?? Palette
+}
+
+/* 按索引返回附近卡 sub 左侧图标（map-pin / clock） */
+function getNearbySubIcon(idx: number): typeof MapPin {
+  return [MapPin, Clock][idx] ?? MapPin
 }
 </script>
 
 <template>
   <view class="page">
-    <!-- 顶部问候 -->
+    <!-- 顶部问候区 -->
     <view class="greeting">
-      <text class="greeting-title">{{ greeting }}</text>
+      <text class="greeting-title">{{ greeting.text }} {{ greeting.emoji }}</text>
       <text class="greeting-sub">今天，过得值得一点</text>
     </view>
 
-    <!-- 加载 / 错误态 -->
-    <view v-if="loading && !plan" class="loading-card">
-      <text class="loading-text">正在为你准备今天...</text>
-    </view>
-    <view v-else-if="errorMsg && !plan" class="error-card">
-      <text class="error-text">{{ errorMsg }}</text>
-      <button class="btn-retry" @click="loadToday">重试</button>
-    </view>
-
-    <!-- 空态：温柔引导（01-today-module-review §首次使用） -->
-    <view v-else-if="!hasPlan" class="empty-hero">
-      <view class="empty-emoji">🌅</view>
-      <text class="empty-title">今天感觉怎么样？</text>
-      <text class="empty-sub">想出门吗？让 AI 为你准备一份轻松的今日安排</text>
-      <button class="btn-primary" :disabled="loading" @click="createTodayPlan">
-        {{ loading ? '生成中...' : '生成今日计划' }}
-      </button>
-    </view>
-
-    <!-- AI 今日规划 Hero 卡（设计稿 §AI 今日规划 Hero 卡片） -->
-    <view v-else class="hero-card">
-      <view class="hero-decor-1"></view>
-      <view class="hero-decor-2"></view>
+    <!-- AI 今日规划 Hero 卡片 -->
+    <view class="hero-card">
+      <!-- 装饰圆形 -->
+      <view class="hero-decor hero-decor-1"></view>
+      <view class="hero-decor hero-decor-2"></view>
 
       <view class="hero-content">
+        <!-- 头部：标签 + 天气 -->
         <view class="hero-header">
           <view class="hero-tag">
-            <text class="hero-tag-icon">✨</text>
+            <Sparkles class="hero-tag-icon" :size="14" :stroke-width="2" />
             <text class="hero-tag-text">AI 今日规划</text>
           </view>
-          <text class="hero-status">{{ planStatusText }}</text>
-        </view>
-
-        <text class="hero-title">为你准备的今天</text>
-        <text class="hero-sub">
-          根据你的节奏，推荐了 {{ activities.length }} 件小而美好的事
-        </text>
-
-        <!-- 活动 pills（信息折叠：只显示标题，不展开细节） -->
-        <view v-if="activities.length" class="hero-pills">
-          <view v-for="a in activities" :key="a.id" class="pill" @click="goPlanDetail">
-            <text class="pill-emoji">{{ activityEmoji(a.type) }}</text>
-            <text class="pill-text">{{ a.title }}</text>
+          <view class="hero-weather">
+            <Sun class="hero-weather-icon" :size="16" :stroke-width="2" />
+            <text class="hero-weather-text">26°C · 晴</text>
           </view>
         </view>
-        <view v-else class="hero-pills-empty">
-          <text class="pills-empty-text">还没有活动，去规划详情添加吧</text>
+
+        <!-- 主标题 -->
+        <text class="hero-title">为你准备的今天</text>
+        <text class="hero-sub">根据你的心情和节奏，推荐了 4 件小而美好的事</text>
+
+        <!-- 活动预览 pills -->
+        <view class="hero-pills">
+          <view
+            v-for="(pill, idx) in heroPills"
+            :key="idx"
+            class="pill"
+            @click="goPlanDetail"
+          >
+            <component
+              :is="getPillIcon(idx)"
+              class="pill-icon"
+              :size="14"
+              :stroke-width="2"
+              :color="pill.iconColor"
+            />
+            <text class="pill-text">{{ pill.label }}</text>
+          </view>
         </view>
 
-        <button class="btn-hero" @click="goPlanDetail">
+        <!-- 查看完整规划按钮 -->
+        <view class="btn-hero" @click="goPlanDetail">
           <text class="btn-hero-text">查看完整规划</text>
-          <text class="btn-hero-arrow">→</text>
-        </button>
+          <ArrowRight class="btn-hero-arrow" :size="16" :stroke-width="2" />
+        </view>
       </view>
     </view>
 
-    <!-- 时间块概览（PLAN 存在时按上午/下午/晚上/睡前分组） -->
-    <view v-if="hasPlan && groupedActivities.length" class="section">
-      <text class="section-title">今日时间块</text>
-      <view class="block-list">
-        <view
-          v-for="group in groupedActivities"
-          :key="group.label"
-          class="block-card"
-          @click="goPlanDetail"
-        >
-          <view class="block-header">
-            <text class="block-emoji">{{ group.emoji }}</text>
-            <text class="block-label">{{ group.label }}</text>
-            <text class="block-count">{{ group.items.length }} 项</text>
-          </view>
-          <view class="block-items">
-            <view v-for="a in group.items" :key="a.id" class="block-item">
-              <text class="block-item-time">{{ formatTime(a.startTime) }}</text>
-              <text class="block-item-title">{{ a.title }}</text>
+    <!-- AI 为你推荐 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-title-wrap">
+          <Sparkles class="section-title-icon" :size="16" :stroke-width="2" color="#F97316" />
+          <text class="section-title">AI 为你推荐</text>
+        </view>
+        <view class="section-more">
+          <text class="section-more-text">更多</text>
+          <ChevronRight class="section-more-icon" :size="14" :stroke-width="2" />
+        </view>
+      </view>
+
+      <scroll-view scroll-x class="rec-scroll no-scrollbar" :show-scrollbar="false">
+        <view class="rec-list">
+          <view
+            v-for="(card, idx) in recommendCards"
+            :key="idx"
+            class="rec-card"
+          >
+            <view
+              class="rec-cover"
+              :style="{ background: `linear-gradient(135deg, ${card.gradientFrom}, ${card.gradientTo})` }"
+            >
+              <component
+                :is="getRecIcon(idx)"
+                :size="36"
+                :stroke-width="2"
+                :color="card.iconColor"
+              />
+            </view>
+            <view class="rec-body">
+              <text class="rec-title">{{ card.title }}</text>
+              <view class="rec-distance">
+                <MapPin :size="12" :stroke-width="2" color="#78716C" />
+                <text class="rec-distance-text">{{ card.distance }}</text>
+              </view>
+              <view
+                class="rec-tag"
+                :style="{ backgroundColor: card.tagBg, color: card.tagColor }"
+              >
+                <component :is="getRecTagIcon(idx)" :size="12" :stroke-width="2" />
+                <text class="rec-tag-text">{{ card.tagLabel }}</text>
+              </view>
             </view>
           </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 附近正在发生 -->
+    <view class="section">
+      <view class="section-header">
+        <view class="section-title-wrap">
+          <MapPin class="section-title-icon" :size="16" :stroke-width="2" color="#F97316" />
+          <text class="section-title">附近正在发生</text>
+        </view>
+      </view>
+
+      <view class="nearby-list">
+        <view
+          v-for="(card, idx) in nearbyCards"
+          :key="idx"
+          class="nearby-card"
+        >
+          <!-- 3缺2 角标（仅第二张） -->
+          <view v-if="card.badge" class="nearby-badge">
+            <text class="nearby-badge-text">{{ card.badge }}</text>
+          </view>
+
+          <view
+            class="nearby-icon"
+            :style="{ backgroundColor: card.bgColor }"
+          >
+            <component
+              :is="getNearbyIcon(idx)"
+              :size="24"
+              :stroke-width="2"
+              :color="card.iconColor"
+            />
+          </view>
+
+          <view class="nearby-info">
+            <text class="nearby-title">{{ card.title }}</text>
+            <view class="nearby-sub">
+              <view class="nearby-sub-item">
+                <component :is="getNearbySubIcon(idx)" :size="12" :stroke-width="2" color="#78716C" />
+                <text class="nearby-sub-text">{{ card.subDistance }}</text>
+              </view>
+              <view class="nearby-sub-item">
+                <Users :size="12" :stroke-width="2" color="#78716C" />
+                <text class="nearby-sub-text">{{ card.subMeta }}</text>
+              </view>
+            </view>
+          </view>
+
+          <ChevronRight class="nearby-arrow" :size="16" :stroke-width="2" color="#A8A29E" />
         </view>
       </view>
     </view>
 
     <!-- 底部操作区 -->
-    <view v-if="hasPlan" class="bottom-actions">
-      <button
-        v-if="plan?.status === 'PLANNING'"
-        class="btn-primary"
-        :disabled="loading"
-        @click="startPlan"
-      >
-        开始今天
-      </button>
-      <button v-else class="btn-primary" @click="goSummary">今晚记录一下</button>
+    <view class="bottom-actions">
+      <view class="btn-primary" @click="goSummary">
+        <MoonStar :size="16" :stroke-width="2" />
+        <text class="btn-primary-text">今晚记录一下</text>
+      </view>
       <view class="bottom-link" @click="goReplan">
-        <text class="bottom-link-icon">↻</text>
+        <RefreshCw class="bottom-link-icon" :size="14" :stroke-width="2" />
         <text class="bottom-link-text">重新规划</text>
       </view>
-    </view>
-
-    <!-- 顶部右上：个人中心入口 -->
-    <view class="profile-entry" @click="goProfile">
-      <text class="profile-entry-text">我的</text>
     </view>
   </view>
 </template>
@@ -301,22 +359,24 @@ function formatTime(startTime: string): string {
 <style scoped lang="scss">
 .page {
   min-height: 100vh;
-  padding: 80rpx 32rpx 160rpx;
-  background-color: $solo-neutral-50;
+  max-width: 896rpx; /* max-w-md 448px → 896rpx */
+  margin: 0 auto;
+  padding: 96rpx 32rpx 160rpx;
+  background-color: $solo-background;
   position: relative;
 }
 
-/* 顶部问候 */
+/* ===== 顶部问候 ===== */
 .greeting {
-  margin-bottom: 40rpx;
+  padding-bottom: 40rpx;
 }
 
 .greeting-title {
   display: block;
   font-size: 52rpx;
   font-weight: 700;
-  color: $solo-neutral-900;
   line-height: 1.2;
+  color: $solo-foreground;
 }
 
 .greeting-sub {
@@ -326,83 +386,22 @@ function formatTime(startTime: string): string {
   margin-top: 8rpx;
 }
 
-/* 加载 / 错误态 */
-.loading-card,
-.error-card {
-  background-color: $solo-card;
-  border-radius: $solo-radius-lg;
-  padding: 64rpx 32rpx;
-  text-align: center;
-}
-
-.loading-text,
-.error-text {
-  display: block;
-  font-size: 28rpx;
-  color: $solo-neutral-500;
-  margin-bottom: 24rpx;
-}
-
-.btn-retry {
-  display: inline-block;
-  height: 64rpx;
-  line-height: 64rpx;
-  padding: 0 40rpx;
-  background-color: $solo-primary-500;
-  color: #fff;
-  font-size: 26rpx;
-  border-radius: $solo-radius-full;
-  border: none;
-}
-
-/* 空态 */
-.empty-hero {
-  background: linear-gradient(135deg, $solo-primary-50 0%, $solo-primary-100 60%, $solo-primary-200 100%);
-  border: 1rpx solid $solo-primary-200;
-  border-radius: $solo-radius-xl;
-  padding: 64rpx 40rpx;
-  text-align: center;
-}
-
-.empty-emoji {
-  font-size: 96rpx;
-  margin-bottom: 24rpx;
-}
-
-.empty-title {
-  display: block;
-  font-size: 40rpx;
-  font-weight: 700;
-  color: $solo-neutral-900;
-  margin-bottom: 16rpx;
-}
-
-.empty-sub {
-  display: block;
-  font-size: 28rpx;
-  color: $solo-neutral-600;
-  line-height: 1.6;
-  margin-bottom: 40rpx;
-}
-
-/* AI Hero 卡 */
+/* ===== Hero 卡 ===== */
 .hero-card {
   position: relative;
   overflow: hidden;
-  border-radius: $solo-radius-xl;
+  border-radius: 40rpx; /* rounded-[20px] → 40rpx */
   padding: 40rpx;
   margin-bottom: 48rpx;
-  background: linear-gradient(135deg, $solo-primary-50 0%, $solo-primary-100 40%, $solo-primary-200 100%);
+  background: $solo-hero-gradient;
   border: 1rpx solid $solo-primary-200;
 }
 
-.hero-decor-1,
-.hero-decor-2 {
+.hero-decor {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
 }
-
 .hero-decor-1 {
   top: -64rpx;
   right: -64rpx;
@@ -411,7 +410,6 @@ function formatTime(startTime: string): string {
   background-color: $solo-primary-200;
   opacity: 0.4;
 }
-
 .hero-decor-2 {
   top: 64rpx;
   right: 96rpx;
@@ -428,31 +426,39 @@ function formatTime(startTime: string): string {
 
 .hero-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 24rpx;
 }
 
 .hero-tag {
   display: inline-flex;
   align-items: center;
+  gap: 6rpx;
   padding: 8rpx 20rpx;
   border-radius: $solo-radius-full;
   background-color: rgba(249, 115, 22, 0.12);
 }
-
 .hero-tag-icon {
-  font-size: 24rpx;
-  margin-right: 8rpx;
+  color: $solo-primary-700;
+  flex-shrink: 0;
 }
-
 .hero-tag-text {
   font-size: 24rpx;
   font-weight: 500;
   color: $solo-primary-700;
 }
 
-.hero-status {
+.hero-weather {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+}
+.hero-weather-icon {
+  color: $solo-state-warning;
+  flex-shrink: 0;
+}
+.hero-weather-text {
   font-size: 24rpx;
   color: $solo-neutral-600;
 }
@@ -483,184 +489,258 @@ function formatTime(startTime: string): string {
 .pill {
   display: inline-flex;
   align-items: center;
+  gap: 6rpx;
   padding: 12rpx 24rpx;
   border-radius: $solo-radius-full;
   background-color: rgba(255, 255, 255, 0.7);
   border: 1rpx solid rgba(249, 115, 22, 0.15);
 }
-
-.pill-emoji {
-  font-size: 24rpx;
-  margin-right: 8rpx;
-}
-
+.pill-icon { flex-shrink: 0; }
 .pill-text {
   font-size: 24rpx;
   color: $solo-neutral-700;
 }
 
-.hero-pills-empty {
-  margin-bottom: 40rpx;
-}
-
-.pills-empty-text {
-  font-size: 24rpx;
-  color: $solo-neutral-500;
-}
-
 .btn-hero {
   width: 100%;
   height: 88rpx;
-  line-height: 88rpx;
-  background-color: $solo-primary-500;
   border-radius: $solo-radius-full;
-  border: none;
-  box-shadow: 0 8rpx 28rpx rgba(249, 115, 22, 0.35);
+  background-color: $solo-primary-500;
+  box-shadow: $solo-shadow-primary-sm;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8rpx;
 }
-
 .btn-hero-text {
-  color: #fff;
   font-size: 28rpx;
   font-weight: 600;
+  color: #fff;
 }
-
 .btn-hero-arrow {
   color: #fff;
-  font-size: 28rpx;
+  flex-shrink: 0;
 }
 
-/* 时间块 */
+/* ===== 通用 section ===== */
 .section {
   margin-bottom: 48rpx;
 }
 
-.section-title {
-  display: block;
-  font-size: 32rpx;
-  font-weight: 600;
-  color: $solo-neutral-900;
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 24rpx;
 }
+.section-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+}
+.section-title-icon { flex-shrink: 0; }
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: $solo-foreground;
+}
 
-.block-list {
+.section-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rpx;
+}
+.section-more-text {
+  font-size: 24rpx;
+  color: $solo-neutral-500;
+}
+.section-more-icon {
+  color: $solo-neutral-500;
+  flex-shrink: 0;
+}
+
+/* ===== AI 为你推荐 横滑 ===== */
+.rec-scroll {
+  width: 100%;
+  white-space: nowrap;
+  margin: 0 -32rpx;
+  padding: 0 32rpx 4rpx;
+}
+
+.rec-list {
+  display: inline-flex;
+  gap: 24rpx;
+}
+
+.rec-card {
+  flex-shrink: 0;
+  width: 300rpx; /* 150px → 300rpx */
+  overflow: hidden;
+  background-color: $solo-card;
+  border: 1rpx solid $solo-border;
+  border-radius: $solo-radius-md; /* rounded-xl 12px → 24rpx, 这里用设计稿的 12px */
+}
+
+.rec-cover {
+  height: 180rpx; /* 90px → 180rpx */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rec-body {
+  padding: 24rpx;
+}
+
+.rec-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: $solo-foreground;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rec-distance {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+  margin-top: 8rpx;
+}
+.rec-distance-text {
+  font-size: 22rpx;
+  color: $solo-neutral-500;
+}
+
+.rec-tag {
+  margin-top: 16rpx;
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+  padding: 4rpx 16rpx;
+  border-radius: $solo-radius-full;
+}
+.rec-tag-text {
+  font-size: 20rpx;
+}
+
+/* ===== 附近正在发生 ===== */
+.nearby-list {
   display: flex;
   flex-direction: column;
   gap: 24rpx;
 }
 
-.block-card {
+.nearby-card {
+  position: relative;
+  overflow: hidden;
   background-color: $solo-card;
   border: 1rpx solid $solo-border;
-  border-radius: $solo-radius-lg;
+  border-radius: $solo-radius-md;
   padding: 32rpx;
-}
-
-.block-header {
   display: flex;
   align-items: center;
-  margin-bottom: 20rpx;
+  gap: 24rpx;
 }
 
-.block-emoji {
-  font-size: 32rpx;
-  margin-right: 12rpx;
+.nearby-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4rpx 16rpx;
+  border-bottom-left-radius: $solo-radius-sm;
+  background-color: $solo-state-error;
+}
+.nearby-badge-text {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: #fff;
 }
 
-.block-label {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: $solo-neutral-900;
-}
-
-.block-count {
-  margin-left: auto;
-  font-size: 24rpx;
-  color: $solo-neutral-500;
-}
-
-.block-items {
-  display: flex;
-  flex-direction: column;
-  gap: 12rpx;
-}
-
-.block-item {
-  display: flex;
-  align-items: center;
-  padding: 12rpx 0;
-}
-
-.block-item-time {
-  font-size: 24rpx;
-  color: $solo-neutral-500;
+.nearby-icon {
   width: 96rpx;
+  height: 96rpx;
+  border-radius: $solo-radius-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.block-item-title {
+.nearby-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nearby-title {
+  display: block;
   font-size: 28rpx;
-  color: $solo-neutral-800;
+  font-weight: 500;
+  color: $solo-foreground;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* 底部操作区 */
+.nearby-sub {
+  margin-top: 8rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.nearby-sub-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rpx;
+}
+.nearby-sub-text {
+  font-size: 24rpx;
+  color: $solo-neutral-500;
+}
+
+.nearby-arrow {
+  flex-shrink: 0;
+}
+
+/* ===== 底部操作区 ===== */
 .bottom-actions {
-  margin-top: 48rpx;
+  padding-top: 32rpx;
+  padding-bottom: 16rpx;
 }
 
 .btn-primary {
   width: 100%;
   height: 96rpx;
-  line-height: 96rpx;
-  background-color: $solo-primary-500;
-  color: #fff;
-  font-size: 30rpx;
-  font-weight: 600;
   border-radius: $solo-radius-full;
-  border: none;
-  box-shadow: 0 8rpx 28rpx rgba(249, 115, 22, 0.35);
+  background-color: $solo-primary-500;
+  box-shadow: $solo-shadow-primary-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  color: #fff;
 }
-
-.btn-primary[disabled] {
-  background-color: $solo-primary-300;
-  box-shadow: none;
+.btn-primary-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #fff;
 }
 
 .bottom-link {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin-top: 24rpx;
-  padding: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 8rpx;
 }
-
 .bottom-link-icon {
-  font-size: 28rpx;
   color: $solo-neutral-500;
-  margin-right: 8rpx;
+  flex-shrink: 0;
 }
-
 .bottom-link-text {
   font-size: 24rpx;
   color: $solo-neutral-500;
-}
-
-/* 个人中心入口（右上浮动） */
-.profile-entry {
-  position: fixed;
-  top: 48rpx;
-  right: 32rpx;
-  padding: 12rpx 24rpx;
-  background-color: $solo-card;
-  border: 1rpx solid $solo-border;
-  border-radius: $solo-radius-full;
-  z-index: 10;
-}
-
-.profile-entry-text {
-  font-size: 24rpx;
-  color: $solo-neutral-700;
 }
 </style>
