@@ -37,8 +37,59 @@ $solo-state-warning: #F59E0B;
 $solo-state-error: #EF4444;
 $solo-state-info: #3B82F6;
 
-$solo-radius-sm: 8rpx;
-$solo-radius-md: 12rpx;
-$solo-radius-lg: 16rpx;
-$solo-radius-xl: 24rpx;
+$solo-radius-sm: 16rpx;
+$solo-radius-md: 24rpx;
+$solo-radius-lg: 32rpx;
+$solo-radius-xl: 48rpx;
+$solo-radius-2xl: 64rpx;
 $solo-radius-full: 9999rpx;
+
+/* Semantic aliases (match colors_and_type.css --solo-*) */
+$solo-background: $solo-neutral-50;
+$solo-foreground: $solo-neutral-900;
+$solo-card: #FFFFFF;
+$solo-card-foreground: $solo-neutral-800;
+$solo-muted: $solo-neutral-100;
+$solo-muted-foreground: $solo-neutral-500;
+$solo-border: $solo-neutral-200;
+$solo-input: $solo-neutral-200;
+$solo-ring: $solo-primary-400;
+
+/* Shadows (design tokens) */
+$solo-shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+$solo-shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+$solo-shadow-primary: 0 8rpx 28rpx rgba(249, 115, 22, 0.35);
+$solo-shadow-primary-sm: 0 4rpx 14rpx rgba(249, 115, 22, 0.3);
+
+/* Gradients (design tokens) */
+$solo-hero-gradient: linear-gradient(135deg, $solo-primary-50 0%, $solo-primary-100 40%, $solo-primary-200 100%);
+$solo-ai-gradient: linear-gradient(135deg, $solo-primary-50 0%, $solo-primary-100 50%, $solo-primary-200 100%);
+$solo-summary-gradient: linear-gradient(180deg, $solo-primary-50 0%, $solo-primary-100 30%, $solo-neutral-50 70%);
+
+/* Typography scale (rpx) */
+$solo-font-xs: 22rpx;
+$solo-font-sm: 24rpx;
+$solo-font-base: 28rpx;
+$solo-font-lg: 30rpx;
+$solo-font-xl: 32rpx;
+$solo-font-2xl: 36rpx;
+$solo-font-3xl: 44rpx;
+$solo-font-4xl: 48rpx;
+$solo-font-5xl: 52rpx;
+
+/* Spacing scale (rpx) — 4rpx base unit */
+$solo-space-1: 4rpx;
+$solo-space-2: 8rpx;
+$solo-space-3: 12rpx;
+$solo-space-4: 16rpx;
+$solo-space-5: 20rpx;
+$solo-space-6: 24rpx;
+$solo-space-8: 32rpx;
+$solo-space-10: 40rpx;
+$solo-space-12: 48rpx;
+$solo-space-16: 64rpx;
+$solo-space-20: 80rpx;
+
+/* Card & Nav glass effect */
+$solo-glass-bg: rgba(255, 255, 255, 0.95);
+$solo-summary-glass-bg: rgba(255, 247, 237, 0.85);
