@@ -85,8 +85,8 @@ function logout(): void {
   uni.reLaunch({ url: '/pages/login/index' })
 }
 
-function goIndex(): void {
-  uni.reLaunch({ url: '/pages/index/index' })
+function goToday(): void {
+  uni.reLaunch({ url: '/pages/today/index' })
 }
 </script>
 
@@ -129,7 +129,7 @@ function goIndex(): void {
       <view class="actions">
         <button class="btn-primary" @click="startEdit">编辑资料</button>
         <button class="btn-secondary" @click="goPreference">偏好设置</button>
-        <button class="btn-link" @click="goIndex">返回首页</button>
+        <button class="btn-link" @click="goToday">返回今日</button>
         <button class="btn-link danger" @click="logout">退出登录</button>
       </view>
     </view>

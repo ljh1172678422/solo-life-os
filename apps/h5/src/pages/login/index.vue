@@ -21,8 +21,8 @@ async function handleLogin(): Promise<void> {
   try {
     const res = await login({ account: account.value.trim(), password: password.value })
     userStore.setAuth(res)
-    // 登录成功跳转资料页（reLaunch 关闭登录页，避免返回）
-    uni.reLaunch({ url: '/pages/profile/index' })
+    // 登录成功跳转今日首页（Sprint 2 起 Today 是用户登录后的第一眼，reLaunch 关闭登录页避免返回）
+    uni.reLaunch({ url: '/pages/today/index' })
   } catch (e) {
     errorMsg.value = e instanceof ApiError ? e.message : '登录失败，请稍后重试'
   } finally {

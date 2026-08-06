@@ -6,9 +6,9 @@ const userStore = useUserStore()
 const title = ref('Solo Life OS')
 
 onMounted(() => {
-  // 未登录跳登录页，已登录跳资料页
+  // 未登录跳登录页，已登录跳今日首页（Sprint 2 起 Today 是用户登录后的第一眼）
   if (userStore.isLoggedIn) {
-    uni.reLaunch({ url: '/pages/profile/index' })
+    uni.reLaunch({ url: '/pages/today/index' })
   } else {
     uni.reLaunch({ url: '/pages/login/index' })
   }
