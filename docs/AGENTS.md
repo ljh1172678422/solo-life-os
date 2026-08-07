@@ -52,12 +52,13 @@ SPRINT_PLAN.md → TASK_BOARD.md          ← 迭代计划与任务看板
 
 1. docs/Solo_Product_Principles.md  ← 产品宪法，最高优先级
 2. docs/PROJECT_CONTEXT.md
-3. docs/ARCHITECTURE.md
-4. docs/DATABASE_DESIGN.md
-5. docs/AGENTS.md（本文档）
-6. docs/CODE_RULES.md
-7. docs/SPRINT_PLAN.md
-8. docs/TASK_BOARD.md
+3. docs/architecture/ADR/README.md + 与任务相关的 Accepted ADR
+4. docs/ARCHITECTURE.md
+5. docs/DATABASE_DESIGN.md
+6. docs/AGENTS.md（本文档）
+7. docs/CODE_RULES.md
+8. docs/SPRINT_PLAN.md
+9. docs/TASK_BOARD.md
 
 
 

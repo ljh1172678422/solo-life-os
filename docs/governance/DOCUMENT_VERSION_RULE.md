@@ -41,7 +41,7 @@ Last Update: 2026-08-07
 文档与代码同步约束：
 
 - 涉及产品宪法（Solo_Product_Principles）→ 人工产品负责人审核
-- 涉及产品边界 / 领域模型 / 架构决策 → Accepted ADR 先行，代码随后
+- 涉及产品边界 / 领域模型 / 架构决策 → 上游（Product Principles / Project Context）决策确认后，更新下游 ARCHITECTURE / DATABASE_DESIGN 及实施代码前须先形成 Accepted ADR（注：重写 Project Context 本身不要求 ADR 前置，因为 Project Context 是 ADR 的上游）
 - 涉及 Schema / 枚举 / 模块边界 → ARCHITECTURE / DATABASE_DESIGN 与 migration 同 PR 或紧邻 PR
 - 普通功能 / Bug 修复 → 代码先，CHANGELOG 同步
 
@@ -91,7 +91,8 @@ SPRINT_PLAN.md → TASK_BOARD.md
 | Task 生命周期（Status / Branch / PR / Validation） | `TASK_BOARD.md` | README "In Progress" 摘要 |
 | 提交历史（每次合并做了什么） | `CHANGELOG.md` | 无 |
 | 项目当前阶段快照（Current Sprint / Completed / Next） | `README.md`（数据源自 TASK_BOARD） | 无 |
-| 架构决策 | `ADR/*` + `ARCHITECTURE.md` | 无 |
+| 架构决策 | `Accepted ADR`（docs/architecture/ADR/*） | 无 |
+| 当前架构投影 | `ARCHITECTURE.md` | 无（投影自 Accepted ADR） |
 | AI 行为决策 | `AI_CHANGELOG.md` | 无 |
 
 禁止：
@@ -415,7 +416,7 @@ Squash merge to develop
 - [X] 禁止直推 `develop` / `main`，无任何例外（包括纯文档修改）
 - [X] 所有文档修改必须走 feature 分支 + PR
 - [X] `Solo_Product_Principles.md` 修改须人工产品负责人审核，AI/Agent 不得自行变更
-- [X] 涉及产品边界 / 领域模型 / 架构决策的文档修改，须先形成 Accepted ADR
+- [X] 上游决策（Product Principles / Project Context）确认后，更新下游 ARCHITECTURE / DATABASE_DESIGN 及实施代码前，须先形成 Accepted ADR（注：重写 Project Context 本身不要求 ADR 前置，因为 Project Context 是 ADR 的上游）
 - [X] Commit message 遵循 Conventional Commits（`docs(scope): ...`）
 - [X] PR 描述说明文档修改原因（治理规则变更需引用对应 §节）
 
@@ -426,7 +427,7 @@ Squash merge to develop
 
 ## 12. Roadmap（v2.0+，待规模需要再落地）
 
-v1.3 完成后本规则进入 v2.0 冻结期：后续仅通过 ADR 修改，禁止零散调整。以下规则已识别但暂缓实现，留待规模需要时再评估。
+v1.4 为人工产品负责人批准的治理基线调整（确立文档权威层级、Product Principles 进入治理链、删除直推例外），非零散调整。本次调整完成后，本规则进入 v2.0 冻结期：后续仅通过 ADR 修改，禁止零散调整。以下规则已识别但暂缓实现，留待规模需要时再评估。
 
 ### 12.1 Documentation Freeze Period（待 §2.6）
 
