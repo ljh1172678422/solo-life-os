@@ -1,10 +1,10 @@
 # Solo Life OS Sprint 规划
 
-Version: 2.2
+Version: 2.3
 
-Status: Planning
+Status: Active
 
-Last Update: 2026-07-28
+Last Update: 2026-08-07
 
 
 > 本文档定义 Solo Life OS 的迭代计划，所有 AI Agent 与人类开发者按 Sprint 执行。
@@ -249,10 +249,12 @@ Sprint 1（User / Preference）
 ## DoD
 
 
-- [ ] 地图可显示用户附近地点
-- [ ] 用户可收藏地点（UNIQUE 约束生效）
-- [ ] Recommendation Agent 接口定义完成
-- [ ] 测试通过
+- [ ] Migration 已执行（TASK-0301：location + favorite 表 + ADR-0007）
+- [ ] 地图可显示用户附近地点（TASK-0305：explore/index 卡片流 + nearby 搜索，MVP 用卡片流代替地图视图）
+- [ ] 用户可收藏地点（TASK-0304 FavoriteController + TASK-0303 唯一性校验，UNIQUE 约束生效）
+- [ ] Recommendation Agent 接口定义完成（TASK-0307：RecommendationAgent + RecommendationContext + AiConfig，Agent.execute 契约验证）
+- [ ] Map Provider Adapter 接口定义完成（TASK-0304：MapProviderAdapter Interface + MockMapProviderAdapter，ADR-0007 Accepted）
+- [ ] 测试通过（TASK-0306：7 测试类 Domain/App/Controller 三层全覆盖）
 
 
 ---
@@ -703,6 +705,7 @@ ADR 生命周期与 Sprint 生命周期一致，禁止一次性批量创建。�
 | v2.0 | 2026-07-28 | 全量升级：按 Module 组织；增加 Goal / DoD / Depends / Agents / Risk / Milestone / Lifecycle；统一术语 Module；Sprint 5 改名 AI Platform |
 | v2.1 | 2026-07-28 | 修正 Activity Owner 冲突（归 Today）；Sprint 7 改用 community_event 独立领域实体；Sprint 0 Vector DB 延后为 Adapter Interface；Sprint 5 新增 ai_conversation；新增 §16 ADR Roadmap（ADR-0005~0011） |
 | v2.2 | 2026-07-28 | §16 ADR Roadmap 重写：ADR 生命周期与 Sprint 生命周期一致；ADR-0006~0009 严格按对应 Sprint 创建（Pending）；ADR-0010 提前到 Sprint 0（Proposed）；ADR-0011 提前到 Sprint 0（Accepted，已是架构事实）；ADR-0007 改为 Provider Adapter Pattern；ADR-0008 改为抽象层策略不锁定 Provider；ADR-0009 标注 MVP 可延期 |
+| v2.3 | 2026-08-07 | Sprint 3 DoD 对齐 TASK-0301~0307 任务分解；Status 从 Planning 切换为 Active（Sprint 2 已关闭，Sprint 3 任务分解已就绪） |
 
 
 ---
