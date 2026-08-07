@@ -16,14 +16,16 @@
 
 ### Added
 
-- 新建 6 个 Accepted ADR（治理层重构第 3 步，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1）
-  - ADR-0012 Product Module Boundary Revision：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除；Story 暂缓；声明与 ADR-0011 的待消解差异
-  - ADR-0013 Today Core Object Lifecycle Refactor：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象；迁移方式比较 3 方案后采用版本化替换（方案 C，无生产数据）；ADR-0011 Activity 条款由本 ADR 替代
-  - ADR-0014 AI Platform Six Roles and Confidence Gating：6 角色（Opportunity Discovery/Proposal Composer/Motivation Engine/Life Curator/State Understanding/Assistant）；Life Curator 是产品判断角色不替代 Router；置信度三级门控；主动通知边界；MVP 采用枚举+服务粒度
-  - ADR-0015 External Fact Trustworthiness Model：事实/推断/偏好三类区分；新增 external_fact 表 + location 表扩展；可信度计算公式
-  - ADR-0016 Passive Sensing Consent Boundary：场景化数据授权；新增 data_consent + notification_preference 表；禁止隐性监控换确认
-  - ADR-0017 Commercial Recommendation Boundary：商业合作不影响自然排序；商业内容必须明确披露；location 表新增 sponsor_id/commercial_type；ExperienceProposal 输出 is_sponsored/sponsor_disclosure
-  - ADR README.md Index 登记 6 个新 ADR；ADR-0011 标注「ADR-0013 落地后部分条款由 ADR-0013 替代」
+- 新建 8 个 Accepted ADR（治理层重构第 3 步，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1，经人工 Architecture Review 修正）
+  - ADR-0012 Product Module Boundary Revision [L3]：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除；Story 暂缓
+  - ADR-0013 Today Core Object Lifecycle Refactor [L3]：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象；迁移方式比较 3 方案后采用版本化替换（方案 C，含 5 项 Preconditions + Go/No-Go Gate + 回退方式）；居家体验 Location 关联可为空
+  - ADR-0014 AI Platform Six Roles and Confidence Gating [L2]：6 角色；Life Curator 是产品判断角色不替代 Router（Router 为唯一技术入口，角色 Service 不互调，Life Curator 只返回 GateDecision，通知发送前再次校验）；置信度三级门控（恢复上游映射：高主动提醒/中仅展示/低询问或不推荐）；Memory Layer/Context Builder/Router 为平台基础设施不属于六角色
+  - ADR-0015 External Fact Trustworthiness Model [L2]：事实/推断/偏好三类真正分离（external_fact 仅存事实不含 INFERRED，推断存 ai_memory）；SSOT 方案比较（external_fact 为 SSOT，location.business_hours 为投影缓存）；差异化时效衰减；多事实加权最小值聚合
+  - ADR-0016 Passive Sensing Consent Boundary [L2]：data_type + scenario + purpose 三维授权（覆盖位置/活动记录/日程/健康/设备数据）；Explore 按需定位与主动建议定位为两个独立场景；通知偏好含类别/场景/时区；Mood 主动输入与权限授权分离；逻辑关联不建物理 FK
+  - ADR-0017 Commercial Recommendation Boundary [L2]：商业关系建模方案比较（A Location 静态属性 / B Proposal 级 / C 独立 Campaign+Attribution 模型），采用方案 C；独立 commercial_campaign + commercial_attribution 表，不污染 location；候选资格与自然排序完全忽略商业字段；只有自然入选的候选才允许附加商业归因（自然决策后附加）；可审计披露/主体/类型/有效期/来源；location 表不新增商业字段
+  - ADR-0018 Mental Health Boundary and Immediate Safety Support Flow [L2]：Safety Gate 前置于 AI Pipeline；Level 1（心理健康边界：长期兴趣丧失+功能变化）温和提供专业支持入口；Level 2（即时安全风险）立即停止推荐转危机干预；fail-safe 不确定时保守降级；不诊断不治疗不固化（safety_event_log 审计日志不作为偏好存储）
+  - ADR-0019 LifeResponseMap / ai_memory Ownership and Data Governance [L2]：ai_memory 所有权归 AI Platform；一次行为不得永久固化为偏好（单次行为不写 PREFERENCE，累积 N≥3 次形成 INFERENCE）；查看/修改/删除/撤回完整控制权；撤回授权后派生数据清理；保留期限（INFERENCE 180 天，safety_event_log 365 天）；LifeResponseMap 作为 ai_memory PREFERENCE 聚合视图避免双重 SSOT
+  - ADR README.md Index 登记 8 个新 ADR；ADR-0011 标记 Deprecated（两个替代来源：Activity/Explore 条款→ADR-0013，CommunityEvent 条款→ADR-0012）；删除 Future ADR 中的 ADR-0009 Payment Adapter（Community 已移出目标产品范围）
 - PROJECT_CONTEXT.md 全文重写 v1.2 → v1.3（治理层重构第 2 步，对齐 Solo_Product_Principles v1.1）
   - §1 项目名称：项目代号 `Solo-Life-OS` 保留，对外产品名 `Solo`，定位改为"AI 驱动的日常体验发现系统"（恢复产品宪法 §三原文，移除"Life Operating System"对外定位）
   - §2 产品愿景：改为"成为习惯独处者最值得信任的日常体验发现入口"（移除"伙伴/陪伴"语义）

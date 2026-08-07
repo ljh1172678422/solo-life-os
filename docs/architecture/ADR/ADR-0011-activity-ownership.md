@@ -3,10 +3,16 @@
 
 Date:    2026-07-28
 
-Status:  Accepted
+Status:  Deprecated（2026-08-07）
+
+> **Deprecated 说明**：本 ADR 已被以下 ADR 替代，不再生效：
+> - **Activity Ownership / Explore 引用条款** → 由 [ADR-0013](./ADR-0013-today-core-object-lifecycle-refactor.md) 替代（Today 核心对象从 DailyPlan/Activity 重构为 Experience 系列，Activity 不再作为目标产品核心概念）
+> - **CommunityEvent 独立领域实体条款** → 由 [ADR-0012](./ADR-0012-product-module-boundary-revision.md) 替代（Community 从目标产品范围移除，CommunityEvent 不再作为目标产品核心概念）
+>
+> 架构/代码迁移状态：**Implementation Pending**（待第 7 步代码迁移评估）。在代码迁移完成前，现有 daily_plan/activity 表与代码继续运行，但本 ADR 不再作为新开发的架构依据。新开发必须遵循 ADR-0012/0013。
 
 
-## Decision
+## Decision（已废弃）
 
 
 Activity 表属于 Today Module，Owner 为 Today。
@@ -31,7 +37,7 @@ Explore        Community
 ```
 
 
-## Reason
+## Reason（历史记录）
 
 
 - Activity 是用户每日生活事件的执行上下文，与 DailyPlan 同属 Today 领域
@@ -40,7 +46,15 @@ Explore        Community
 - 此决策已在 SPRINT_PLAN v2.1 评审中确认（P0-1 修复），已是架构事实
 
 
-## Impact
+## Deprecation Reason
+
+
+- 产品宪法 v1.1 与 PROJECT_CONTEXT v1.3 重构目标产品范围：Today 核心对象从 DailyPlan/Activity 改为 Experience 系列（ADR-0013）；Community 从目标产品范围移除（ADR-0012）
+- 保留两个相互冲突的 Accepted ADR 违反仓库 ADR 状态机（Accepted → Deprecated 不可逆向回滚）
+- 架构/代码未迁移应标为 Implementation Pending，不能靠保留旧 ADR 生效解决
+
+
+## Impact（已废弃）
 
 
 - Today Module：拥有 activity 表的 create / update / delete 权限，发布 activity.completed 事件
@@ -57,3 +71,4 @@ Explore        Community
 - SPRINT_PLAN v2.1 评审 P0-1：Activity Owner 冲突修复
 - DATABASE_DESIGN v2.1 §4 / §6.4
 - ARCHITECTURE v2.3 §22
+- **替代 ADR**：[ADR-0012](./ADR-0012-product-module-boundary-revision.md)（CommunityEvent 条款）、[ADR-0013](./ADR-0013-today-core-object-lifecycle-refactor.md)（Activity 条款）
