@@ -1556,6 +1556,79 @@ Pending
 ---
 
 
+## 2026-08-07 (第 39 次变更)
+
+
+Agent:
+
+
+Architecture Agent
+
+
+Task:
+
+
+非任务（治理层重构第 1 步：确立文档权威层级）
+
+
+Action:
+
+
+基于人工产品负责人提供的产品原则专档（Solo_Product_Principles v1.1）与全量文档审计结论，确立核心文档权威层级，修订两份治理文档：
+
+1. `docs/AGENTS.md` v1.3 → v1.4：
+   - 新增 §0「文档权威层级与冲突裁决（最高约束）」，明确层级 `Solo_Product_Principles → PROJECT_CONTEXT → Accepted ADR → ARCHITECTURE/DATABASE_DESIGN → CODE_RULES → SPRINT_PLAN → TASK_BOARD`，下游不得与上游冲突
+   - 明确 `Solo_Product_Principles.md` Owner = 人工产品负责人，AI/Agent 可提议但不得自行变更
+   - §1 强制阅读顺序置顶 `Solo_Product_Principles.md`（原首位 PROJECT_CONTEXT 降为第二），并补充"未与产品宪法及 Accepted ADR 冲突"前置校验
+   - §15.1 删除"文档热修直推 develop"例外条款（原允许 docs/ 目录变更直推），明确文档与代码同等走 feature 分支 + PR，无任何例外
+
+2. `docs/governance/DOCUMENT_VERSION_RULE.md` v1.3 → v1.4：
+   - §1 修改条件表新增 `Solo_Product_Principles.md` 行（Owner: 人工产品负责人）+ `PROJECT_CONTEXT.md` 行（受产品宪法约束）
+   - §2.1「代码优先」改为「文档与代码保持同步」，明确上游 Product Principles / Project Context 决策确认后，更新下游 ARCHITECTURE / DATABASE_DESIGN 及实施代码前须先形成 Accepted ADR（重写 Project Context 本身不要求 ADR 前置）
+   - §2.4 SSOT 表新增「产品宪法」为最高状态来源 + 权威层级图，新增禁止项"AI/Agent 自行变更 Solo_Product_Principles.md"
+   - §11 Git Governance 删除"包括纯文档修改"的暗示性例外表述，明确"无任何例外"，新增产品宪法变更须人工产品负责人审核约束
+
+3. `docs/CHANGELOG.md` [Unreleased]/Added 顶部追加本次治理变更条目
+4. `docs/AI_CHANGELOG.md` 追加本第 39 次条目
+
+
+Reason:
+
+
+独立审核结论确认：Solo_Product_Principles v1.1 已定义产品宪法（体验发现系统定位、no_proposal、事实可信度、隐私边界、北极星指标等），但 7 份核心文档均未引用它，存在结构性冲突而非措辞漂移；同时 DOCUMENT_VERSION_RULE §2.1「代码优先」与 §3.1「ADR 先行」方向冲突，AGENTS §15.1 允许文档热修直推 develop 与 DOCUMENT_VERSION_RULE §11 禁止直推直接矛盾。本次重构按人工产品负责人指定的处置顺序第 1 步执行：先确立权威层级，让产品宪法进入治理链，再逐层重写下游文档。本次仅改治理层（AGENTS + DOCUMENT_VERSION_RULE + 变更记录），不动业务代码、数据库、Today/Explore 页面，符合"有条件批准"约束。
+
+
+Impact:
+
+
+修改 4 个文件：docs/AGENTS.md（v1.3→v1.4）、docs/governance/DOCUMENT_VERSION_RULE.md（v1.3→v1.4）、docs/CHANGELOG.md（追加 1 条目）、docs/AI_CHANGELOG.md（本条目）。无代码与数据库变更。
+
+生效后约束：
+- 任何下游文档（PROJECT_CONTEXT / ARCHITECTURE / DATABASE_DESIGN / SPRINT_PLAN / TASK_BOARD 等）与 Solo_Product_Principles 冲突时，下游无效，必须以上游为准修订
+- AI/Agent 不得自行变更 Solo_Product_Principles.md
+- 上游 Product Principles / Project Context 决策确认后，更新下游 ARCHITECTURE / DATABASE_DESIGN 及实施代码前，必须先形成 Accepted ADR
+- 文档修改与代码修改同等走 feature 分支 + PR，无直推例外
+
+下一步（待人工审核本 PR 通过后）：第 2 步重写 PROJECT_CONTEXT.md，第 3 步新建 ADR-0012~0017，第 4 步更新 ARCHITECTURE/DATABASE_DESIGN，第 5 步重排 SPRINT_PLAN + 清理 TASK_BOARD。本 PR 不自动进入第 2 步。
+
+
+Reviewer:
+
+
+Pending（人工审核）
+
+
+Decision Level:
+
+
+不适用 AI 自主决策分级（§8.5）
+
+本次变更为人工产品负责人批准的治理基线调整（确立文档权威层级、Product Principles 进入治理链、删除直推例外），决策来源是人工审核结论，非 AI Agent 自主决策。§8.5 的 L0-L3 分级适用于 AI 自主做出的技术/架构决策；本次属于"人工决策、Agent 执行"，因此不套用 L2 定级，也不要求新建 ADR。本条目仅记录执行过程，决策权威属于人工产品负责人。
+
+
+---
+
+
 ## 2026-08-06 (第 36 次变更)
 
 

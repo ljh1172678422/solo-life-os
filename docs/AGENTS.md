@@ -1,8 +1,8 @@
 # AI Agent 协作规范
 
-Version: 1.3
+Version: 1.4
 
-Last Update: 2026-07-28
+Last Update: 2026-08-07
 
 
 你不是代码生成器。
@@ -10,29 +10,59 @@ Last Update: 2026-07-28
 你是 Solo Life OS AI 研发团队。
 
 
-> 本文档是所有 AI Agent 进入仓库前的入口文件，优先级仅次于 `docs/PROJECT_CONTEXT.md`。
+> 本文档是所有 AI Agent 进入仓库前的入口文件。
 >
 > 任何 AI Agent 在动手前必须完整阅读本文档。
 
 
 ---
 
+# 0. 文档权威层级与冲突裁决（最高约束）
+
+本仓库核心文档之间存在严格权威层级，下游文档不得与上游文档冲突；冲突发生时以上游文档为准。
+
+```
+Solo_Product_Principles.md   ← 产品宪法（Owner: 人工产品负责人，AI 不得自行变更）
+        ↓
+PROJECT_CONTEXT.md           ← 项目上下文（Owner: Architecture Agent，受产品宪法约束）
+        ↓
+Accepted ADR（docs/architecture/ADR/*）  ← 架构决策（Owner: Architecture Agent）
+        ↓
+ARCHITECTURE.md / DATABASE_DESIGN.md    ← 架构与数据模型（Owner: Architecture Agent）
+        ↓
+CODE_RULES.md                ← 工程规范（Owner: Architecture Agent）
+        ↓
+SPRINT_PLAN.md → TASK_BOARD.md          ← 迭代计划与任务看板
+```
+
+权威层级硬约束：
+
+- [X] 下游文档与上游文档冲突时，下游文档无效，必须以上游为准修订
+- [X] 任何 Agent 不得在下游文档（如 TASK_BOARD / SPRINT_PLAN）中规避上游约束
+- [X] `Solo_Product_Principles.md` 的 Owner 为人工产品负责人；AI/Agent 可提出修改建议，但不得自行变更产品宪法
+- [X] 涉及产品边界、领域模型或架构决策时，必须先形成 Accepted ADR，再实施代码
+
+
+---
+
 # 1. 任务开始前必读
 
-
-按顺序读取：
-
-
-1. docs/PROJECT_CONTEXT.md
-2. docs/ARCHITECTURE.md
-3. docs/DATABASE_DESIGN.md
-4. docs/AGENTS.md（本文档）
-5. docs/CODE_RULES.md
-6. docs/TASK_BOARD.md
+按顺序读取（强制，顺序即权威层级）：
 
 
+1. docs/Solo_Product_Principles.md  ← 产品宪法，最高优先级
+2. docs/PROJECT_CONTEXT.md
+3. docs/architecture/ADR/README.md + 与任务相关的 Accepted ADR
+4. docs/ARCHITECTURE.md
+5. docs/DATABASE_DESIGN.md
+6. docs/AGENTS.md（本文档）
+7. docs/CODE_RULES.md
+8. docs/SPRINT_PLAN.md
+9. docs/TASK_BOARD.md
 
-只有确认「该任务在当前 Sprint 内、属于本 Agent 权限范围、未与已有模块冲突」之后，才能动手编码。
+
+
+只有确认「该任务在当前 Sprint 内、属于本 Agent 权限范围、未与已有模块冲突、未与产品宪法及 Accepted ADR 冲突」之后，才能动手编码。
 
 
 ---
@@ -628,7 +658,7 @@ Solo-Life-OS
 ## 15.1 Develop Branch Protection（硬约束）
 
 
-禁止以下行为：
+禁止以下行为（无例外）：
 
 
 - 在 `develop` 分支上执行 `git commit`
@@ -636,15 +666,10 @@ Solo-Life-OS
 - 在 `main` 分支上执行任何写操作
 
 
-例外（允许直接提交 develop）：
+不存在任何例外条款：仓库初始化已完成，文档变更与代码变更同等对待，必须走 feature 分支 + PR + Reviewer 审核流程。涉及产品宪法（Solo_Product_Principles）的修改还须人工产品负责人审核，详见 §0 权威层级。
 
 
-- 仓库初始化阶段（TASK-0001 Architecture Foundation 之前的文档治理提交）
-- 文档热修复（仅 docs/ 目录变更，不涉及代码）
-- 用户明确批准的架构紧急修复
-
-
-从 TASK-0002 开始，所有代码任务必须使用 feature 分支，无例外。
+从 TASK-0002 开始，所有代码与文档任务必须使用 feature 分支，无例外。
 
 
 ## 15.2 Task Start Checklist（强制）
