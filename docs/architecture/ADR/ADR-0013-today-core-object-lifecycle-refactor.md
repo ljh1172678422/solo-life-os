@@ -47,38 +47,47 @@ Status: Accepted
 
 ## Decision on Migration Strategy
 
-**采用方案 C（版本化替换）**，但需满足以下 Preconditions。
+**采用方案 C（版本化替换）**，但当前为**条件方案**：在人工产品负责人逐项确认 Preconditions 之前，方案 C 未完成 Go Gate，不得执行。若任一前提不成立，自动改用方案 B。
 
-### Preconditions（须由人工产品负责人确认）
+### Preconditions（须由人工产品负责人逐项确认）
 
-方案 C 仅在以下前提**全部成立**时采用：
+方案 C 仅在以下前提**全部成立**时采用。当前状态：**Pending（待人工确认）**。
 
-1. 从未部署生产环境
-2. 无生产数据
-3. 无外部 API 消费者
-4. 测试/演示数据库可安全重建
-5. 前后端可协调切换
+| # | 前提 | 确认方式 | 当前状态 |
+|---|---|---|---|
+| 1 | 从未部署生产环境 | 人工产品负责人确认无生产部署 | ⬜ Pending |
+| 2 | 无生产数据 | 人工产品负责人确认无生产数据 | ⬜ Pending |
+| 3 | 无外部 API 消费者 | 人工产品负责人确认无外部消费者 | ⬜ Pending |
+| 4 | 测试/演示数据库可安全重建 | 人工产品负责人确认可重建 | ⬜ Pending |
+| 5 | 前后端可协调切换 | 人工产品负责人确认可协调 | ⬜ Pending |
 
 ### Go/No-Go Gate
 
-- **Go**：人工产品负责人确认上述 5 项前提全部成立 → 采用方案 C
+- **Go**：人工产品负责人在 PR 中逐项确认上述 5 项前提全部成立 → 采用方案 C
 - **No-Go**：任一前提不成立 → 自动改用方案 B（增量迁移，保留兼容 + 双写过渡）
+- **当前**：Go Gate 未完成，方案 C 不得执行；代码迁移 PR 启动前必须先完成 Go Gate
 
 ### 方案 C 具体执行约束
 
 1. **不删除历史 Migration 文件**：V20260730_002/003 保留在仓库供追溯，仅新增 create/drop Migration
-2. **新增 Migration 顺序**：
-   - `V20260807_xxx__create_experience_proposal_series.sql`（创建 5 张表）
-   - `V20260807_xxx__drop_daily_plan_activity.sql`（drop 旧表）
-3. **drop 前备份或确认环境可重建**：drop migration 执行前确认测试库可重建（无生产数据）
-4. **协调切换顺序**：Schema（migration）→ 后端 API（Entity/Service/Controller）→ 前端（4 页面重写）→ 测试（60+ 用例重写）
-5. **LifeResponseMap 不单独建表**：存于 AI 侧 ai_memory（待 Sprint 5 AI Platform 实现，数据治理见 ADR-0019）
+2. **切换顺序（先建新表 → 验证 → 切流量 → 最后独立 drop）**：
+   - **Step 1**：执行 create migration（新建 5 张 experience_* 表），旧表 daily_plan/activity 保留不动
+   - **Step 2**：部署新后端 API（Entity/Service/Controller 指向 experience_* 表），新前端（4 页面重写），新测试（60+ 用例重写）
+   - **Step 3**：验证新后端/前端/测试全部通过，确认新表可用
+   - **Step 4**：切换流量到新后端/前端（旧应用停止运行）
+   - **Step 5**：旧应用确认停止运行后，**独立执行** drop migration（删除 daily_plan/activity 表）
+   - **约束**：不在旧应用仍可能运行时先删除旧表
+3. **drop 前备份或确认环境可重建**：drop migration 执行前确认测试库可重建（无生产数据），或对旧表执行 pg_dump 备份
+4. **LifeResponseMap 不单独建表**：作为派生读模型，基于 ProposalDecision/Occurrence/Feedback + 上下文快照形成（详见 ADR-0019）
 
 ### 失败回退方式
 
-- Migration 失败：回滚 migration（Flyway baseline 回退到 V20260807 之前）
-- 后端 API 失败：Git revert 后端 PR，保留 migration 已执行状态（drop migration 未执行则无影响）
-- 若已执行 drop migration 后发现需回退：改用方案 B，新建 daily_plan/activity 兼容表（代价较高，因此 drop 前需充分测试）
+> 注：Flyway `baseline` 命令仅用于将现有数据库标记到某个版本，不负责撤销已执行的表结构变更，不是有效的 Migration 回滚方式。以下为有效回退方式。
+
+- **create migration 失败**：执行补偿 Migration（drop 新建的 experience_* 表），恢复到迁移前状态
+- **后端 API 失败（Step 2-3）**：Git revert 后端/前端 PR，旧表 daily_plan/activity 仍存在（drop migration 未执行），旧应用继续运行，无影响
+- **drop migration 失败（Step 5）**：旧应用已停止运行，从 Step 3 的 pg_dump 备份恢复旧表，或重建测试环境
+- **drop migration 已执行后需回退**：改用方案 B，从备份恢复 daily_plan/activity 表 + 新建兼容代码（代价较高，因此 drop 前需充分测试 + 备份）
 
 ## Activity Disposition
 

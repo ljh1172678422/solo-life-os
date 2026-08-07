@@ -16,16 +16,17 @@
 
 ### Added
 
-- 新建 8 个 Accepted ADR（治理层重构第 3 步，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1，经人工 Architecture Review 修正）
-  - ADR-0012 Product Module Boundary Revision [L3]：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除；Story 暂缓
-  - ADR-0013 Today Core Object Lifecycle Refactor [L3]：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象；迁移方式比较 3 方案后采用版本化替换（方案 C，含 5 项 Preconditions + Go/No-Go Gate + 回退方式）；居家体验 Location 关联可为空
-  - ADR-0014 AI Platform Six Roles and Confidence Gating [L2]：6 角色；Life Curator 是产品判断角色不替代 Router（Router 为唯一技术入口，角色 Service 不互调，Life Curator 只返回 GateDecision，通知发送前再次校验）；置信度三级门控（恢复上游映射：高主动提醒/中仅展示/低询问或不推荐）；Memory Layer/Context Builder/Router 为平台基础设施不属于六角色
-  - ADR-0015 External Fact Trustworthiness Model [L2]：事实/推断/偏好三类真正分离（external_fact 仅存事实不含 INFERRED，推断存 ai_memory）；SSOT 方案比较（external_fact 为 SSOT，location.business_hours 为投影缓存）；差异化时效衰减；多事实加权最小值聚合
+- 新建 9 个 Accepted ADR（治理层重构第 3 步，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1，经两轮人工 Architecture Review 修正）
+  - ADR-0012 Product Module Boundary Revision [L3]：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除；Story 暂缓；ADR-0011 标记 Deprecated（两个替代来源：Activity/Explore 条款→ADR-0013，CommunityEvent 条款→ADR-0012），架构/代码迁移状态为 Implementation Pending
+  - ADR-0013 Today Core Object Lifecycle Refactor [L3]：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象；迁移方式比较 3 方案后采用版本化替换（方案 C，含 5 项 Preconditions + Go/No-Go Gate + 回退方式）；回退改为补偿 Migration/备份恢复（非 Flyway baseline）；切换顺序为「先建新表→验证→切流量→最后独立 drop」；居家体验 Location 关联可为空
+  - ADR-0014 AI Platform Six Roles and Confidence Gating [L2]：6 角色；Life Curator 是产品判断角色不替代 Router（Router 为唯一技术入口，角色 Service 不互调，Life Curator 只返回 GateDecision，通知发送前再次校验）；置信度三级门控（恢复上游映射：高主动提醒/中仅展示/低询问或不推荐）；调用链权威由 ADR-0020 定义，Router 内置 Orchestrator 编排多角色
+  - ADR-0015 External Fact Trustworthiness Model [L2]：事实/推断/偏好三类真正分离（external_fact 仅存事实不含 INFERRED，推断存 ai_memory）；SSOT 方案比较（external_fact 为 SSOT，location.business_hours 为投影缓存）；差异化时效衰减；多事实加权最小值聚合；行为模式只能形成 INFERENCE，经用户确认才转为 PREFERENCE（同步 ADR-0019）
   - ADR-0016 Passive Sensing Consent Boundary [L2]：data_type + scenario + purpose 三维授权（覆盖位置/活动记录/日程/健康/设备数据）；Explore 按需定位与主动建议定位为两个独立场景；通知偏好含类别/场景/时区；Mood 主动输入与权限授权分离；逻辑关联不建物理 FK
   - ADR-0017 Commercial Recommendation Boundary [L2]：商业关系建模方案比较（A Location 静态属性 / B Proposal 级 / C 独立 Campaign+Attribution 模型），采用方案 C；独立 commercial_campaign + commercial_attribution 表，不污染 location；候选资格与自然排序完全忽略商业字段；只有自然入选的候选才允许附加商业归因（自然决策后附加）；可审计披露/主体/类型/有效期/来源；location 表不新增商业字段
-  - ADR-0018 Mental Health Boundary and Immediate Safety Support Flow [L2]：Safety Gate 前置于 AI Pipeline；Level 1（心理健康边界：长期兴趣丧失+功能变化）温和提供专业支持入口；Level 2（即时安全风险）立即停止推荐转危机干预；fail-safe 不确定时保守降级；不诊断不治疗不固化（safety_event_log 审计日志不作为偏好存储）
-  - ADR-0019 LifeResponseMap / ai_memory Ownership and Data Governance [L2]：ai_memory 所有权归 AI Platform；一次行为不得永久固化为偏好（单次行为不写 PREFERENCE，累积 N≥3 次形成 INFERENCE）；查看/修改/删除/撤回完整控制权；撤回授权后派生数据清理；保留期限（INFERENCE 180 天，safety_event_log 365 天）；LifeResponseMap 作为 ai_memory PREFERENCE 聚合视图避免双重 SSOT
-  - ADR README.md Index 登记 8 个新 ADR；ADR-0011 标记 Deprecated（两个替代来源：Activity/Explore 条款→ADR-0013，CommunityEvent 条款→ADR-0012）；删除 Future ADR 中的 ADR-0009 Payment Adapter（Community 已移出目标产品范围）
+  - ADR-0018 Mental Health Boundary and Immediate Safety Support Flow [L2]：分两层——产品安全边界（Accepted）+ 分类器规则与阈值（Implementation Pending，须经专业评审/离线评测/发布 Gate）；Safety Gate 前置于 AI Pipeline（ADR-0020 调用链最前置）；MVP 仅处理用户本轮主动输入文本信号（不使用行为信号，避免隐性监控）；Level 1（心理健康边界）温和提供专业支持入口；Level 2（即时安全风险）立即停止推荐转危机干预；fail-safe 不确定时保守降级；不诊断不治疗不固化；safety_event_log 为可关联用户的高度敏感记录（非脱敏日志，访问控制仅限人工审计，保留期须经专业评审）；危机干预资源按地区/语言配置含兜底与版本管理；对齐 WHO 2026 年指导
+  - ADR-0019 LifeResponseMap / ai_memory Ownership and Data Governance [L2]：ai_memory 所有权归 AI Platform；**LifeResponseMap 重定义为基于 ProposalDecision/ExperienceOccurrence/ExperienceFeedback + 上下文快照的派生读模型**（不是 ai_memory PREFERENCE 聚合视图，避免丢失状态/时间/天气/地点/阻力/发生/值得维度）；一次行为不得永久固化为偏好（单次行为不写 PREFERENCE，累积 N≥3 次形成 INFERENCE，经用户确认才转为 PREFERENCE）；查看/修改/删除/撤回完整控制权；撤回授权后基于数据血缘清理派生数据（新增 source_data_type/source_record_refs/consent_scenario/derived_from_memory_ids/provenance_json 字段使清理可执行）；保留期限含硬删除/匿名化（INFERENCE 180 天软删除+30 天硬删除，safety_event_log 365 天硬删除须专业评审）
+  - ADR-0020 Unified AI Pipeline Call Chain [L2]：解决 ADR-0003 与 ADR-0014 调用链冲突，确立唯一权威调用顺序；统一为「Safety Gate → Router（唯一技术入口）→ Context Builder → Orchestrator 编排角色 → 角色经 LLM Provider → Router 汇聚 → Domain API 落库 → 通知服务」；明确 Orchestrator 属 Router 内部能力（非独立服务）；Agent 产出经 Domain API 落库（禁止 Agent 直接写库）；ADR-0003 链路定义标记 Deprecated（核心原则由 ADR-0020 继承）
+  - ADR README.md Index 更新：登记 9 个新 ADR；ADR-0003 移至 Deprecated（链路定义由 ADR-0020 替代）；ADR-0011 移至 Deprecated（两个替代来源）；删除 Future ADR 中的 ADR-0009 Payment Adapter（Community 已移出目标产品范围）
 - PROJECT_CONTEXT.md 全文重写 v1.2 → v1.3（治理层重构第 2 步，对齐 Solo_Product_Principles v1.1）
   - §1 项目名称：项目代号 `Solo-Life-OS` 保留，对外产品名 `Solo`，定位改为"AI 驱动的日常体验发现系统"（恢复产品宪法 §三原文，移除"Life Operating System"对外定位）
   - §2 产品愿景：改为"成为习惯独处者最值得信任的日常体验发现入口"（移除"伙伴/陪伴"语义）

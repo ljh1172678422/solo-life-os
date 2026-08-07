@@ -57,33 +57,42 @@ Life Curator 基于置信度对 AI 输出进行门控（产品宪法 §九，PRO
 
 以下为 AI Platform 基础设施，与 6 产品角色分离：
 
-- **Agent Router**（ADR-0003）：唯一技术入口，所有请求经 Router 调度
+- **Agent Router**（ADR-0020）：唯一技术入口，所有请求经 Router 调度；内置 Workflow Orchestrator 编排多角色
 - **Memory Layer**：Memory/Context 读写，6 角色通过 Memory Layer 读写记忆，不直接访问 ai_memory 表
-- **Context Builder**：构建请求上下文，供 Router 编排时使用
+- **Context Builder**：由 Router 调用，构建请求上下文
 
 ### 调用契约
 
+> AI Pipeline 唯一调用链顺序由 [ADR-0020](./ADR-0020-unified-ai-pipeline-call-chain.md) 定义，本节为角色维度的契约补充。
+
 1. **Router 是唯一技术入口**：所有外部请求（用户主动查询、定时触发、通知触发）必须经 Router，6 角色 Service 不得直接暴露给外部
-2. **Router 或 Workflow Orchestrator 编排多角色**：单个请求需多角色协同时（如生成提案需 Opportunity Discovery → Proposal Composer → Motivation Engine → Life Curator），由 Router 或其后的 Workflow Orchestrator 编排，角色之间不直接互调
+2. **Router 内置 Orchestrator 编排多角色**：单个请求需多角色协同时（如生成提案需 Opportunity Discovery → Proposal Composer → Motivation Engine → Life Curator），由 Router 内部的 Workflow Orchestrator 编排，角色之间不直接互调
 3. **角色 Service 不直接互调**：6 角色 Service 之间禁止直接调用，必须经 Router/Orchestrator 编排
 4. **Life Curator 只返回 GateDecision**：Life Curator 输出 GateDecision（OUTPUT_PROPOSAL / SHOW_ONLY_IN_APP / ASK_LOW_BURDEN_QUESTION / NO_PROPOSAL），不直接发送通知、不直接写库
 5. **通知发送由通知服务执行**：通知服务在发送前再次校验授权（ADR-0016）、场景、频率上限、静默时段、置信度门槛，校验通过才发送
 6. **Memory/Context 不属 6 角色**：Memory Layer、Context Builder、Router 是平台基础设施，6 角色通过接口使用，不拥有
+7. **Agent 产出经 Domain API 落库**：角色产出不直接写 Repository / 数据库，必须经业务模块 Domain API 持久化（继承 ADR-0003 核心原则，详见 ADR-0020）
 
 ### 典型编排流程
+
+> 完整调用链见 [ADR-0020](./ADR-0020-unified-ai-pipeline-call-chain.md)。以下为角色编排视角的简化示意。
 
 ```
 用户打开 Solo
   ↓
-Router（技术入口）
+Safety Gate（ADR-0018，最前置安全检测）
   ↓
-Context Builder（构建上下文：用户状态 + 历史反馈）
+Router（唯一技术入口）→ 调用 Context Builder（构建上下文）
   ↓
-Router 编排：
+Router 内置 Orchestrator 编排：
   ├─ Opportunity Discovery（生成候选机会）
   ├─ Proposal Composer（组织提案）
   ├─ Motivation Engine（阻力/适配度评分）
   └─ Life Curator（返回 GateDecision）
+  ↓
+Router 汇聚 → Commercial Attribution 附加层（ADR-0017，自然决策后附加）
+  ↓
+Domain API 落库（Agent 产出经 Domain API，不直接写库）
   ↓
 通知服务（若 GateDecision=OUTPUT_PROPOSAL 且高置信度，校验授权/频率/静默后发送）
   ↓

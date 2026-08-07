@@ -20,7 +20,9 @@ Status: Accepted
 |---|---|---|---|---|---|
 | **事实（Fact）** | 可追溯至来源与更新时间的客观信息 | 天气、距离、营业时间、活动场次、花期、库存 | Explore Module（地点相关）/ AI Platform（天气等） | `external_fact` 表 | source / source_type / fetched_at / valid_until / confidence |
 | **推断（Inference）** | 表达概率与不确定性的主观判断 | 「人流可能较少」「适合安静阅读」 | AI Platform | `ai_memory`（memory_category=INFERENCE） | inference_basis / probability / inferred_at / 撤回机制 |
-| **偏好记忆（Preference）** | 用户主动表达或行为反馈的偏好 | 「不喜欢吵闹的地方」 | AI Platform（数据治理见 ADR-0019） | `ai_memory`（memory_category=PREFERENCE） | 来源（主动表达/行为推断）/ 时间 / 可撤回 / 可删除 |
+| **偏好记忆（Preference）** | 用户主动表达或经用户确认的偏好 | 「不喜欢吵闹的地方」 | AI Platform（数据治理见 ADR-0019） | `ai_memory`（memory_category=PREFERENCE） | 来源（主动表达/经用户确认）/ 时间 / 可撤回 / 可删除 |
+
+> **行为与偏好的关系（对齐 ADR-0019）**：行为模式（如连续多次拒绝同类提案）只能形成 **INFERENCE**（概率性推断），不可直接升为 PREFERENCE。INFERENCE 须经用户主动确认后才转为 PREFERENCE（source=CONFIRMED）。单次行为反馈不固化、不写 PREFERENCE。
 
 ### 关键约束
 

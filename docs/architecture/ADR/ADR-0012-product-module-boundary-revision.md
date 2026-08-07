@@ -52,21 +52,15 @@ Growth / Community / Story 的现有代码、实体、表处置方式，本 ADR 
 
 ## Relation to ADR-0011
 
-ADR-0011（Activity Ownership）当前仍 Accepted，规定：
+ADR-0011（Activity Ownership）已标记为 **Deprecated（2026-08-07）**，不再生效。其条款由以下 ADR 替代：
 
-- Activity 归 Today
-- Explore 只读引用 Activity Domain API
-- CommunityEvent 是独立领域实体
-
-本 ADR 对 ADR-0011 的影响：
-
-| ADR-0011 条款 | 本 ADR 影响 | 处置 |
+| ADR-0011 条款 | 替代 ADR | 说明 |
 |---|---|---|
-| Activity 归 Today | 部分修订：Today 核心对象改为 Experience 系列，Activity 是否拆分由 ADR-0013 决定 | ADR-0013 落地后，新建 ADR 替代 ADR-0011 的 Activity 相关条款 |
-| Explore 只读引用 Activity Domain API | 待 ADR-0013 决定 Activity 拆分方式后重新评估 | 暂保留 |
-| CommunityEvent 是独立领域实体 | 修订：Community 从目标产品范围移除，CommunityEvent 不再作为目标产品核心概念 | 现有架构事实（无表、无代码）继续有效，无需迁移 |
+| Activity 归 Today | [ADR-0013](./ADR-0013-today-core-object-lifecycle-refactor.md) | Today 核心对象从 DailyPlan/Activity 重构为 Experience 系列，Activity 不再作为目标产品核心概念 |
+| Explore 只读引用 Activity Domain API | [ADR-0013](./ADR-0013-today-core-object-lifecycle-refactor.md) | Explore 不再引用 Activity Domain API；如需关联体验发生记录，通过 ExperienceOccurrence 反查（location_id 可为空） |
+| CommunityEvent 是独立领域实体 | 本 ADR（ADR-0012） | Community 从目标产品范围移除，CommunityEvent 不再作为目标产品核心概念 |
 
-**在 ADR-0013 落地前，ADR-0011 继续有效。**
+**架构/代码迁移状态：Implementation Pending**（待第 7 步代码迁移评估）。在代码迁移完成前，现有 daily_plan/activity 表与代码继续运行，但 ADR-0011 不再作为新开发的架构依据。新开发必须遵循 ADR-0012/0013。
 
 ## Impact
 
@@ -107,8 +101,9 @@ ADR-0011（Activity Ownership）当前仍 Accepted，规定：
 
 ### Follow-up ADR
 
-- ADR-0013：Today 核心对象生命周期重构（决定 Activity 拆分方式，进而决定 ADR-0011 的最终处置）
+- ADR-0013：Today 核心对象生命周期重构（替代 ADR-0011 的 Activity 相关条款）
 - ADR-0014：AI Platform 6 角色职责与拆分粒度
+- ADR-0020：AI Pipeline 调用链统一（替代 ADR-0003 的链路定义）
 
 ### 验证方式
 

@@ -3,7 +3,10 @@
 
 Date:    2026-07-28
 
-Status:  Accepted
+Status:  Deprecated（2026-08-07）
+
+> **Deprecated 说明**：本 ADR 的链路定义（`Memory Layer → Context Builder → Agent Router → Agent → LLM Provider`）由 [ADR-0020](./ADR-0020-unified-ai-pipeline-call-chain.md) 替代。核心原则（Agent 经 Router 统一路由、禁止 Agent 间直接互调、Agent 产出经 Domain API 落库）由 ADR-0020 完整继承。
+> 架构/代码迁移状态：Implementation Pending（Sprint 5 AI Platform 实现时按 ADR-0020 调用链重构）。
 
 
 ## Decision

@@ -1629,44 +1629,6 @@ Decision Level:
 ---
 
 
-## 2026-08-07 (第 41 次变更)
-
-
-Agent:
-
-
-Architecture Agent
-
-
-Task:
-
-
-治理层重构第 3 步：新建 ADR-0012~0017（6 个 Accepted ADR，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1）
-
-
-Change:
-
-
-- 新建 6 个 Accepted ADR，将产品宪法与 PROJECT_CONTEXT 的产品决策转化为架构事实：
-  - ADR-0012 Product Module Boundary Revision：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除（现有代码处置待第 7 步代码核查）；Story 暂缓；声明与 ADR-0011 的待消解差异（ADR-0011 在 ADR-0013 落地前继续有效）
-  - ADR-0013 Today Core Object Lifecycle Refactor：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象（ExperienceOpportunity/ExperienceProposal/ProposalDecision/ExperienceOccurrence/ExperienceFeedback/LifeResponseMap）；迁移方式比较 3 方案（原位演进/增量迁移/版本化替换）后采用方案 C 版本化替换（无生产数据，语义差距大，技术债最小）；ADR-0011 Activity 条款由本 ADR 替代；Activity 不再作为目标产品核心概念
-  - ADR-0014 AI Platform Six Roles and Confidence Gating：6 角色（Opportunity Discovery/Proposal Composer/Motivation Engine/Life Curator/State Understanding/Assistant）；Life Curator 是产品判断角色不替代 Router（调用关系不锁定）；置信度三级门控（高/中/低→推送/询问/保持安静）；主动通知边界（频率上限/静默时段/置信度门槛/完全可控关闭）；MVP 采用枚举+服务粒度（不拆独立 Agent 服务，与 ADR-0004 一致）
-  - ADR-0015 External Fact Trustworthiness Model：事实/推断/偏好三类区分；新增 external_fact 表（fact_type/source/source_type/fetched_at/valid_until/confidence/payload_json）；location 表扩展 business_hours/verified_at；ai_memory 表 memory_category 区分 FACT/INFERENCE/PREFERENCE；可信度计算公式 fact_confidence × time_decay × source_weight
-  - ADR-0016 Passive Sensing Consent Boundary：场景化数据授权（位置/日历/运动量/应用使用情况/Mood 输入分别授权）；新增 data_consent 表 + notification_preference 表；User Module 新增 DataConsentService/NotificationPreferenceService；禁止隐性监控换确认（ExperienceOccurrence 仅用户自愿确认）
-  - ADR-0017 Commercial Recommendation Boundary：商业合作不影响自然排序；商业内容必须明确披露；location 表新增 sponsor_id/commercial_type；ExperienceProposal 输出 is_sponsored/sponsor_disclosure；商业提案必须经 Proposal Composer 适配度校验，不得绕过；Life Curator 不可因商业合作降级门控
-- ADR README.md Index 登记 6 个新 ADR；ADR-0011 标注「ADR-0013 落地后部分条款由 ADR-0013 替代」
-- CHANGELOG.md [Unreleased]/Added 追加第 3 步变更记录
-
-
-Note:
-
-
-本次变更为人工产品负责人批准的治理基线调整（第 3 步 ADR 创建）。决策来源是 PROJECT_CONTEXT v1.3（PR #34 已合并）与产品宪法 v1.1。§8.5 的 L0-L3 分级适用于 AI 自主做出的技术/架构决策；本次属于"人工决策、Agent 执行"，因此不套用 L2 定级。6 个 ADR 的具体技术决策（如 ADR-0013 迁移方式选 C、ADR-0014 角色粒度选枚举+服务）属于 AI Agent 基于产品约束给出的建议，但最终采纳需人工产品负责人审核 PR 确认。决策权威属于人工产品负责人。
-
-
----
-
-
 ## 2026-08-07 (第 40 次变更)
 
 
@@ -1903,30 +1865,44 @@ Architecture Agent
 Task:
 
 
-非任务（治理层重构第 3 步：PR #35 Architecture Review 修正）
+非任务（治理层重构第 3 步：新建 ADR-0012~0020 共 9 个 Accepted ADR，经两轮人工 Architecture Review 修正）
 
 
 Change:
 
 
-收到人工 Architecture Review（PR #35 Request changes），按审核结论修正 ADR-0012~0017 并新增 ADR-0018/0019：
+本条目合并整理第 3 步完整过程：初始创建 6 个 ADR → 第 1 轮 Architecture Review 修正并新增 ADR-0018/0019 → 第 2 轮 Architecture Review 修正并新增 ADR-0020。最终交付 9 个 Accepted ADR，覆盖产品模块边界、Today 核心对象、AI 角色与门控、事实可信度、授权边界、商业归因、安全门控、记忆治理、统一调用链。
+
+**初始创建（已被后续两轮 Review 修正，此处仅记录方向）**：基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1，新建 ADR-0012~0017（模块边界 / Today 核心对象 / AI 角色 / 事实可信度 / 授权边界 / 商业归因）。
+
+**第 1 轮 Architecture Review 修正（PR #35 Request changes，新增 ADR-0018/0019）**：
 
 - ADR-0011 处置修正：从「Accepted（ADR-0013 落地后部分条款由 ADR-0013 替代）」改为 Deprecated（2026-08-07），标明两个替代来源（Activity/Explore 引用条款→ADR-0013；CommunityEvent 独立领域实体条款→ADR-0012）；删除「ADR-0013 落地后才替代」「是否新建 ADR-0018 待确认」措辞；架构/代码未迁移标为 Implementation Pending
-- ADR-0013 补充方案 C 前提：新增 5 项 Preconditions（无生产部署/无生产数据/无外部消费者/测试库可重建/前后端可协调）+ Go/No-Go Gate（任一不成立改用方案 B）+ 失败回退方式；明确居家体验 Location 关联可为空（避免地点中心模型）
-- ADR-0014 恢复上游置信度映射：从「高推送/中询问/低保持安静」恢复为产品宪法 §九「高主动提醒一次/中仅打开时展示/低询问或不推荐」；明确 Life Curator 与 Router 可执行边界（Router 唯一技术入口，角色 Service 不互调，Life Curator 只返回 GateDecision，通知发送前再次校验授权/场景/频率/静默时段）；明确 Memory Layer/Context Builder/Router 为平台基础设施不属于六角色
-- ADR-0015 真正分离事实与推断：external_fact.source_type 移除 INFERRED（推断存 ai_memory）；business_hours 明确 SSOT（external_fact 为 SSOT，location 为投影缓存）；差异化时效衰减（天气 3h/营业时间 30d 等，非统一 1h）；多事实加权最小值聚合公式；补充 SSOT 方案比较
-- ADR-0016 场景化授权补全：data_type + scenario + purpose 三维授权（覆盖位置/活动记录/日程/健康/设备数据）；Explore 按需定位与主动建议定位为两个独立场景；通知偏好含类别/场景/时区；Mood 主动输入与权限授权分离；FK 改为逻辑关联（对齐 DATABASE_DESIGN §9）
-- ADR-0017 重写商业归因模型：从 location 静态属性（sponsor_id/commercial_type）改为独立 commercial_campaign + commercial_attribution 模型；补充方案 A/B/C 比较；候选资格与自然排序完全忽略商业字段；只有自然入选的候选才允许附加商业归因（自然决策后附加）；可审计披露/主体/类型/有效期/来源；location 表不新增商业字段
-- 新建 ADR-0018 Mental Health Boundary and Immediate Safety Support Flow：Safety Gate 前置于 AI Pipeline；Level 1（心理健康边界）温和提供专业支持入口；Level 2（即时安全风险）立即停止推荐转危机干预；fail-safe 不确定时保守降级；不诊断不治疗不固化（safety_event_log 审计日志不作为偏好）
-- 新建 ADR-0019 LifeResponseMap / ai_memory Ownership and Data Governance：ai_memory 所有权归 AI Platform；一次行为不得永久固化为偏好（单次行为不写 PREFERENCE，累积 N≥3 次形成 INFERENCE）；查看/修改/删除/撤回完整控制权；撤回授权后派生数据清理；保留期限（INFERENCE 180 天，safety_event_log 365 天）；LifeResponseMap 作为 ai_memory PREFERENCE 聚合视图避免双重 SSOT
-- ADR README.md Index 更新：ADR-0011 移至 Deprecated ADR 段（标明两个替代来源）；删除 Future ADR 中的 ADR-0009 Payment Adapter（Community 已移出目标产品范围）；登记 ADR-0018/0019
-- CHANGELOG.md [Unreleased]/Added 更新：6 个 ADR 改为 8 个 ADR，每个 ADR 补充关键修正点与分级标注
+- ADR-0013 补充方案 C 前提：新增 5 项 Preconditions + Go/No-Go Gate（任一不成立改用方案 B）+ 失败回退方式；明确居家体验 Location 关联可为空（避免地点中心模型）
+- ADR-0014 恢复上游置信度映射：从「高推送/中询问/低保持安静」恢复为产品宪法 §九「高主动提醒一次/中仅打开时展示/低询问或不推荐」；明确 Life Curator 与 Router 可执行边界（Router 唯一技术入口，角色 Service 不互调，Life Curator 只返回 GateDecision）
+- ADR-0015 真正分离事实与推断：external_fact.source_type 移除 INFERRED；business_hours 明确 SSOT；差异化时效衰减；多事实加权最小值聚合
+- ADR-0016 场景化授权补全：data_type + scenario + purpose 三维授权；FK 改为逻辑关联
+- ADR-0017 重写商业归因模型：从 location 静态属性改为独立 commercial_campaign + commercial_attribution 模型；自然决策后附加
+- 新建 ADR-0018 Mental Health Safety Gate：Safety Gate 前置；Level 1/2 分级；fail-safe；不诊断不治疗不固化
+- 新建 ADR-0019 ai_memory 数据治理：一次行为不固化偏好；查看/修改/删除/撤回；保留期限
+
+**第 2 轮 Architecture Review 修正（PR #35 复审 Request changes，新增 ADR-0020，修正 7 项问题）**：
+
+- ADR-0012 修正：删除「ADR-0011 当前仍 Accepted」「ADR-0013 落地前 ADR-0011 继续有效」「落地后新建 ADR 替代」等自相矛盾措辞，全部改为当前事实（ADR-0011 已 Deprecated，替代来源为 ADR-0012/0013，代码迁移 Implementation Pending）
+- ADR-0003/0014 调用链冲突解决：新建 ADR-0020 Unified AI Pipeline Call Chain，统一唯一调用顺序为「Safety Gate → Router（唯一技术入口）→ Context Builder → Orchestrator 编排角色 → 角色经 LLM Provider → Router 汇聚 → Domain API 落库 → 通知服务」；明确 Orchestrator 属 Router 内部能力（非独立服务）；Agent 产出经 Domain API 落库（禁止直接写库）；ADR-0003 链路定义标记 Deprecated（核心原则由 ADR-0020 继承）
+- ADR-0013 方案 C 回退方式修正：删除「Flyway baseline 回退」（baseline 仅标记版本不撤销变更，非有效回滚）；回退改为补偿 Migration/备份恢复/重建环境；切换顺序改为「先建新表→部署验证→切流量→最后独立 drop」（不在旧应用仍可能运行时先删旧表）；Go Gate 仍为 Pending（5 项 Preconditions 待人工逐项确认）
+- ADR-0018 两层拆分：产品安全边界（Accepted）+ 分类器规则与阈值（Implementation Pending，须经专业评审/离线评测/发布 Gate/持续监控）；MVP 仅处理用户本轮主动输入文本信号（不使用行为信号，避免隐性监控）；safety_event_log 明确为可关联用户的高度敏感记录（非脱敏日志，访问控制仅限人工审计，保留期须专业评审）；危机干预资源按地区/语言配置含兜底+版本管理+责任归属；对齐 WHO 2026 年指导
+- ADR-0019 LifeResponseMap 重定义：从「ai_memory PREFERENCE 聚合视图」改为「基于 ProposalDecision/ExperienceOccurrence/ExperienceFeedback + 上下文快照的派生读模型」（避免丢失状态/时间/天气/地点/阻力/发生/值得维度）；新增数据血缘字段（source_data_type/source_record_refs/consent_scenario/derived_from_memory_ids/provenance_json）使撤回清理可执行；保留期限补充硬删除/匿名化（软删除后 30 天硬删除，INFERENCE 180 天过期+30 天硬删除）
+- ADR-0015 同步修正：行为模式只能形成 INFERENCE，经用户确认才转为 PREFERENCE（对齐 ADR-0019，删除「行为反馈可作为 PREFERENCE」表述）
+- ADR-0014 同步修正：引用 ADR-0020 作为调用链权威；编排流程明确 Router 内置 Orchestrator
+- ADR README.md Index 更新：ADR-0003 移至 Deprecated（链路定义由 ADR-0020 替代）；ADR-0011 移至 Deprecated（两个替代来源）；登记 ADR-0018/0019/0020；ADR-0018 Status 标注「Accepted（产品安全边界）；分类器规则 Implementation Pending」
+- CHANGELOG.md [Unreleased]/Added 更新：6 个 ADR 改为 9 个 ADR（ADR-0012~0020），每个 ADR 补充关键修正点与分级标注；删除 AI_CHANGELOG 旧第 41 次变更（含错误结论的初版条目），合并为最终第 41 次变更记录
 
 
 Note:
 
 
-本次变更为人工 Architecture Review（PR #35 Request changes）驱动的修正。修正前 AI_CHANGELOG 第 39 次变更 Note 写「不套用 L0-L3 定级」，但同一 Note 已承认方案 C（ADR-0013 迁移方式）、角色粒度（ADR-0014 枚举+服务）等是 AI Agent 提出的技术决策，因此不能整体写成「不适用 L0-L3」。
+本次变更为人工 Architecture Review（PR #35 两轮 Request changes）驱动的修正。第 39 次变更 Note 写「不套用 L0-L3 定级」，但同一 Note 已承认方案 C（ADR-0013 迁移方式）、角色粒度（ADR-0014 枚举+服务）等是 AI Agent 提出的技术决策，因此不能整体写成「不适用 L0-L3」。
 
 按人工审核结论重新定级（覆盖第 39 次变更 Note 的定级表述）：
 - ADR-0012 Product Module Boundary Revision → **L3**（影响产品模块边界与领域划分，属重大架构决策）
@@ -1935,13 +1911,14 @@ Note:
 - ADR-0015 External Fact Trustworthiness Model → **L2**
 - ADR-0016 Passive Sensing Consent Boundary → **L2**
 - ADR-0017 Commercial Recommendation Boundary → **L2**
-- ADR-0018 Mental Health Safety Gate → **L2**
+- ADR-0018 Mental Health Safety Gate → **L2**（产品安全边界 Accepted；分类器规则 Implementation Pending）
 - ADR-0019 ai_memory Data Governance → **L2**
+- ADR-0020 Unified AI Pipeline Call Chain → **L2**（解决 ADR-0003/0014 调用链冲突，属中等架构决策）
 
-本次人工审核作为 Architecture Review 记录。决策权威：ADR-0012/0013 的产品边界与核心对象方向由人工产品负责人确认（L3）；其余 ADR 的技术方案（角色粒度/可信度模型/授权边界/商业归因/Safety Gate/数据治理）由 AI Agent 基于产品宪法与 PROJECT_CONTEXT 约束提出，经人工 Architecture Review 修正后采纳（L2）。
+本次两轮人工审核作为 Architecture Review 记录。决策权威：ADR-0012/0013 的产品边界与核心对象方向由人工产品负责人确认（L3）；其余 ADR 的技术方案（角色粒度/可信度模型/授权边界/商业归因/Safety Gate/数据治理/统一调用链）由 AI Agent 基于产品宪法与 PROJECT_CONTEXT 约束提出，经两轮人工 Architecture Review 修正后采纳（L2）。
 
 
 Reviewer:
 
 
-Human（Architecture Review，PR #35 Request changes 修正）
+Human（两轮 Architecture Review，PR #35 Request changes 修正）
