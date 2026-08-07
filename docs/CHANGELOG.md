@@ -16,6 +16,25 @@
 
 ### Added
 
+- PROJECT_CONTEXT.md 全文重写 v1.2 → v1.3（治理层重构第 2 步，对齐 Solo_Product_Principles v1.1）
+  - §1 项目名称：项目代号 `Solo-Life-OS` 保留，对外产品名 `Solo`，定位改为"AI 驱动的日常体验发现系统"（恢复产品宪法 §三原文，移除"Life Operating System"对外定位）
+  - §2 产品愿景：改为"成为习惯独处者最值得信任的日常体验发现入口"（移除"伙伴/陪伴"语义）
+  - §3 目标用户：拆为两层（核心心理与行为特征 + 初始市场范围），移除"18-40 岁城市用户"年龄定义
+  - §4 用户痛点：主痛点改为"启动间隙"（产品宪法 §二），移除"缺少生活规划"和"缺少长期反馈"
+  - §5 核心价值：Plan/Grow/Remember 改为 Discover/Propose/Experience/Reflect
+  - §6 核心竞争力：Personal Life Memory → Personal Life Response Map；移除"AI 主动陪伴"；Life Curator 明确为判断角色非 Planner 改名
+  - §7 产品模块：Today 重构为"一次一份体验提案"（6 阶段核心对象作为目标产品概念，实现方式待 ADR）；Growth/Community 从目标产品范围移除（现有代码处置待 ADR）；活动信息归属及关联方式待 ADR（与 ADR-0011 存在待消解差异，现有架构事实继续有效）；Mood 收敛为"此刻状态输入"；Story 暂缓；AI Platform 6 角色定义
+  - §7.4 新增：声明与 Accepted ADR-0011 的待消解差异，本文件不静默覆盖 Accepted ADR
+  - §8 产品边界：补全商业推荐边界 + 居家与外出体验同等价值（产品宪法 §六 P3）
+  - §9 产品发展阶段：改为产品宪法 §十四 演进顺序（一件事→一段连接→一个下午→Day Curation），明确 Phase 不绑定 Sprint
+  - §10 数据库：ADR-0005 为 Proposed 非 Accepted，AI 语义检索策略不锁定
+  - §11 AI 架构原则：6 角色定义 + 置信度门控 + 主动通知边界 + AI 不扮演关系
+  - §12 数据资产：新增 ExperienceOpportunity/Proposal/Decision/Occurrence/Feedback/LifeResponseMap/ExternalFact/UserStateInput；Goal 不再作为目标产品核心概念（现有实现处置待核查和 ADR）；Memory 概念由 LifeResponseMap 表达
+  - §13 隐私边界：补全场景化数据授权 + 心理健康边界 + 推荐信任不可出售
+  - §16 成功标准：北极星指标改为产品宪法 §十二 定义（每周值得体验次数），Daily Value 降为过程指标
+  - §17 模块边界：目标产品业务模块为 4 个 + AI Platform（现有 growth/community/story 包处置待 ADR，具体边界以 Accepted ADR 与 ARCHITECTURE.md 为准）
+  - §18 治理流程：改为引用 AGENTS §1，流程顺序为 业务方向→ADR→数据/接口→代码
+  - §20 版本格式：改为引用 DOCUMENT_VERSION_RULE §4
 - 文档权威层级确立（治理层重构第 1 步，对齐 Solo_Product_Principles v1.1）
   - 新增文档权威层级：`Solo_Product_Principles → PROJECT_CONTEXT → Accepted ADR → ARCHITECTURE/DATABASE_DESIGN → CODE_RULES → SPRINT_PLAN → TASK_BOARD`，下游文档不得与上游冲突，冲突时以上游为准
   - `Solo_Product_Principles.md` Owner 定为人工产品负责人，AI/Agent 可提议但不得自行变更产品宪法
