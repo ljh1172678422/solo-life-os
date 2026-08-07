@@ -1,6 +1,6 @@
 # Solo Life OS Task Board
 
-Version: 3.5
+Version: 3.7
 
 Last Update: 2026-08-07
 
@@ -2168,7 +2168,7 @@ Architecture Agent
 
 Status:
 
-Reviewing（PR #31）
+Done
 
 
 Module:
@@ -2178,7 +2178,19 @@ Explore Module
 
 Branch:
 
-feature/explore-test-suite
+feature/explore-test-suite (已删除)
+
+
+Branch Status:
+
+Merged
+
+
+Validation:
+
+✅ 7 测试类交付（Domain Model 2 + DomainService 1 + Application 2 + Controller 2）
+⚠️ sandbox 无外网无法运行 mvn test，待本地用 Maven Wrapper 验证（见 v3.7）
+✅ Squash merged to develop (PR #31, 2026-08-07)
 
 
 Depends:
@@ -2193,22 +2205,22 @@ Description:
 
 Todo:
 
-- [ ] LocationEntityTest：工厂校验、字段不变式
-- [ ] FavoriteEntityTest：唯一性约束校验逻辑
-- [ ] ExploreDomainServiceTest：地点创建校验、收藏唯一性校验
-- [ ] LocationApplicationServiceTest：CRUD + nearby 搜索 + 事务边界
-- [ ] FavoriteApplicationServiceTest：收藏 / 取消 / 重复收藏 BusinessException + 按类型查询
-- [ ] LocationControllerTest：MockMvc 全端点（创建 / 列表 / 详情 / nearby + 参数校验 + 异常）
-- [ ] FavoriteControllerTest：MockMvc 全端点（收藏 / 取消 / 列表 / 检查 + 归属校验）
-- [ ] mvn test 全量通过验证
+- [x] LocationEntityTest：工厂校验、字段不变式
+- [x] FavoriteEntityTest：唯一性约束校验逻辑
+- [x] ExploreDomainServiceTest：地点创建校验、收藏唯一性校验
+- [x] LocationApplicationServiceTest：CRUD + nearby 搜索 + 事务边界
+- [x] FavoriteApplicationServiceTest：收藏 / 取消 / 重复收藏 BusinessException + 按类型查询
+- [x] LocationControllerTest：MockMvc 全端点（创建 / 列表 / 详情 / nearby + 参数校验 + 异常）
+- [x] FavoriteControllerTest：MockMvc 全端点（收藏 / 取消 / 列表 / 检查 + 归属校验）
+- [ ] mvn test 全量通过验证（待本地 Maven Wrapper 运行）
 
 
 DoD:
 
-- [ ] 7 测试类全部定义
-- [ ] mvn test 全量通过
-- [ ] 覆盖 Domain / Application / Controller 三层
-- [ ] Controller 测试使用 standalone MockMvc
+- [x] 7 测试类全部定义
+- [ ] mvn test 全量通过（待本地验证）
+- [x] 覆盖 Domain / Application / Controller 三层
+- [x] Controller 测试使用 standalone MockMvc
 
 
 禁止:
@@ -2328,6 +2340,15 @@ DoD:
 ---
 
 # Version History
+
+
+## v3.7 - 2026-08-07
+
+- 工程基础设施：为 backend/solo-server 添加 Maven Wrapper 3.3.2（mvnw + mvnw.cmd + .mvn/wrapper/maven-wrapper.properties）
+  - 解决本地 Windows 环境未全局安装 Maven 导致 `mvn test` 报 "无法将 mvn 项识别为 cmdlet" 的问题
+  - 锁定 Maven 3.9.6（兼容 Spring Boot 3.2.5）；maven-wrapper.jar 不入库（被根 .gitignore `*.jar` 忽略），首次运行脚本自动下载
+  - 本地用法：Windows PowerShell `.\mvnw.cmd test` / Unix `./mvnw test`
+- TASK-0306 Explore Test Suite：🔄 Reviewing → ✅ Done（PR #31 squash merged to develop）
 
 
 ## v3.6 - 2026-08-07
