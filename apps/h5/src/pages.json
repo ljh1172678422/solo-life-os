@@ -9,7 +9,8 @@
     {
       "path": "pages/today/index",
       "style": {
-        "navigationBarTitleText": "今天"
+        "navigationBarTitleText": "今天",
+        "navigationStyle": "custom"
       }
     },
     {
@@ -28,6 +29,34 @@
       "path": "pages/today/summary",
       "style": {
         "navigationBarTitleText": "今日总结"
+      }
+    },
+    {
+      "path": "pages/explore/index",
+      "style": {
+        "navigationBarTitleText": "探索",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/explore/detail",
+      "style": {
+        "navigationBarTitleText": "地点详情",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/explore/route",
+      "style": {
+        "navigationBarTitleText": "路线规划",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/explore/favorites",
+      "style": {
+        "navigationBarTitleText": "我的收藏",
+        "navigationStyle": "custom"
       }
     },
     {
@@ -59,6 +88,26 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Solo Life OS",
     "navigationBarBackgroundColor": "#FFFFFF",
-    "backgroundColor": "#FFFFFF"
+    "backgroundColor": "#FAFAF9"
+  },
+  "tabBar": {
+    "color": "#78716C",
+    "selectedColor": "#F97316",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/today/index",
+        "text": "今日"
+      },
+      {
+        "pagePath": "pages/explore/index",
+        "text": "探索"
+      },
+      {
+        "pagePath": "pages/preference/index",
+        "text": "我的"
+      }
+    ]
   }
 }

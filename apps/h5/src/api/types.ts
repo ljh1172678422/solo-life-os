@@ -154,3 +154,98 @@ export interface EndActivityRequest {
 export interface LocateActivityRequest {
   locationId: number | null
 }
+
+/**
+ * Explore Module 类型定义（对齐后端 TASK-0301~0304）。
+ */
+
+/** 地点类型（对齐后端 LocationType）。 */
+export type LocationType =
+  | 'CAFE'
+  | 'BOOKSTORE'
+  | 'PARK'
+  | 'EXHIBITION'
+  | 'SPORTS'
+  | 'CINEMA'
+  | 'RESTAURANT'
+  | 'OTHER'
+
+/** 收藏目标类型（对齐后端 FavoriteTarget）。 */
+export type FavoriteTarget = 'LOCATION' | 'ROUTE' | 'ACTIVITY' | 'MOVIE'
+
+/** 地点（对齐后端 LocationResponse）。 */
+export interface Location {
+  id: number
+  name: string
+  type: LocationType
+  address: string
+  city: string
+  latitude: number
+  longitude: number
+  rating: number | null
+  phone: string | null
+  openingHours: string | null
+  priceLevel: string | null
+  tags: string | null
+  description: string | null
+  imageUrl: string | null
+  createdTime: string
+  updatedTime: string
+}
+
+/** 收藏（对齐后端 FavoriteResponse）。 */
+export interface Favorite {
+  id: number
+  userId: number
+  targetType: FavoriteTarget
+  targetId: number
+  targetName: string
+  targetCover: string | null
+  targetTypeLabel: string
+  remark: string | null
+  createdTime: string
+}
+
+/** 创建地点请求体。 */
+export interface CreateLocationRequest {
+  name: string
+  type: LocationType
+  address: string
+  city: string
+  latitude: number
+  longitude: number
+  rating?: number | null
+  phone?: string | null
+  openingHours?: string | null
+  priceLevel?: string | null
+  tags?: string | null
+  description?: string | null
+  imageUrl?: string | null
+}
+
+/** 更新地点请求体（部分字段可空）。 */
+export interface UpdateLocationRequest {
+  name: string
+  type: LocationType
+  address: string
+  city: string
+  latitude: number
+  longitude: number
+  rating?: number | null
+  phone?: string | null
+  openingHours?: string | null
+  priceLevel?: string | null
+  tags?: string | null
+  description?: string | null
+  imageUrl?: string | null
+}
+
+/** 创建收藏请求体。 */
+export interface CreateFavoriteRequest {
+  targetType: FavoriteTarget
+  targetId: number
+  targetName: string
+  targetCover?: string | null
+  targetTypeLabel?: string | null
+  remark?: string | null
+}
