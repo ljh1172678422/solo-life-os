@@ -1,8 +1,8 @@
 # Solo Life OS Task Board
 
-Version: 3.4
+Version: 3.5
 
-Last Update: 2026-08-06
+Last Update: 2026-08-07
 
 
 > 本看板是 Sprint 执行层入口，所有 AI Agent 领取任务、更新状态、提交 PR 必须先查阅本文档。
@@ -14,17 +14,17 @@ Last Update: 2026-08-06
 
 # Current Sprint
 
-Sprint 2：Today Module
+Sprint 3：Explore Module
 
 
 Status:
 
-Done（Closed 2026-08-06，启动 2026-07-30）
+Planning（启动待 Sprint Planning 确认）
 
 
 Sprint Goal:
 
-完成 Today Module MVP，支持 AI 生成每日计划（Planner Agent 用 Mock Memory）。
+完成 Explore Module MVP，支持地图探索 / 地点推荐 / 收藏。
 
 
 Depends:
@@ -37,7 +37,7 @@ Reviewer Gate:
 Architecture Agent
 
 
-> Sprint 2 全部 7 个任务达成，正式关闭（见下方 Sprint 2 Close Gate）。Planner Agent 骨架已交付（Mock Memory，Sprint 5 替换正式实现）。
+> Sprint 2 全部 7 个任务达成，正式关闭（见下方 Sprint 2 Close Gate）。Sprint 3 任务分解已就绪，待启动。
 
 
 ---
@@ -1695,6 +1695,621 @@ Sprint Goal（Today Module MVP + AI 生成每日计划，Planner Agent 用 Mock 
 ---
 
 
+# Sprint 3 Task Plan
+
+
+Sprint 3 已规划（Current Sprint）。以下为任务分解，按依赖顺序推进：
+
+
+Sprint Goal:
+
+完成 Explore Module MVP，支持地图探索 / 地点推荐 / 收藏。
+
+
+Depends:
+
+Sprint 1（Done 2026-07-30，User Module 全部交付）
+
+
+待启动任务：
+
+- ✅ TASK-0301 Explore Migration（location + favorite 表 + ADR-0007）— Done
+- ✅ TASK-0302 Explore Domain Layer（Location / Favorite Entity + Repository + DomainService）— Done
+- ✅ TASK-0303 Explore Application Layer（LocationApplicationService + FavoriteApplicationService）— Done
+- ✅ TASK-0304 Explore Controller + DTO + Map Adapter Interface（LocationController + FavoriteController + 6 DTO + MapProviderAdapter 接口）— Done
+- ⬜ TASK-0305 Explore Frontend（Page06-09：地图 / 地点详情 / 路线 / 收藏）
+- ⬜ TASK-0306 Explore Test Suite（Domain / App / Controller 三层）
+- ⬜ TASK-0307 Recommendation Agent 骨架（Mock Memory）
+
+
+Sprint 3 Task Dependency Graph：
+
+```
+TASK-0301 Explore Migration + ADR-0007
+    │
+    ▼
+TASK-0302 Explore Domain Layer
+    │
+    ▼
+TASK-0303 Explore Application Layer
+    │
+    ▼
+TASK-0304 Explore Controller + DTO + Map Adapter Interface
+    │
+    ├──────────────────────────┐
+    ▼                          ▼
+TASK-0305 Explore Frontend   TASK-0306 Explore Test Suite
+    │                          │
+    └──────────┬───────────────┘
+               │
+    TASK-0307 Recommendation Agent 骨架
+    （依赖 0302 Domain + 0304 Controller 接口）
+```
+
+
+Sprint 3 设计决策（TASK-0301）：
+
+- favorite 表 Owner 为 User Module（DATABASE_DESIGN §6.7），但 Sprint 0 未创建（仅创建 user / user_preference / tag），Sprint 3 需创建
+- location 表 Owner 为 Explore Module（DATABASE_DESIGN §6.9）
+- ADR-0007 Map Provider Adapter 在本 Sprint 创建（Proposed → Accepted），采用 Provider Adapter Pattern，MVP 阶段不绑定具体地图供应商（高德 / 腾讯），仅定义接口 + Mock 实现
+- Recommendation Agent 用 Mock Memory（复用 Sprint 2 MockMemoryService），Sprint 5 替换正式实现
+
+
+---
+
+
+## TASK-0301 Explore Migration + ADR-0007
+
+
+Owner:
+
+Architecture Agent → Backend Agent
+
+
+Reviewer:
+
+QA Agent
+
+
+Status:
+
+Done
+
+
+Module:
+
+Explore Module / Foundation
+
+
+Branch:
+
+feature/explore-migration
+
+
+Depends:
+
+Sprint 1（已满足）
+
+
+Description:
+
+创建 ADR-0007 Map Provider Adapter（Accepted），建立 location + favorite 两张表 Migration，启动 Sprint 3 Explore Module。favorite 表 Owner 为 User Module（§6.7），但 Sprint 0 未创建，本任务补建。
+
+
+Todo:
+
+- [ ] 创建 ADR-0007 Map Provider Adapter（Accepted，Provider Adapter Pattern，MVP 不绑定供应商）
+- [ ] Migration V20260807_001__create_location_table.sql（DATABASE_DESIGN §6.9）
+  - location 表：id / name / address / city / latitude / longitude / type / created_time / updated_time
+  - 索引：idx_city（city）/ idx_lat_lng（latitude, longitude）
+- [ ] Migration V20260807_002__create_favorite_table.sql（DATABASE_DESIGN §6.7）
+  - favorite 表：id / user_id / target_type / target_id / created_time
+  - 唯一约束：uk_user_target UNIQUE(user_id, target_type, target_id)
+- [ ] 枚举对齐 §7：LOCATION_TYPE（9 值）/ FAVORITE_TARGET（3 值）
+
+
+DoD:
+
+- [ ] ADR-0007 进入 Accepted 状态
+- [ ] 两张表字段与 DATABASE_DESIGN §6.7 / §6.9 完全一致
+- [ ] 索引 / 唯一约束 / 枚举对齐
+- [ ] Flyway migrate 幂等执行通过（待本地验证）
+
+
+禁止:
+
+- [X] 创建 activity 表（Owner 是 Today，Sprint 2 已创建）
+- [X] 物理外键约束（§9 逻辑关联策略）
+- [X] 绑定具体地图 SDK 实现（ADR-0007 Provider Adapter Pattern，仅定义接口）
+
+
+交付物：
+
+- `docs/architecture/ADR/ADR-0007-map-provider-adapter.md`（Accepted）
+- `database/migrations/V20260807_001__create_location_table.sql`
+- `database/migrations/V20260807_002__create_favorite_table.sql`
+
+
+---
+
+
+## TASK-0302 Explore Domain Layer
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Done
+
+
+Module:
+
+Explore Module
+
+
+Branch:
+
+feature/explore-domain-layer
+
+
+Depends:
+
+TASK-0301（已满足）
+
+
+Description:
+
+建立 Explore Module 领域层：Location Entity + Repository + Domain Service。Favorite Entity + Repository 归 user/ 包（User Module Owner，ARCHITECTURE §22），Explore Module 经 Domain API 调用。
+
+
+Todo:
+
+- [ ] 创建 Explore 模块包结构（domain/model + domain/service + repository，ARCHITECTURE §19）
+- [ ] 创建枚举：LocationType / FavoriteTarget（对齐 §7）
+- [ ] 创建 Location JPA Entity（对齐 §6.9，9 字段）
+- [ ] 创建 Favorite JPA Entity（放 user/domain/model/，对齐 §6.7，5 字段）
+- [ ] 创建 LocationRepository Interface
+  - findByCity / findByTypeAndCity / findNearby（latitude/longitude 范围查询）
+- [ ] 创建 FavoriteRepository Interface
+  - findByUserId / findByUserIdAndTargetType / existsByUserIdAndTarget（唯一性校验）
+- [ ] 创建 ExploreDomainService：地点创建 / 地点查询校验 / 收藏唯一性校验
+
+
+DoD:
+
+- [ ] Location Entity + Repository + Domain Service 定义（explore/ 包）
+- [ ] Favorite Entity + Repository 定义（user/ 包，User Module Owner）
+- [ ] 枚举与 §7 LOCATION_TYPE / FAVORITE_TARGET 对齐
+- [ ] 接口编译通过
+- [ ] 代码与 ARCHITECTURE §2 分层 / CODE_RULES §3 一致
+
+
+禁止:
+
+- [X] Application Service 实现（归 TASK-0303）
+- [X] Controller / DTO 实现（归 TASK-0304）
+- [X] Entity 间建物理 FK 关系映射（违反 §9）
+- [X] Entity 直出 Controller（CODE_RULES §5）
+- [X] 在 explore/ 包创建 Favorite Entity（Owner 是 User Module，放 user/ 包）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/explore/domain/model/`：Location Entity + LocationType 枚举
+- `backend/solo-server/src/main/java/com/sololifeos/explore/repository/`：LocationRepository
+- `backend/solo-server/src/main/java/com/sololifeos/explore/domain/service/`：ExploreDomainService
+- `backend/solo-server/src/main/java/com/sololifeos/user/domain/model/Favorite.java`：Favorite Entity + FavoriteTarget 枚举
+- `backend/solo-server/src/main/java/com/sololifeos/user/repository/FavoriteRepository.java`
+
+
+---
+
+
+## TASK-0303 Explore Application Layer
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Done
+
+
+Module:
+
+Explore Module
+
+
+Branch:
+
+feature/explore-application-layer
+
+
+Depends:
+
+TASK-0302（已满足）
+
+
+Description:
+
+建立 Explore Module 应用服务层：用例协调 + 事务边界。LocationApplicationService 管理地点 CRUD，FavoriteApplicationService 管理收藏增删查。不实现 Controller / DTO（归 TASK-0304）。
+
+
+Todo:
+
+- [ ] LocationApplicationService：createLocation / getLocation / listByCity / listByType / searchNearby（经纬度范围）
+- [ ] FavoriteApplicationService：addFavorite / removeFavorite / listFavorites / listFavoritesByType / checkFavorited
+- [ ] 事务边界：写操作 @Transactional，读操作 @Transactional(readOnly=true)
+- [ ] 收藏唯一性校验：addFavorite 前检查 existsByUserIdAndTarget，重复收藏返回 BusinessException
+- [ ] 入参原始类型，出参 Domain Entity（DTO 转换归 TASK-0304）
+
+
+DoD:
+
+- [ ] 2 Application Service 全部定义
+- [ ] 事务边界与 CODE_RULES §3.1 一致
+- [ ] 收藏唯一性校验生效
+- [ ] 接口编译通过
+
+
+禁止:
+
+- [X] Controller / DTO 实现（归 TASK-0304）
+- [X] 业务规则写在 Application Service（归 Domain Service）
+- [X] SQL 写在 Application Service（归 Repository）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/explore/application/`：LocationApplicationService
+- `backend/solo-server/src/main/java/com/sololifeos/user/application/FavoriteApplicationService.java`
+
+
+---
+
+
+## TASK-0304 Explore Controller + DTO + Map Adapter Interface
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Done
+
+
+Module:
+
+Explore Module
+
+
+Branch:
+
+feature/explore-controller-dto
+
+
+Depends:
+
+TASK-0303（已满足）
+
+
+Description:
+
+建立 Explore Module REST 端点 + DTO + Map Provider Adapter 接口定义。禁 Entity 直出 Controller（CODE_RULES §5），经 Assembler 转换。
+
+
+Todo:
+
+- [ ] 6 DTO（Java record）：LocationResponse / LocationCreateRequest / FavoriteResponse / FavoriteCreateRequest / NearbySearchRequest / RouteResponse
+- [ ] ExploreAssembler：Entity → Response DTO 转换
+- [ ] LocationController（REST 端点）：
+  - POST /api/locations（创建地点，管理员操作）
+  - GET /api/locations（列表，支持 ?city= &type= 筛选）
+  - GET /api/locations/{id}（地点详情）
+  - GET /api/locations/nearby?lat= &lng= &radius=（附近搜索）
+- [ ] FavoriteController（REST 端点）：
+  - POST /api/users/{userId}/favorites（收藏）
+  - DELETE /api/users/{userId}/favorites/{targetType}/{targetId}（取消收藏）
+  - GET /api/users/{userId}/favorites（列表，支持 ?targetType= 筛选）
+  - GET /api/users/{userId}/favorites/check?targetType= &targetId=（检查是否已收藏）
+- [ ] MapProviderAdapter Interface（基于 ADR-0007，common/adapter/ 包）
+  - geocode(address) → coordinates
+  - reverseGeocode(lat, lng) → address
+  - searchNearby(lat, lng, radius, type) → List<Location>
+  - Mock 实现（MockMapProviderAdapter，返回静态数据）
+- [ ] 参数校验（@Valid + jakarta.validation）
+
+
+DoD:
+
+- [ ] Controller + DTO + Assembler + MapProviderAdapter 接口全部定义
+- [ ] Swagger 可见（springdoc 已配置）
+- [ ] 接口编译通过
+- [ ] 所有端点需 JWT 认证（JwtAuthFilter）
+
+
+禁止:
+
+- [X] Entity 直出 Controller（CODE_RULES §5）
+- [X] 绑定具体地图 SDK（ADR-0007 Provider Adapter Pattern，仅接口 + Mock）
+- [X] 业务逻辑写在 Controller（归 Application Service）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/explore/dto/`：6 DTO record
+- `backend/solo-server/src/main/java/com/sololifeos/explore/application/ExploreAssembler.java`
+- `backend/solo-server/src/main/java/com/sololifeos/explore/controller/`：LocationController / FavoriteController
+- `backend/solo-server/src/main/java/com/sololifeos/common/adapter/`：MapProviderAdapter Interface + MockMapProviderAdapter
+
+
+---
+
+
+## TASK-0305 Explore Frontend
+
+
+Owner:
+
+Frontend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Backlog
+
+
+Module:
+
+Explore Module（前端）
+
+
+Branch:
+
+feature/explore-frontend
+
+
+Depends:
+
+TASK-0304（已满足）
+
+
+Description:
+
+实现 Explore Module 前端页面，对齐 designs/solo-life-os-mobile/pages/ 设计稿。包含地图首页、地点详情、路线规划、收藏夹 4 个页面。MVP 阶段地图用静态卡片流 + Mock 数据，不接入真实地图 SDK。
+
+
+Todo:
+
+- [ ] api/explore.ts：location（CRUD + nearby）+ favorite（add / remove / list / check）API 封装
+- [ ] api/types.ts：Explore Module TS 类型（Location / Favorite / Route / NearbySearchRequest，禁 any）
+- [ ] 4 个页面（对齐 designs/solo-life-os-mobile/pages/）：
+  - pages/explore/index：地图首页（分类筛选条 + 地点卡片流 + 推荐路线横滑，MVP 卡片流代替地图视图）
+  - pages/explore/detail：地点详情（Hero 图 + 信息卡 + AI 推荐理由 + 营业时间 + 收藏按钮 + "添加到我的一天"入口）
+  - pages/explore/route：路线规划（路线概览卡 + 途经地点时间轴 + 拍照点标记 + "开始行走"按钮，MVP 静态路线）
+  - pages/explore/favorites：收藏夹（分类 tab：全部/地点/路线/活动 + 列表网格切换 + 空收藏引导）
+- [ ] pages.json 注册 4 个 explore 页面
+- [ ] 底部 Tab 栏新增 Explore 入口（与 Today 并列）
+- [ ] 收藏状态双向同步（detail 页收藏 → favorites 页更新）
+
+
+DoD:
+
+- [ ] 4 个页面可访问，布局对齐设计稿
+- [ ] API 层封装完整（禁组件直连 fetch）
+- [ ] type-check 通过（vue-tsc --noEmit）
+- [ ] 收藏交互闭环（收藏 → 取消 → 列表更新）
+
+
+禁止:
+
+- [X] 组件直连 fetch（必须经 api/ 封装，CODE_RULES §2）
+- [X] 使用 any / as any（CODE_RULES §2）
+- [X] 引入 vue-router（uni-app 用原生路由 API）
+- [X] 接入真实地图 SDK（MVP 阶段用静态卡片流，Sprint 5+ 接入）
+
+
+交付物：
+
+- `apps/h5/src/api/explore.ts`（新增：location + favorite API 封装）
+- `apps/h5/src/api/types.ts`（修改：新增 Explore Module TS 类型）
+- `apps/h5/src/pages/explore/index.vue`（新增：地图首页卡片流）
+- `apps/h5/src/pages/explore/detail.vue`（新增：地点详情）
+- `apps/h5/src/pages/explore/route.vue`（新增：路线规划）
+- `apps/h5/src/pages/explore/favorites.vue`（新增：收藏夹）
+- `apps/h5/src/pages.json`（修改：注册 4 explore 页面 + Tab 栏）
+
+
+---
+
+
+## TASK-0306 Explore Test Suite
+
+
+Owner:
+
+Backend Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Backlog
+
+
+Module:
+
+Explore Module
+
+
+Branch:
+
+feature/explore-test-suite
+
+
+Depends:
+
+TASK-0302 / TASK-0303 / TASK-0304（已满足）
+
+
+Description:
+
+建立 Explore Module 单元测试套件（JUnit 5 + Mockito + MockMvc），覆盖 Domain Service / Application Service / Controller 全部分层。对齐 Sprint 1/2 测试模式。
+
+
+Todo:
+
+- [ ] LocationEntityTest：工厂校验、字段不变式
+- [ ] FavoriteEntityTest：唯一性约束校验逻辑
+- [ ] ExploreDomainServiceTest：地点创建校验、收藏唯一性校验
+- [ ] LocationApplicationServiceTest：CRUD + nearby 搜索 + 事务边界
+- [ ] FavoriteApplicationServiceTest：收藏 / 取消 / 重复收藏 BusinessException + 按类型查询
+- [ ] LocationControllerTest：MockMvc 全端点（创建 / 列表 / 详情 / nearby + 参数校验 + 异常）
+- [ ] FavoriteControllerTest：MockMvc 全端点（收藏 / 取消 / 列表 / 检查 + 归属校验）
+- [ ] mvn test 全量通过验证
+
+
+DoD:
+
+- [ ] 7 测试类全部定义
+- [ ] mvn test 全量通过
+- [ ] 覆盖 Domain / Application / Controller 三层
+- [ ] Controller 测试使用 standalone MockMvc
+
+
+禁止:
+
+- [X] 集成测试连真实数据库 / Redis（仅 Mock）
+- [X] 测试代码访问地图 SDK / 外部依赖
+- [X] 为通过测试修改生产代码业务逻辑
+
+
+交付物：
+
+- `backend/solo-server/src/test/java/com/sololifeos/explore/domain/model/LocationEntityTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/user/domain/model/FavoriteEntityTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/explore/domain/service/ExploreDomainServiceTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/explore/application/LocationApplicationServiceTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/user/application/FavoriteApplicationServiceTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/explore/controller/LocationControllerTest.java`
+- `backend/solo-server/src/test/java/com/sololifeos/user/controller/FavoriteControllerTest.java`
+
+
+---
+
+
+## TASK-0307 Recommendation Agent 骨架（Mock Memory）
+
+
+Owner:
+
+AI Agent
+
+
+Reviewer:
+
+Architecture Agent
+
+
+Status:
+
+Backlog
+
+
+Module:
+
+AI Platform / Explore Module
+
+
+Branch:
+
+feature/recommendation-agent
+
+
+Depends:
+
+TASK-0302（Domain Layer）/ TASK-0304（Controller + Map Adapter Interface）
+
+
+Description:
+
+建立 Recommendation Agent 骨架（ARCHITECTURE §7 / §8），基于 Mock Memory 生成地点推荐。复用 Sprint 2 MockMemoryService，Sprint 5 替换正式实现。Agent 接口遵守 Agent.execute 契约（TASK-0005 定义）。
+
+
+Todo:
+
+- [ ] RecommendationContext（ai/agents/）：结构化输入 record（userId / location(lat,lng) / radius / timeOfDay / weather / preferences / locationHistory）
+- [ ] RecommendationAgent（ai/agents/recommendation/）：Agent 接口实现
+  - execute 从 Context 提取 RecommendationContext
+  - 检索 Memory（用户偏好 + 历史行为）
+  - 规则模板生成 Mock 地点推荐（时段 + 天气 + 偏好 + 距离 → 推荐地点列表 JSON）
+  - 返回 AgentResult
+- [ ] AiConfig 更新：注册 RecommendationAgent Bean（与 PlannerAgent 并列）
+- [ ] 单元测试：RecommendationAgentTest（Mock Memory 输入 → 推荐产出校验）
+
+
+DoD:
+
+- [ ] RecommendationAgent 实现 Agent.execute 契约
+- [ ] RecommendationContext 结构化输入（禁 Map 取值）
+- [ ] AiConfig 注册 RecommendationAgent Bean
+- [ ] 单元测试通过
+- [ ] Sprint 5 可替换 Mock Memory 为正式实现
+
+
+禁止:
+
+- [X] 真实 LLM 接入（Sprint 5）
+- [X] 真实地图 SDK 调用（Sprint 5）
+- [X] Agent 之间直接调用（必须经 Router，ARCHITECTURE §7）
+- [X] 直连数据库（ARCHITECTURE §21）
+
+
+交付物：
+
+- `backend/solo-server/src/main/java/com/sololifeos/ai/agents/RecommendationContext.java`
+- `backend/solo-server/src/main/java/com/sololifeos/ai/agents/recommendation/RecommendationAgent.java`
+- `backend/solo-server/src/main/java/com/sololifeos/ai/AiConfig.java`（修改：注册 RecommendationAgent）
+- `backend/solo-server/src/test/java/com/sololifeos/ai/agents/recommendation/RecommendationAgentTest.java`
+
+
+---
+
+
 # Task Status Legend
 
 
@@ -1713,6 +2328,20 @@ Sprint Goal（Today Module MVP + AI 生成每日计划，Planner Agent 用 Mock 
 ---
 
 # Version History
+
+
+## v3.5 - 2026-08-07
+
+- Sprint 3 Planning：Current Sprint 从 Sprint 2（Done）切换为 Sprint 3 Explore Module（Planning）
+- 新增 Sprint 3 Task Plan 段：7 个任务（TASK-0301~0307）+ Task Dependency Graph + 设计决策
+- TASK-0301 Explore Migration + ADR-0007（location + favorite 表 + Map Provider Adapter ADR）
+- TASK-0302 Explore Domain Layer（Location Entity + Favorite Entity + Repository + DomainService）
+- TASK-0303 Explore Application Layer（LocationApplicationService + FavoriteApplicationService）
+- TASK-0304 Explore Controller + DTO + Map Adapter Interface（LocationController + FavoriteController + 6 DTO + MapProviderAdapter 接口 + Mock）
+- TASK-0305 Explore Frontend（Page06-09：地图 / 地点详情 / 路线 / 收藏，对齐 designs 设计稿）
+- TASK-0306 Explore Test Suite（7 测试类，Domain / App / Controller 三层）
+- TASK-0307 Recommendation Agent 骨架（Mock Memory，复用 Sprint 2 MockMemoryService）
+- 设计决策：favorite 表 Owner User Module 但 Sprint 0 未创建，Sprint 3 补建；ADR-0007 Provider Adapter Pattern，MVP 不绑定地图供应商
 
 
 ## v3.4 - 2026-08-06
