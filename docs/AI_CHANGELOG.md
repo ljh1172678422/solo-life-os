@@ -1629,6 +1629,61 @@ Decision Level:
 ---
 
 
+## 2026-08-07 (第 40 次变更)
+
+
+Agent:
+
+
+Architecture Agent
+
+
+Task:
+
+
+治理层重构第 2 步：重写 PROJECT_CONTEXT.md v1.2 → v1.3
+
+
+Change:
+
+
+- PROJECT_CONTEXT.md 全文重写，对齐 Solo_Product_Principles v1.1（产品宪法）
+- 20 个章节按审计矩阵 A1-A11 全部决策落地：
+  - §1 项目名称：对外产品名 Solo（保留仓库代号 Solo-Life-OS），定位改为"AI 驱动的日常体验发现产品"
+  - §2 产品愿景：改为"成为习惯独处者最值得信任的日常体验发现入口"，移除"伙伴/陪伴"语义
+  - §3 目标用户：双层定义（核心心理与行为特征 + 初始市场范围），移除"18-40 岁城市用户"年龄定义
+  - §4 用户痛点：主痛点改为"启动间隙"（产品宪法 §二），移除"缺少生活规划"和"缺少长期反馈"
+  - §5 核心价值：Plan/Grow/Remember → Discover/Propose/Experience/Reflect
+  - §6 核心竞争力：Personal Life Memory → Personal Life Response Map；移除"AI 主动陪伴"；Life Curator 明确为判断角色
+  - §7 产品模块：Today 重构为"一次一份体验提案"（6 阶段核心对象）；Growth/Community 移除；Mood 收敛为"此刻状态输入"；Story 暂缓；AI Platform 6 角色
+  - §8 产品边界：补全商业推荐边界
+  - §9 产品发展阶段：改为产品宪法 §十四 演进顺序，明确 Phase 不绑定 Sprint
+  - §11 AI 架构原则：6 角色 + 置信度门控 + 主动通知边界 + AI 不扮演关系
+  - §12 数据资产：新增 8 个核心对象（ExperienceOpportunity 等），移除 Goal
+  - §13 隐私边界：补全场景化数据授权 + 心理健康边界 + 推荐信任不可出售
+  - §16 成功标准：北极星指标改为产品宪法 §十二 定义，Daily Value 降为过程指标
+  - §17 模块边界：MVP 改为 4 业务模块 + AI Platform
+- CHANGELOG.md [Unreleased]/Added 追加第 2 步变更记录
+
+
+Reviewer:
+
+
+Pending（人工审核）
+
+
+Decision Level:
+
+
+不适用 AI 自主决策分级（§8.5）
+
+
+本次变更为人工产品负责人批准的产品宪法落地（重写 PROJECT_CONTEXT 对齐 Solo_Product_Principles v1.1），决策来源是人工审核结论与审计矩阵 A1-A11 决策，非 AI Agent 自主决策。本条目仅记录执行过程，决策权威属于人工产品负责人。后续下游文档（ARCHITECTURE / DATABASE_DESIGN / SPRINT_PLAN）更新需先形成 Accepted ADR。
+
+
+---
+
+
 ## 2026-08-06 (第 36 次变更)
 
 
