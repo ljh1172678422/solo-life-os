@@ -23,7 +23,7 @@ Solo-Life-OS（仓库目录名，保留以避免无价值的工程改名）
 
 ## 产品定位
 
-> **AI 驱动的日常体验发现产品（AI Experience Discovery System）**
+> **AI 驱动的日常体验发现系统（AI Experience Discovery System）**
 
 Solo 不管理人生，不规划人生，也不把生活变成一张等待完成的日程表。它只从庞杂的现实世界中，替用户辨认出此时此刻最可能值得的一件事。
 
@@ -161,9 +161,9 @@ Life Curator 不是 Planner 的改名，是整套系统的判断角色，负责�
 
 今日体验提案。
 
-目标：一次只提供一份体验提案，支持"今天没有合适建议"（no_proposal 是正常业务结果，不是算法失败）。
+目标：一次只提供一份体验提案，支持"今天没有合适建议"（no_proposal 是正常业务结果，不是算法失败）。居家体验与外出体验拥有同等价值（产品宪法 §六 P3），提案不偏向城市地点或消费体验。
 
-核心对象生命周期（6 阶段，具体实现方式由 ADR 决定）：
+核心对象生命周期（6 阶段，作为目标产品概念；具体实现方式、与现有 daily_plan/activity 表/实体的关系由 ADR 决定）：
 
 | 阶段 | 核心对象 | 说明 |
 |---|---|---|
@@ -174,7 +174,7 @@ Life Curator 不是 Planner 的改名，是整套系统的判断角色，负责�
 | 用户是否觉得值得 | ExperienceFeedback | 十秒反馈，可跳过 |
 | 长期学习 | LifeResponseMap | 形成个人生活反应地图 |
 
-> 注：旧版 DailyPlan 不再作为当前核心对象，可废弃或保留为远期 DayCuration 的聚合概念。Activity 含义过宽需拆分。具体迁移方式（原位演进/增量迁移/版本化替换）由 ADR 决定。
+> 注：旧版 DailyPlan 不再作为目标产品核心概念，可保留为远期 DayCuration 聚合概念。现有 daily_plan / activity 表、实体及代码如何处置（保留兼容/原位演进/增量迁移/版本化替换），待代码核查与 ADR 比较后决定。Activity 是否拆分、如何与 Location 关联，不在本文件定案。
 
 ### Explore
 
@@ -182,7 +182,7 @@ Life Curator 不是 Planner 的改名，是整套系统的判断角色，负责�
 
 目标：从真实世界中辨认此刻成立的候选体验，并提供有限、用户主动发起的探索入口。
 
-包含：地点发现、收藏、活动信息（Community 模块移除后，活动信息归入 Explore，通过 location 关联）。
+包含：地点发现、收藏。活动信息是否归入 Explore 及关联方式，待 ADR 决定（与 ADR-0011 CommunityEvent 归属存在待消解差异，见 §7.4）。
 
 边界（来自产品宪法 §十三）：Explore 不得演化为默认信息流或无限推荐流。默认展示上限 + 无无限滚动。产品的终点在现实体验中，页面应尽可能短，选择应尽可能少。
 
@@ -211,19 +211,23 @@ AI 能力层。
 | State Understanding | 替代易造成诊断误解的 Emotion Agent，仅接收用户主动输入 |
 | Assistant | 只作为用户主动查询入口，不塑造陪伴关系 |
 
-## 7.2 已移除模块
+## 7.2 从目标产品范围移除
 
-### Growth（移除）
+### Growth
 
-从 MVP 和核心架构中移除。不做目标、习惯、连续打卡、成长统计。
+从目标产品范围移除。不做目标、习惯、连续打卡、成长统计。
 
 （与产品宪法 §十三"不鼓励连续打卡，不设置失败惩罚"、§三"不是习惯养成工具"冲突）
 
-### Community（移除）
+> 注：Growth 模块现有代码、实体、表如何处置，待代码核查与 ADR 决定。本文件只确立目标产品范围，不锁死架构处置方式。
 
-移除整个社交模块。活动信息归入 Explore，但不保留交流、关系链和社区概念。
+### Community
+
+从目标产品范围移除。不保留交流、关系链和社区概念。
 
 （与产品宪法 §三"不是社交平台或搭子社区"、§十三"不设置关注、粉丝、动态社区和排行榜"冲突）
+
+> 注：Community 模块现有代码、实体、表如何处置，待代码核查与 ADR 决定。本文件只确立目标产品范围，不锁死架构处置方式。
 
 ## 7.3 远期 / 暂缓模块
 
@@ -232,6 +236,15 @@ AI 能力层。
 未来可作为用户主动触发的生活回顾，不承担留存任务。
 
 （产品宪法 §十四 演进顺序：一件事 → 一段连接 → 一个下午 → 一天的策展。Story 属于远期，不绑定当前 Sprint）
+
+## 7.4 与现有 Accepted ADR 的待消解差异
+
+新产品方向与 Accepted ADR-0011（Activity Ownership）存在待消解差异：
+
+- ADR-0011 规定 Activity 归 Today、Explore 只读引用 Activity Domain API、CommunityEvent 是独立领域实体
+- 新产品方向移除 Community 概念、Today 核心对象改为 Experience 系列、Activity 是否拆分待定
+
+**现有架构事实继续有效，直到第 3 步通过新 ADR 对 ADR-0011 进行保留、修订或替代。** 本文件不静默覆盖 Accepted ADR。
 
 ---
 
@@ -251,6 +264,7 @@ AI 能力层。
 - 不为了活跃度降低提案质量
 - 不用隐性监控换取更高的完成确认率
 - 不让赞助、佣金或商家利益覆盖用户适配度
+- **居家体验与外出体验拥有同等价值**（来自产品宪法 §六 P3）：不预设"出门比在家更好"，不以外出率或消费金额作为成功指标
 
 ## 商业推荐边界
 
@@ -331,7 +345,7 @@ Day Curation 不是把四个地点塞进一天，而是设计一种没有完成�
 
 缓存：Redis
 
-AI 检索：Vector Database（具体选型由 ADR-0005 决策方向，Adapter 延迟绑定）
+AI 语义检索：Vector Database。AI 语义检索的存储、Provider 与 Adapter 策略尚未形成 Accepted ADR（ADR-0005 当前为 Proposed），不在本文件锁定。
 
 ## 外部事实数据
 
@@ -420,7 +434,7 @@ AI 检索：Vector Database（具体选型由 ADR-0005 决策方向，Adapter �
 
 Solo 不能把推断写成事实，也不能把一次行为永久解释为用户偏好。
 
-> 注：旧版 Goal 数据对象已移除（Growth 模块移除）。旧版 Memory 改为 LifeResponseMap（从"记忆积累"改为"反应地图"）。
+> 注：Goal 不再作为目标产品核心概念（Growth 从目标产品范围移除）。Memory 概念在目标产品中由 LifeResponseMap 表达（从"记忆积累"转为"反应地图"）。现有 goal / ai_memory 表如何处置待代码核查与 ADR 决定。
 
 ---
 
@@ -570,7 +584,7 @@ DAU、会话时长和打开次数可以用于产品运营诊断，但不得成�
 
 ## 核心模块边界
 
-MVP 业务模块（4 个 + AI Platform）：
+目标产品业务模块（4 个 + AI Platform）：
 
 - user
 - today
@@ -582,20 +596,13 @@ MVP 业务模块（4 个 + AI Platform）：
 
 禁止：跨模块直接访问数据库。
 
-> 注：旧版 growth / community / story 模块已移除或暂缓（见 §7）。
+> 注：以上为目标产品范围。现有代码中的 growth / community / story 包如何处置（保留兼容/重构/移除），待代码核查与 ADR 决定。具体模块边界、依赖关系、Data Ownership 以 Accepted ADR 与 ARCHITECTURE.md 为准。
 
 ---
 
 # 18. AI 代码生成原则
 
-AI 生成代码前必须：
-
-1. 阅读 `Solo_Product_Principles.md`（产品宪法，最高优先级）
-2. 阅读 `PROJECT_CONTEXT.md`（本文档）
-3. 阅读与任务相关的 Accepted ADR
-4. 阅读 `ARCHITECTURE.md`
-5. 确认数据库设计
-6. 确认已有模块
+AI 开始任务前必须遵循 `AGENTS.md §1` 的完整强制阅读顺序（含 Solo_Product_Principles / PROJECT_CONTEXT / Accepted ADR / ARCHITECTURE / DATABASE_DESIGN / CODE_RULES / SPRINT_PLAN / TASK_BOARD 等）。本文件不重复维护该清单，以 AGENTS.md 为唯一权威来源。
 
 禁止：
 
@@ -605,18 +612,14 @@ AI 生成代码前必须：
 - 引入未经批准的大型框架
 - 自行变更产品宪法
 
-新增功能流程：
+涉及领域模型或架构变更时，流程为：
 
 ```
-需求
+业务方向确认（上游：产品宪法 / Project Context）
   ↓
-业务设计
+Accepted ADR（涉及产品边界/领域模型/架构决策时）
   ↓
-数据模型确认
-  ↓
-接口设计
-  ↓
-（涉及产品边界/领域模型/架构决策时）Accepted ADR 先行
+数据模型 / 接口设计（下游：ARCHITECTURE / DATABASE_DESIGN）
   ↓
 代码实现
   ↓
@@ -663,14 +666,9 @@ Solo Life OS 使用多个 AI Agent 协作（研发分工，非产品 AI 角色�
 
 # 20. 文档版本管理
 
-所有核心文档必须维护版本。
+所有核心文档必须维护版本。版本格式与管理规则遵循 `governance/DOCUMENT_VERSION_RULE.md §4`，本文件不重复维护。
 
-格式：
-
-- 文件名：XXX.md
-- 版本：v1.x
-- 每次修改必须记录：修改时间、修改原因、影响范围
-- 禁止：无记录修改核心设计
+禁止：无记录修改核心设计。
 
 文档权威层级（来自 AGENTS §0）：
 
