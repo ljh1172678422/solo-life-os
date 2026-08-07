@@ -16,6 +16,13 @@
 
 ### Added
 
+- 文档权威层级确立（治理层重构第 1 步，对齐 Solo_Product_Principles v1.1）
+  - 新增文档权威层级：`Solo_Product_Principles → PROJECT_CONTEXT → Accepted ADR → ARCHITECTURE/DATABASE_DESIGN → CODE_RULES → SPRINT_PLAN → TASK_BOARD`，下游文档不得与上游冲突，冲突时以上游为准
+  - `Solo_Product_Principles.md` Owner 定为人工产品负责人，AI/Agent 可提议但不得自行变更产品宪法
+  - 强制阅读顺序置顶 `Solo_Product_Principles.md`（原首位 PROJECT_CONTEXT 降为第二）
+  - 删除 `AGENTS §15.1` 的"文档热修直推 develop"例外条款，文档与代码同等走 feature 分支 + PR
+  - `DOCUMENT_VERSION_RULE §2.1` "代码优先" 改为 "文档与代码保持同步"，涉及产品边界/领域模型/架构决策必须先 Accepted ADR
+  - `DOCUMENT_VERSION_RULE §2.4` SSOT 表新增"产品宪法"为最高状态来源
 - Sprint 2 Close：Today Module 全部 7 个任务交付（TASK-0201~0207），Sprint 2 关闭（2026-08-06）
   - Sprint Goal（Today Module MVP + AI 生成每日计划，Planner Agent 用 Mock Memory）达成
   - 后端：Migration（daily_plan / activity + 增量索引 CHECK 约束）+ Domain（Entity 不变式校验 + isClosed + 软删除）+ Application（事务协调 + DataIntegrityViolationException 业务化）+ Controller（13 REST 端点 + 5 DTO + Assembler）

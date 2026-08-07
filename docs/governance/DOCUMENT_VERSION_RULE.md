@@ -1,11 +1,11 @@
 # Document Version Synchronization Rule
 
-Version: 1.3
+Version: 1.4
 
-Last Update: 2026-07-30
+Last Update: 2026-08-07
 
 > 本规则约束核心文档的修改条件，防止文档频繁变更导致架构漂移。
-> 对齐 AGENTS §13 文档版本管理 / §8 Architecture Change Process。
+> 对齐 AGENTS §0 文档权威层级 / §13 文档版本管理 / §8 Architecture Change Process。
 
 ---
 
@@ -13,6 +13,8 @@ Last Update: 2026-07-30
 
 | 文件 | 修改条件 | 修改人 |
 |------|----------|--------|
+| `Solo_Product_Principles.md` | 产品宪法级变更（产品定位 / 边界 / 北极星 / AI 角色原则等） | **人工产品负责人**（AI/Agent 可提出建议，但不得自行变更） |
+| `PROJECT_CONTEXT.md` | 产品上下文调整（受 Solo_Product_Principles 约束） | Architecture Agent |
 | `README.md` | Sprint 完成 / Major milestone / Release 发布 / 架构阶段切换（见 §6） | Architecture Agent |
 | `ARCHITECTURE.md` | 架构边界变化、新增模块、新增 ADR | Architecture Agent |
 | `DATABASE_DESIGN.md` | Schema 变化、新增表、新增字段、枚举变化 | Architecture Agent |
@@ -28,21 +30,27 @@ Last Update: 2026-07-30
 
 ## 2. 核心原则
 
-### 2.1 代码优先
+### 2.1 文档与代码保持同步
 
 ```
-代码产出 > 文档完善
+文档与代码同等对待，保持同步演进
 ```
 
-核心架构文档（ARCHITECTURE / DATABASE_DESIGN / AGENTS）在 Sprint 边界冻结后，
-非必要不修改。修改必须有明确业务或技术驱动，禁止为「完善文档」而修改。
+核心架构文档（ARCHITECTURE / DATABASE_DESIGN / AGENTS）与代码同等重要，均走 feature 分支 + PR 流程。修改必须有明确业务或技术驱动，禁止为「完善文档」而修改；但涉及产品边界、领域模型或架构决策时，**必须先形成 Accepted ADR，再实施代码**，禁止"先写代码后补文档"。
+
+文档与代码同步约束：
+
+- 涉及产品宪法（Solo_Product_Principles）→ 人工产品负责人审核
+- 涉及产品边界 / 领域模型 / 架构决策 → Accepted ADR 先行，代码随后
+- 涉及 Schema / 枚举 / 模块边界 → ARCHITECTURE / DATABASE_DESIGN 与 migration 同 PR 或紧邻 PR
+- 普通功能 / Bug 修复 → 代码先，CHANGELOG 同步
 
 ### 2.2 非必要禁止修改
 
 以下情况禁止修改核心架构文档：
 
-- 没有对应代码变更的「文档完善」
 - 没有经过 Architecture Agent 审核的架构调整
+- 没有对应 ADR 的产品边界 / 领域模型变更
 - Sprint 进行中的临时性调整（应等到 Sprint 回顾时统一处理）
 - 个人偏好性修改（措辞、格式、排版）
 
@@ -57,10 +65,29 @@ Last Update: 2026-07-30
 
 ### 2.4 状态唯一来源原则（Single Source Of Truth）
 
-项目状态有且仅有一个权威来源，其他文档只做引用，不做覆盖。
+项目状态有且仅有一个权威来源，其他文档只做引用，不做覆盖。同时，核心文档之间存在严格权威层级（详见 AGENTS §0），下游文档不得与上游文档冲突，冲突时以上游为准。
+
+**文档权威层级（自上而下）：**
+
+```
+Solo_Product_Principles.md   ← 产品宪法（Owner: 人工产品负责人）
+        ↓
+PROJECT_CONTEXT.md           ← 项目上下文
+        ↓
+Accepted ADR（docs/architecture/ADR/*）
+        ↓
+ARCHITECTURE.md / DATABASE_DESIGN.md
+        ↓
+CODE_RULES.md
+        ↓
+SPRINT_PLAN.md → TASK_BOARD.md
+```
+
+**状态来源映射：**
 
 | 状态类型 | 唯一来源 | 派生引用 |
 |----------|----------|----------|
+| 产品宪法（定位 / 边界 / 北极星 / AI 角色原则） | `Solo_Product_Principles.md` | PROJECT_CONTEXT 引用 |
 | Task 生命周期（Status / Branch / PR / Validation） | `TASK_BOARD.md` | README "In Progress" 摘要 |
 | 提交历史（每次合并做了什么） | `CHANGELOG.md` | 无 |
 | 项目当前阶段快照（Current Sprint / Completed / Next） | `README.md`（数据源自 TASK_BOARD） | 无 |
@@ -69,10 +96,12 @@ Last Update: 2026-07-30
 
 禁止：
 
+- [X] 下游文档与上游文档冲突（如 TASK_BOARD 规避 Solo_Product_Principles 的边界约束）
 - [X] README 状态覆盖 TASK_BOARD（如 README 写 "TASK-0200 Completed" 但 TASK_BOARD 是 "Reviewing"）
 - [X] 用 CHANGELOG 作为 Task 状态来源（CHANGELOG 是历史，不是当前状态）
 - [X] 多文档维护同一份状态数据，导致冲突时无法裁决
 - [X] 在 PR / Commit message / Issue 中维护脱离 TASK_BOARD 的私有任务状态
+- [X] AI/Agent 自行变更 Solo_Product_Principles.md（必须人工产品负责人审核）
 
 ### 2.5 Domain Ownership Matrix
 
@@ -363,7 +392,7 @@ PR Merge 前 PR 提交者必须逐项确认（v1.3 提前落地，原 §9.2 Road
 
 ## 11. Git Governance Integration
 
-本规则不重复 Git 工作流定义，依赖 `docs/AGENTS.md` §15 Git Branch Governance。文档修改与代码修改遵循同一 Git 流程。
+本规则不重复 Git 工作流定义，依赖 `docs/AGENTS.md` §0 文档权威层级与 §15 Git Branch Governance。文档修改与代码修改遵循同一 Git 流程，**无任何例外**。
 
 ```
 feature/<domain>-<task> 分支
@@ -375,20 +404,22 @@ feature/<domain>-<task> 分支
 PR + CI Validation
         │
         ▼
-Reviewer Approve（默认为该领域 Owner，§2.5）
+Reviewer Approve（默认为该领域 Owner，§2.5；产品宪法变更须人工产品负责人审核）
         │
         ▼
 Squash merge to develop
 ```
 
-核心约束（引自 AGENTS §15）：
+核心约束（引自 AGENTS §0 + §15）：
 
-- [X] 禁止直推 `develop` / `main`（包括纯文档修改）
+- [X] 禁止直推 `develop` / `main`，无任何例外（包括纯文档修改）
 - [X] 所有文档修改必须走 feature 分支 + PR
+- [X] `Solo_Product_Principles.md` 修改须人工产品负责人审核，AI/Agent 不得自行变更
+- [X] 涉及产品边界 / 领域模型 / 架构决策的文档修改，须先形成 Accepted ADR
 - [X] Commit message 遵循 Conventional Commits（`docs(scope): ...`）
 - [X] PR 描述说明文档修改原因（治理规则变更需引用对应 §节）
 
-> 本节仅引用 AGENTS §15，不复制其完整内容。Git 工作流细则以 AGENTS §15 为唯一来源。
+> 本节仅引用 AGENTS §0 + §15，不复制其完整内容。Git 工作流细则以 AGENTS §15 为唯一来源；权威层级以 AGENTS §0 为唯一来源。
 
 
 ---
