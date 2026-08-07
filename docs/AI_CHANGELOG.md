@@ -1584,7 +1584,7 @@ Action:
 
 2. `docs/governance/DOCUMENT_VERSION_RULE.md` v1.3 → v1.4：
    - §1 修改条件表新增 `Solo_Product_Principles.md` 行（Owner: 人工产品负责人）+ `PROJECT_CONTEXT.md` 行（受产品宪法约束）
-   - §2.1「代码优先」改为「文档与代码保持同步」，明确涉及产品边界/领域模型/架构决策必须先 Accepted ADR 再实施代码，禁止"先写代码后补文档"
+   - §2.1「代码优先」改为「文档与代码保持同步」，明确上游 Product Principles / Project Context 决策确认后，更新下游 ARCHITECTURE / DATABASE_DESIGN 及实施代码前须先形成 Accepted ADR（重写 Project Context 本身不要求 ADR 前置）
    - §2.4 SSOT 表新增「产品宪法」为最高状态来源 + 权威层级图，新增禁止项"AI/Agent 自行变更 Solo_Product_Principles.md"
    - §11 Git Governance 删除"包括纯文档修改"的暗示性例外表述，明确"无任何例外"，新增产品宪法变更须人工产品负责人审核约束
 
@@ -1606,7 +1606,7 @@ Impact:
 生效后约束：
 - 任何下游文档（PROJECT_CONTEXT / ARCHITECTURE / DATABASE_DESIGN / SPRINT_PLAN / TASK_BOARD 等）与 Solo_Product_Principles 冲突时，下游无效，必须以上游为准修订
 - AI/Agent 不得自行变更 Solo_Product_Principles.md
-- 涉及产品边界/领域模型/架构决策的代码与文档变更，必须先形成 Accepted ADR
+- 上游 Product Principles / Project Context 决策确认后，更新下游 ARCHITECTURE / DATABASE_DESIGN 及实施代码前，必须先形成 Accepted ADR
 - 文档修改与代码修改同等走 feature 分支 + PR，无直推例外
 
 下一步（待人工审核本 PR 通过后）：第 2 步重写 PROJECT_CONTEXT.md，第 3 步新建 ADR-0012~0017，第 4 步更新 ARCHITECTURE/DATABASE_DESIGN，第 5 步重排 SPRINT_PLAN + 清理 TASK_BOARD。本 PR 不自动进入第 2 步。
