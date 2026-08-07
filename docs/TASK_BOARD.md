@@ -19,7 +19,7 @@ Sprint 3：Explore Module
 
 Status:
 
-Planning（启动待 Sprint Planning 确认）
+In Progress
 
 
 Sprint Goal:
@@ -1717,8 +1717,8 @@ Sprint 1（Done 2026-07-30，User Module 全部交付）
 - ✅ TASK-0302 Explore Domain Layer（Location / Favorite Entity + Repository + DomainService）— Done
 - ✅ TASK-0303 Explore Application Layer（LocationApplicationService + FavoriteApplicationService）— Done
 - ✅ TASK-0304 Explore Controller + DTO + Map Adapter Interface（LocationController + FavoriteController + 6 DTO + MapProviderAdapter 接口）— Done
-- ⬜ TASK-0305 Explore Frontend（Page06-09：地图 / 地点详情 / 路线 / 收藏）
-- ⬜ TASK-0306 Explore Test Suite（Domain / App / Controller 三层）
+- ✅ TASK-0305 Explore Frontend（Page06-09：地图 / 地点详情 / 路线 / 收藏）— Done（PR #30 merged）
+- 🔄 TASK-0306 Explore Test Suite（Domain / App / Controller 三层）
 - ⬜ TASK-0307 Recommendation Agent 骨架（Mock Memory）
 
 
@@ -2168,7 +2168,7 @@ Architecture Agent
 
 Status:
 
-Backlog
+Reviewing（PR #31）
 
 
 Module:
@@ -2329,6 +2329,18 @@ DoD:
 
 # Version History
 
+
+## v3.6 - 2026-08-07
+
+- Sprint 3 Status: Planning → In Progress；TASK-0301~0304 ✅ Done
+- TASK-0305 Explore Frontend：⬜ → ✅ Done（PR #30 squash merged）
+  - 交付：4 页面（explore/index + detail + route + favorites）+ api/explore.ts 9 端点 + api/types.ts Explore Module 类型
+  - pages.json 新增 Explore 路由（4 pages navigationStyle=custom）+ tabBar 3 项（今日/探索/我的）
+  - vue-tsc 0 errors 验证通过
+- TASK-0306 Explore Test Suite：⬜ → 🔄 Reviewing（PR #31）
+  - 交付 7 测试类：Domain Model（LocationEntityTest 15 + FavoriteEntityTest 5）+ DomainService（ExploreDomainServiceTest 9）+ Application（LocationAppServiceTest 14 + FavoriteAppServiceTest 11）+ Controller（LocationControllerTest 13 + FavoriteControllerTest 12）
+  - 对齐 Sprint 2 Today Module 测试模式：JUnit 5 + Mockito + AssertJ + standalone MockMvc + LocalValidatorFactoryBean
+  - Controller 测试含参数校验（@NotBlank/@NotNull/@Size）、BusinessException → 409、Concurrent DIVE → BusinessException 等异常路径
 
 ## v3.5 - 2026-08-07
 
