@@ -16,6 +16,14 @@
 
 ### Added
 
+- 新建 6 个 Accepted ADR（治理层重构第 3 步，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1）
+  - ADR-0012 Product Module Boundary Revision：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除；Story 暂缓；声明与 ADR-0011 的待消解差异
+  - ADR-0013 Today Core Object Lifecycle Refactor：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象；迁移方式比较 3 方案后采用版本化替换（方案 C，无生产数据）；ADR-0011 Activity 条款由本 ADR 替代
+  - ADR-0014 AI Platform Six Roles and Confidence Gating：6 角色（Opportunity Discovery/Proposal Composer/Motivation Engine/Life Curator/State Understanding/Assistant）；Life Curator 是产品判断角色不替代 Router；置信度三级门控；主动通知边界；MVP 采用枚举+服务粒度
+  - ADR-0015 External Fact Trustworthiness Model：事实/推断/偏好三类区分；新增 external_fact 表 + location 表扩展；可信度计算公式
+  - ADR-0016 Passive Sensing Consent Boundary：场景化数据授权；新增 data_consent + notification_preference 表；禁止隐性监控换确认
+  - ADR-0017 Commercial Recommendation Boundary：商业合作不影响自然排序；商业内容必须明确披露；location 表新增 sponsor_id/commercial_type；ExperienceProposal 输出 is_sponsored/sponsor_disclosure
+  - ADR README.md Index 登记 6 个新 ADR；ADR-0011 标注「ADR-0013 落地后部分条款由 ADR-0013 替代」
 - PROJECT_CONTEXT.md 全文重写 v1.2 → v1.3（治理层重构第 2 步，对齐 Solo_Product_Principles v1.1）
   - §1 项目名称：项目代号 `Solo-Life-OS` 保留，对外产品名 `Solo`，定位改为"AI 驱动的日常体验发现系统"（恢复产品宪法 §三原文，移除"Life Operating System"对外定位）
   - §2 产品愿景：改为"成为习惯独处者最值得信任的日常体验发现入口"（移除"伙伴/陪伴"语义）

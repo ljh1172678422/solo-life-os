@@ -1629,6 +1629,44 @@ Decision Level:
 ---
 
 
+## 2026-08-07 (第 41 次变更)
+
+
+Agent:
+
+
+Architecture Agent
+
+
+Task:
+
+
+治理层重构第 3 步：新建 ADR-0012~0017（6 个 Accepted ADR，基于 PROJECT_CONTEXT v1.3 + 产品宪法 v1.1）
+
+
+Change:
+
+
+- 新建 6 个 Accepted ADR，将产品宪法与 PROJECT_CONTEXT 的产品决策转化为架构事实：
+  - ADR-0012 Product Module Boundary Revision：模块边界从 8 模块收敛为 4 业务模块 + AI Platform；Growth/Community 从目标产品范围移除（现有代码处置待第 7 步代码核查）；Story 暂缓；声明与 ADR-0011 的待消解差异（ADR-0011 在 ADR-0013 落地前继续有效）
+  - ADR-0013 Today Core Object Lifecycle Refactor：核心对象从 DailyPlan/Activity 重构为 Experience 系列 6 阶段对象（ExperienceOpportunity/ExperienceProposal/ProposalDecision/ExperienceOccurrence/ExperienceFeedback/LifeResponseMap）；迁移方式比较 3 方案（原位演进/增量迁移/版本化替换）后采用方案 C 版本化替换（无生产数据，语义差距大，技术债最小）；ADR-0011 Activity 条款由本 ADR 替代；Activity 不再作为目标产品核心概念
+  - ADR-0014 AI Platform Six Roles and Confidence Gating：6 角色（Opportunity Discovery/Proposal Composer/Motivation Engine/Life Curator/State Understanding/Assistant）；Life Curator 是产品判断角色不替代 Router（调用关系不锁定）；置信度三级门控（高/中/低→推送/询问/保持安静）；主动通知边界（频率上限/静默时段/置信度门槛/完全可控关闭）；MVP 采用枚举+服务粒度（不拆独立 Agent 服务，与 ADR-0004 一致）
+  - ADR-0015 External Fact Trustworthiness Model：事实/推断/偏好三类区分；新增 external_fact 表（fact_type/source/source_type/fetched_at/valid_until/confidence/payload_json）；location 表扩展 business_hours/verified_at；ai_memory 表 memory_category 区分 FACT/INFERENCE/PREFERENCE；可信度计算公式 fact_confidence × time_decay × source_weight
+  - ADR-0016 Passive Sensing Consent Boundary：场景化数据授权（位置/日历/运动量/应用使用情况/Mood 输入分别授权）；新增 data_consent 表 + notification_preference 表；User Module 新增 DataConsentService/NotificationPreferenceService；禁止隐性监控换确认（ExperienceOccurrence 仅用户自愿确认）
+  - ADR-0017 Commercial Recommendation Boundary：商业合作不影响自然排序；商业内容必须明确披露；location 表新增 sponsor_id/commercial_type；ExperienceProposal 输出 is_sponsored/sponsor_disclosure；商业提案必须经 Proposal Composer 适配度校验，不得绕过；Life Curator 不可因商业合作降级门控
+- ADR README.md Index 登记 6 个新 ADR；ADR-0011 标注「ADR-0013 落地后部分条款由 ADR-0013 替代」
+- CHANGELOG.md [Unreleased]/Added 追加第 3 步变更记录
+
+
+Note:
+
+
+本次变更为人工产品负责人批准的治理基线调整（第 3 步 ADR 创建）。决策来源是 PROJECT_CONTEXT v1.3（PR #34 已合并）与产品宪法 v1.1。§8.5 的 L0-L3 分级适用于 AI 自主做出的技术/架构决策；本次属于"人工决策、Agent 执行"，因此不套用 L2 定级。6 个 ADR 的具体技术决策（如 ADR-0013 迁移方式选 C、ADR-0014 角色粒度选枚举+服务）属于 AI Agent 基于产品约束给出的建议，但最终采纳需人工产品负责人审核 PR 确认。决策权威属于人工产品负责人。
+
+
+---
+
+
 ## 2026-08-07 (第 40 次变更)
 
 

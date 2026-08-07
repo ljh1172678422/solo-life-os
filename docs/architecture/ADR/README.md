@@ -17,7 +17,13 @@ Solo Life OS Architecture Decision Records
 | ADR-0004 | No Microservices in MVP | Accepted | [ADR-0004-no-microservices-in-mvp.md](./ADR-0004-no-microservices-in-mvp.md) |
 | ADR-0006 | JWT Authentication | Accepted | [ADR-0006-jwt-authentication.md](./ADR-0006-jwt-authentication.md) |
 | ADR-0007 | Map Provider Adapter | Accepted | [ADR-0007-map-provider-adapter.md](./ADR-0007-map-provider-adapter.md) |
-| ADR-0011 | Activity Ownership | Accepted | [ADR-0011-activity-ownership.md](./ADR-0011-activity-ownership.md) |
+| ADR-0011 | Activity Ownership | Accepted（ADR-0013 落地后部分条款由 ADR-0013 替代） | [ADR-0011-activity-ownership.md](./ADR-0011-activity-ownership.md) |
+| ADR-0012 | Product Module Boundary Revision | Accepted | [ADR-0012-product-module-boundary-revision.md](./ADR-0012-product-module-boundary-revision.md) |
+| ADR-0013 | Today Core Object Lifecycle Refactor | Accepted | [ADR-0013-today-core-object-lifecycle-refactor.md](./ADR-0013-today-core-object-lifecycle-refactor.md) |
+| ADR-0014 | AI Platform Six Roles and Confidence Gating | Accepted | [ADR-0014-ai-platform-six-roles-and-confidence-gating.md](./ADR-0014-ai-platform-six-roles-and-confidence-gating.md) |
+| ADR-0015 | External Fact Trustworthiness Model | Accepted | [ADR-0015-external-fact-trustworthiness-model.md](./ADR-0015-external-fact-trustworthiness-model.md) |
+| ADR-0016 | Passive Sensing Consent Boundary | Accepted | [ADR-0016-passive-sensing-consent-boundary.md](./ADR-0016-passive-sensing-consent-boundary.md) |
+| ADR-0017 | Commercial Recommendation Boundary | Accepted | [ADR-0017-commercial-recommendation-boundary.md](./ADR-0017-commercial-recommendation-boundary.md) |
 
 ## Proposed ADR
 
